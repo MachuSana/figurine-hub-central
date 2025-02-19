@@ -1,5 +1,5 @@
 import MainNav from "../components/MainNav";
-import { Calendar, Eye, MessageSquare, ArrowRight, Star, TrendingUp, Tag } from "lucide-react";
+import { Calendar, Eye, MessageSquare, ArrowRight, Star, TrendingUp, Tag, Mail } from "lucide-react";
 
 const Index = () => {
   const featuredNews = [
@@ -103,6 +103,24 @@ const Index = () => {
       description: "Éditions limitées en stock",
       image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
       bgColor: "bg-orange-100",
+    },
+  ];
+
+  const brands = [
+    {
+      id: 1,
+      name: "Good Smile Company",
+      logo: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+    },
+    {
+      id: 2,
+      name: "Kotobukiya",
+      logo: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    },
+    {
+      id: 3,
+      name: "Bandai",
+      logo: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
     },
   ];
 
@@ -319,6 +337,51 @@ const Index = () => {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Newsletter Section */}
+        <div className="bg-violet-50 rounded-xl shadow-sm p-8 mb-12">
+          <div className="max-w-2xl mx-auto text-center">
+            <Mail className="w-12 h-12 text-primary mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-4">Restez informé des dernières sorties</h2>
+            <p className="text-gray-600 mb-6">
+              Inscrivez-vous à notre newsletter pour ne manquer aucune nouveauté et promotion exclusive.
+            </p>
+            <div className="flex gap-4 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Votre adresse email"
+                className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+              <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors duration-300">
+                S'inscrire
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Brands Slider */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-12">
+          <h2 className="text-2xl font-bold mb-6 text-center">Nos Marques Partenaires</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            {brands.map((brand) => (
+              <div
+                key={brand.id}
+                className="group cursor-pointer bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-300"
+              >
+                <div className="aspect-video relative overflow-hidden rounded-lg mb-3">
+                  <img
+                    src={brand.logo}
+                    alt={brand.name}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <h3 className="text-center font-medium text-gray-700 group-hover:text-primary transition-colors duration-200">
+                  {brand.name}
+                </h3>
+              </div>
+            ))}
           </div>
         </div>
       </main>
