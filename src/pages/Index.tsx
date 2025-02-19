@@ -1,6 +1,6 @@
 
 import MainNav from "../components/MainNav";
-import { Calendar, Eye, MessageSquare, ArrowRight } from "lucide-react";
+import { Calendar, Eye, MessageSquare, ArrowRight, Star, TrendingUp, Tag } from "lucide-react";
 
 const Index = () => {
   const featuredNews = [
@@ -35,6 +35,7 @@ const Index = () => {
       date: "2024-04-08",
       views: 756,
       comments: 23,
+      thumbnail: "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64",
     },
     {
       id: 4,
@@ -42,7 +43,32 @@ const Index = () => {
       date: "2024-04-07",
       views: 1543,
       comments: 67,
+      thumbnail: "https://images.unsplash.com/photo-1608889824875-56aa13be3ff0",
     },
+  ];
+
+  const popularFigures = [
+    {
+      id: 5,
+      title: "Naruto Uzumaki Mode Sage",
+      price: "129.99 €",
+      rating: 4.8,
+      image: "https://images.unsplash.com/photo-1608889175123-8ee362201f81",
+    },
+    {
+      id: 6,
+      title: "Monkey D. Luffy Gear 5",
+      price: "199.99 €",
+      rating: 4.9,
+      image: "https://images.unsplash.com/photo-1608889175638-48e13d0f104f",
+    },
+  ];
+
+  const categories = [
+    { name: "Anime", count: 145 },
+    { name: "Jeux Vidéo", count: 89 },
+    { name: "Comics", count: 67 },
+    { name: "Films", count: 54 },
   ];
 
   return (
@@ -54,9 +80,10 @@ const Index = () => {
           L'actualité des <span className="text-primary">Figurines</span>
         </h1>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Articles principaux */}
-          <div className="lg:col-span-2 space-y-8 animate-fade-up">
+        {/* Featured Articles Grid */}
+        <div className="grid lg:grid-cols-3 gap-8 mb-12">
+          {/* Main Articles */}
+          <div className="lg:col-span-2 space-y-8">
             {featuredNews.map((news) => (
               <article
                 key={news.id}
@@ -104,35 +131,93 @@ const Index = () => {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6 animate-fade-in">
-              <h3 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-200">
+          <div className="lg:col-span-1 space-y-8">
+            {/* Recent Articles */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h3 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 flex items-center">
+                <TrendingUp className="mr-2 text-primary" size={20} />
                 Articles Récents
               </h3>
               <div className="space-y-4">
                 {recentNews.map((news) => (
-                  <article
-                    key={news.id}
-                    className="group cursor-pointer"
-                  >
-                    <h4 className="font-medium mb-2 group-hover:text-primary transition-colors duration-200">
-                      {news.title}
-                    </h4>
-                    <div className="flex items-center text-sm text-gray-500 space-x-4">
-                      <div className="flex items-center">
-                        <Calendar size={14} className="mr-1" />
-                        {news.date}
-                      </div>
-                      <div className="flex items-center">
-                        <Eye size={14} className="mr-1" />
-                        {news.views}
-                      </div>
-                      <div className="flex items-center">
-                        <MessageSquare size={14} className="mr-1" />
-                        {news.comments}
+                  <article key={news.id} className="group cursor-pointer flex gap-4">
+                    <div className="w-20 h-20 overflow-hidden rounded-lg">
+                      <img 
+                        src={news.thumbnail} 
+                        alt={news.title}
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium mb-2 group-hover:text-primary transition-colors duration-200 line-clamp-2">
+                        {news.title}
+                      </h4>
+                      <div className="flex items-center text-sm text-gray-500 space-x-4">
+                        <div className="flex items-center">
+                          <Calendar size={14} className="mr-1" />
+                          {news.date}
+                        </div>
+                        <div className="flex items-center">
+                          <Eye size={14} className="mr-1" />
+                          {news.views}
+                        </div>
                       </div>
                     </div>
                   </article>
+                ))}
+              </div>
+            </div>
+
+            {/* Popular Figures */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h3 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 flex items-center">
+                <Star className="mr-2 text-primary" size={20} />
+                Figurines Populaires
+              </h3>
+              <div className="space-y-4">
+                {popularFigures.map((figure) => (
+                  <div key={figure.id} className="group cursor-pointer">
+                    <div className="relative overflow-hidden rounded-lg mb-2">
+                      <img
+                        src={figure.image}
+                        alt={figure.title}
+                        className="w-full h-40 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                        <p className="text-white font-semibold">{figure.price}</p>
+                      </div>
+                    </div>
+                    <h4 className="font-medium group-hover:text-primary transition-colors duration-200">
+                      {figure.title}
+                    </h4>
+                    <div className="flex items-center text-yellow-400">
+                      <Star size={16} className="fill-current" />
+                      <span className="ml-1 text-sm text-gray-600">{figure.rating}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Categories */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h3 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 flex items-center">
+                <Tag className="mr-2 text-primary" size={20} />
+                Catégories
+              </h3>
+              <div className="space-y-2">
+                {categories.map((category) => (
+                  <div
+                    key={category.name}
+                    className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg cursor-pointer group"
+                  >
+                    <span className="group-hover:text-primary transition-colors duration-200">
+                      {category.name}
+                    </span>
+                    <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                      {category.count}
+                    </span>
+                  </div>
                 ))}
               </div>
             </div>
