@@ -384,6 +384,47 @@ const Index = () => {
             ))}
           </div>
         </div>
+
+        {/* Statistics Section */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+            <div className="text-3xl font-bold text-primary mb-2">10,000+</div>
+            <div className="text-gray-600">Figurines</div>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+            <div className="text-3xl font-bold text-primary mb-2">50+</div>
+            <div className="text-gray-600">Marques</div>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+            <div className="text-3xl font-bold text-primary mb-2">25,000+</div>
+            <div className="text-gray-600">Clients Satisfaits</div>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+            <div className="text-3xl font-bold text-primary mb-2">1,000+</div>
+            <div className="text-gray-600">Avis Clients</div>
+          </div>
+        </div>
+
+        {/* Advanced Search Widget */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-12">
+          <h2 className="text-2xl font-bold mb-6">Recherche Avancée</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            <input
+              type="text"
+              placeholder="Nom de la figurine"
+              className="px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
+            />
+            <select className="px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50">
+              <option value="">Toutes les marques</option>
+              <option value="good-smile">Good Smile Company</option>
+              <option value="kotobukiya">Kotobukiya</option>
+              <option value="bandai">Bandai</option>
+            </select>
+            <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors duration-300">
+              Rechercher
+            </button>
+          </div>
+        </div>
       </main>
     </div>
   );
