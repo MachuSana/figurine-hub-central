@@ -1,4 +1,3 @@
-
 import MainNav from "../components/MainNav";
 import { Calendar, Eye, MessageSquare, ArrowRight, Star, TrendingUp, Tag } from "lucide-react";
 
@@ -71,11 +70,110 @@ const Index = () => {
     { name: "Films", count: 54 },
   ];
 
+  const latestReleases = [
+    {
+      id: 7,
+      title: "Gon Freecss - Hunter × Hunter",
+      price: "89.99 €",
+      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e",
+      brand: "Good Smile Company",
+      releaseDate: "Mai 2024",
+    },
+    {
+      id: 8,
+      title: "Mikasa Ackerman - L'Attaque des Titans",
+      price: "159.99 €",
+      image: "https://images.unsplash.com/photo-1501286353178-1ec881214838",
+      brand: "Kotobukiya",
+      releaseDate: "Juin 2024",
+    },
+  ];
+
+  const promotionalBanners = [
+    {
+      id: 1,
+      title: "Pré-commandes printemps 2024",
+      description: "Découvrez les nouveautés à venir",
+      image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+      bgColor: "bg-violet-100",
+    },
+    {
+      id: 2,
+      title: "Collection Dragon Ball",
+      description: "Éditions limitées en stock",
+      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+      bgColor: "bg-orange-100",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
+        {/* Promotional Banners */}
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
+          {promotionalBanners.map((banner) => (
+            <div
+              key={banner.id}
+              className={`${banner.bgColor} rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group`}
+            >
+              <div className="flex items-center p-6">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-2">{banner.title}</h3>
+                  <p className="text-gray-600 mb-4">{banner.description}</p>
+                  <button className="bg-white text-primary px-6 py-2 rounded-full inline-flex items-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    Découvrir <ArrowRight size={16} className="ml-2" />
+                  </button>
+                </div>
+                <div className="w-32 h-32 relative overflow-hidden rounded-lg">
+                  <img
+                    src={banner.image}
+                    alt={banner.title}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Latest Releases Carousel */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-12">
+          <h2 className="text-2xl font-bold mb-6 flex items-center">
+            <Star className="mr-2 text-primary" size={24} />
+            Dernières Sorties
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {latestReleases.map((release) => (
+              <div
+                key={release.id}
+                className="group cursor-pointer bg-gray-50 rounded-lg overflow-hidden hover:bg-gray-100 transition-colors duration-300"
+              >
+                <div className="flex p-4">
+                  <div className="w-36 h-36 relative overflow-hidden rounded-lg">
+                    <img
+                      src={release.image}
+                      alt={release.title}
+                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="flex-1 ml-4">
+                    <span className="text-sm text-primary font-medium">{release.brand}</span>
+                    <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors duration-200">
+                      {release.title}
+                    </h3>
+                    <p className="text-2xl font-bold text-gray-900 mb-2">{release.price}</p>
+                    <p className="text-sm text-gray-500">
+                      Sortie prévue : {release.releaseDate}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <h1 className="text-4xl font-bold text-center mb-12">
           L'actualité des <span className="text-primary">Figurines</span>
         </h1>
