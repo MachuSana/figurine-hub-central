@@ -8,6 +8,9 @@ import Index from "./pages/Index";
 import Figurines from "./pages/Figurines";
 import Manufacturers from "./pages/Manufacturers";
 import Series from "./pages/Series";
+import Licenses from "./pages/Licenses";
+import Characters from "./pages/Characters";
+import Shops from "./pages/Shops";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,9 +26,9 @@ const App = () => (
           <Route path="/figurines" element={<Figurines />} />
           <Route path="/manufacturers" element={<Manufacturers />} />
           <Route path="/series" element={<Series />} />
-          <Route path="/licenses" element={<NotFound />} />
-          <Route path="/characters" element={<NotFound />} />
-          <Route path="/shops" element={<NotFound />} />
+          <Route path="/licenses" element={<Licenses />} />
+          <Route path="/characters" element={<Characters />} />
+          <Route path="/shops" element={<Shops />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
