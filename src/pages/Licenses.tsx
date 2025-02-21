@@ -6,36 +6,55 @@ const Licenses = () => {
   const licenses = [
     {
       id: 1,
-      name: "Jump",
-      company: "Shueisha",
-      description: "Le plus grand magazine de manga au monde",
+      name: "Re:Zero",
+      company: "White Fox",
+      type: "Anime/Light Novel",
+      description: "Une histoire de fantasy où Subaru Natsuki se retrouve transporté dans un autre monde",
       image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e",
-      seriesCount: 45,
-      figureCount: 1200,
+      seriesCount: 1,
+      figureCount: 150,
       rating: 4.9,
-      popularSeries: ["One Piece", "Dragon Ball", "Naruto"],
+      productLines: ["Nendoroid", "Figma", "échelle 1/7", "échelle 1/4", "ARTFX J"],
+      popularCharacters: ["Rem", "Emilia", "Ram"],
     },
     {
       id: 2,
-      name: "Marvel",
-      company: "Disney",
-      description: "L'univers des super-héros légendaires",
-      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5",
-      seriesCount: 30,
-      figureCount: 800,
+      name: "Azur Lane",
+      company: "Yostar",
+      type: "Jeu Vidéo/Anime",
+      description: "Un jeu de tir naval mettant en scène des navires anthropomorphisés en jeunes filles",
+      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+      seriesCount: 2,
+      figureCount: 200,
       rating: 4.8,
-      popularSeries: ["Avengers", "Spider-Man", "X-Men"],
+      productLines: ["échelle 1/7", "échelle 1/4", "Altair"],
+      popularCharacters: ["Enterprise", "Belfast", "Akagi"],
     },
     {
       id: 3,
-      name: "DC Comics",
-      company: "Warner Bros",
-      description: "Les plus grands super-héros de tous les temps",
-      image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
-      seriesCount: 25,
-      figureCount: 600,
+      name: "DanMachi",
+      company: "J.C.Staff",
+      type: "Anime/Light Novel",
+      description: "Les aventures de Bell Cranel dans un monde fantasy inspiré des RPG",
+      image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+      seriesCount: 1,
+      figureCount: 75,
       rating: 4.7,
-      popularSeries: ["Batman", "Superman", "Justice League"],
+      productLines: ["Nendoroid", "Figma", "échelle 1/7", "ARTFX J"],
+      popularCharacters: ["Bell Cranel", "Hestia", "Ais Wallenstein"],
+    },
+    {
+      id: 4,
+      name: "Genshin Impact",
+      company: "miHoYo",
+      type: "Jeu Vidéo",
+      description: "Un RPG en monde ouvert au style anime",
+      image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+      seriesCount: 1,
+      figureCount: 100,
+      rating: 4.9,
+      productLines: ["Nendoroid", "échelle 1/7", "Pop Up Parade"],
+      popularCharacters: ["Paimon", "Keqing", "Ganyu"],
     }
   ];
 
@@ -64,6 +83,9 @@ const Licenses = () => {
                       <Star size={14} className="text-yellow-400 fill-current" />
                       {license.rating}
                     </div>
+                    <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm font-medium">
+                      {license.type}
+                    </div>
                   </div>
                 </div>
                 
@@ -75,26 +97,32 @@ const Licenses = () => {
                   
                   <p className="text-gray-600 mb-4">{license.description}</p>
                   
-                  <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
-                      <div className="text-sm text-gray-500">Séries</div>
-                      <div className="font-medium">{license.seriesCount}</div>
+                      <div className="text-sm text-gray-500">Figurines disponibles</div>
+                      <div className="font-medium">{license.figureCount}+</div>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500">Figurines</div>
-                      <div className="font-medium">{license.figureCount}+</div>
+                      <div className="text-sm text-gray-500">Personnages populaires</div>
+                      <div className="flex flex-wrap gap-1">
+                        {license.popularCharacters.map((character, index) => (
+                          <span key={index} className="text-sm font-medium">
+                            {character}{index < license.popularCharacters.length - 1 ? ", " : ""}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
                   <div>
-                    <div className="text-sm text-gray-500 mb-2">Séries Populaires</div>
+                    <div className="text-sm text-gray-500 mb-2">Gammes de figurines</div>
                     <div className="flex flex-wrap gap-2">
-                      {license.popularSeries.map((series, index) => (
+                      {license.productLines.map((line, index) => (
                         <span
                           key={index}
                           className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
                         >
-                          {series}
+                          {line}
                         </span>
                       ))}
                     </div>
