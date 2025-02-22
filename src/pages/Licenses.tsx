@@ -14,8 +14,9 @@ const Licenses = () => {
       seriesCount: 1,
       figureCount: 150,
       rating: 4.9,
-      productLines: ["Nendoroid", "Figma", "échelle 1/7", "échelle 1/4", "ARTFX J"],
+      seasons: ["Saison 1", "Saison 2 Partie 1", "Saison 2 Partie 2"],
       popularCharacters: ["Rem", "Emilia", "Ram"],
+      bestSellers: ["Rem - Maid Ver. 1/7", "Emilia - Crystal Dress 1/7", "Ram & Rem - Birthday 1/7"]
     },
     {
       id: 2,
@@ -27,8 +28,9 @@ const Licenses = () => {
       seriesCount: 2,
       figureCount: 200,
       rating: 4.8,
-      productLines: ["échelle 1/7", "échelle 1/4", "Altair"],
+      seasons: ["Anime Saison 1", "Slow Ahead!"],
       popularCharacters: ["Enterprise", "Belfast", "Akagi"],
+      bestSellers: ["Enterprise - Party Dress", "Belfast - Wedding Ver.", "Akagi - Race Queen"]
     },
     {
       id: 3,
@@ -40,8 +42,9 @@ const Licenses = () => {
       seriesCount: 1,
       figureCount: 75,
       rating: 4.7,
-      productLines: ["Nendoroid", "Figma", "échelle 1/7", "ARTFX J"],
+      seasons: ["Saison 1", "Saison 2", "Saison 3", "Saison 4"],
       popularCharacters: ["Bell Cranel", "Hestia", "Ais Wallenstein"],
+      bestSellers: ["Hestia - 1/4 Ver.", "Bell Cranel - DanMachi III", "Ais - Wind Ver."]
     },
     {
       id: 4,
@@ -53,8 +56,9 @@ const Licenses = () => {
       seriesCount: 1,
       figureCount: 100,
       rating: 4.9,
-      productLines: ["Nendoroid", "échelle 1/7", "Pop Up Parade"],
+      seasons: ["Mondstadt", "Liyue", "Inazuma", "Sumeru"],
       popularCharacters: ["Paimon", "Keqing", "Ganyu"],
+      bestSellers: ["Ganyu - Plenilune Gaze", "Keqing - Piercing Thunderbolt", "Mona - Astral Reflection"]
     }
   ];
 
@@ -114,17 +118,33 @@ const Licenses = () => {
                     </div>
                   </div>
 
-                  <div>
-                    <div className="text-sm text-gray-500 mb-2">Gammes de figurines</div>
-                    <div className="flex flex-wrap gap-2">
-                      {license.productLines.map((line, index) => (
-                        <span
-                          key={index}
-                          className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
-                        >
-                          {line}
-                        </span>
-                      ))}
+                  <div className="space-y-4">
+                    <div>
+                      <div className="text-sm text-gray-500 mb-2">Séries/Saisons</div>
+                      <div className="flex flex-wrap gap-2">
+                        {license.seasons.map((season, index) => (
+                          <span
+                            key={index}
+                            className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                          >
+                            {season}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-sm text-gray-500 mb-2">Meilleures ventes</div>
+                      <div className="flex flex-wrap gap-2">
+                        {license.bestSellers.map((figure, index) => (
+                          <span
+                            key={index}
+                            className="bg-muted text-gray-700 px-3 py-1 rounded-full text-sm"
+                          >
+                            {figure}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
