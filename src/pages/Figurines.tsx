@@ -1,7 +1,14 @@
 
 import MainNav from "../components/MainNav";
 import { useState } from "react";
-import { Star, Tag, ArrowRight, ArrowDown, ArrowUp } from "lucide-react";
+import { Star, Tag, ArrowRight, X, Calendar, Ruler, Box } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 type SortOption = "price-asc" | "price-desc" | "rating" | "newest";
 
@@ -10,6 +17,7 @@ const Figurines = () => {
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
   const [selectedManufacturers, setSelectedManufacturers] = useState<string[]>([]);
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
+  const [selectedFigure, setSelectedFigure] = useState<typeof figures[0] | null>(null);
 
   const figures = [
     {
@@ -216,6 +224,7 @@ const Figurines = () => {
               <div
                 key={figure.id}
                 className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden group cursor-pointer"
+                onClick={() => setSelectedFigure(figure)}
               >
                 <div className="aspect-square relative overflow-hidden">
                   <img
@@ -254,9 +263,99 @@ const Figurines = () => {
           </div>
         </div>
       </main>
+
+      <Dialog open={!!selectedFigure} onOpenChange={(open) => !open && setSelectedFigure(null)}>
+        <DialogContent className="max-w-3xl">
+          {selectedFigure && (
+            <>
+              <DialogHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Tag size={16} className="text-primary" />
+                      <span className="text-sm text-gray-600">{selectedFigure.series}</span>
+                    </div>
+                    <DialogTitle className="text-2xl mb-1">{selectedFigure.name}</DialogTitle>
+                    <DialogDescription className="text-base">
+                      Par {selectedFigure.manufacturer}
+                    </DialogDescription>
+                  </div>
+                  <button 
+                    onClick={() => setSelectedFigure(null)}
+                    className="rounded-full p-2 hover:bg-gray-100 transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </DialogHeader>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="relative aspect-square rounded-lg overflow-hidden">
+                  <img
+                    src={selectedFigure.image}
+                    alt={selectedFigure.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full font-medium">
+                    {selectedFigure.availability}
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="font-medium mb-2">Description</h3>
+                    <p className="text-gray-600">{selectedFigure.description}</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center gap-2">
+                      <Ruler size={18} className="text-gray-400" />
+                      <div>
+                        <div className="text-sm text-gray-500">Taille</div>
+                        <div className="font-medium">{selectedFigure.height}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Box size={18} className="text-gray-400" />
+                      <div>
+                        <div className="text-sm text-gray-500">Échelle</div>
+                        <div className="font-medium">{selectedFigure.scale}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-sm text-gray-500 mb-1">Matériaux</div>
+                    <div className="font-medium">{selectedFigure.material}</div>
+                  </div>
+
+                  <div>
+                    <div className="text-sm text-gray-500 mb-1">Date de sortie</div>
+                    <div className="font-medium">
+                      {new Date(selectedFigure.releaseDate).toLocaleDateString("fr-FR", {
+                        year: "numeric",
+                        month: "long"
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-4 border-t">
+                    <div>
+                      <div className="text-sm text-gray-500 mb-1">Prix</div>
+                      <div className="text-2xl font-bold">{selectedFigure.price} €</div>
+                    </div>
+                    <button className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                      Acheter maintenant
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
 
 export default Figurines;
-
