@@ -1,6 +1,13 @@
 import { useParams, Link } from "react-router-dom";
-import { Star, Tag, Box, Calendar, Ruler, Info, List, ArrowLeft, ShoppingBag, Newspaper, MessageCircle, ImageIcon, Store, ArrowRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import MainNav from "../components/MainNav";
+import { FigurineHeader } from "../components/FigurineHeader";
+import { FigurineGallery } from "../components/FigurineGallery";
+import { FigurineSpecs } from "../components/FigurineSpecs";
+import { FigurineShops } from "../components/FigurineShops";
+import { FigurineNews } from "../components/FigurineNews";
+import { FigurineRelated } from "../components/FigurineRelated";
+import { FigurineComments } from "../components/FigurineComments";
 
 const FigurineDetails = () => {
   const { id } = useParams();
@@ -110,200 +117,24 @@ const FigurineDetails = () => {
           </Link>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
-          <div className="p-6">
-            <div className="flex items-center gap-2 mb-2">
-              <Tag size={16} className="text-primary" />
-              <span className="text-sm text-gray-600">{figure.series}</span>
-            </div>
-            <h1 className="text-3xl font-bold mb-2">{figure.name}</h1>
-            <p className="text-gray-600">Référence: {figure.reference}</p>
-          </div>
-        </div>
+        <FigurineHeader
+          series={figure.series}
+          name={figure.name}
+          reference={figure.reference}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          <div className="md:col-span-2 bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <ImageIcon size={20} />
-              Galerie
-            </h2>
-            <div className="aspect-square rounded-lg overflow-hidden mb-4">
-              <img
-                src={figure.images[0]}
-                alt={figure.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              {figure.images.slice(1).map((image, index) => (
-                <div key={index} className="aspect-square rounded-lg overflow-hidden cursor-pointer">
-                  <img
-                    src={image}
-                    alt={`${figure.name} view ${index + 2}`}
-                    className="w-full h-full object-cover hover:opacity-75 transition-opacity"
-                  />
-                </div>
-              ))}
-            </div>
+          <div className="md:col-span-2">
+            <FigurineGallery name={figure.name} images={figure.images} />
           </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <Info size={20} />
-              Spécifications
-            </h2>
-            <dl className="space-y-4 text-sm">
-              <div>
-                <dt className="text-gray-500 mb-1">Fabricant</dt>
-                <dd className="font-medium">{figure.manufacturer}</dd>
-              </div>
-              <div>
-                <dt className="text-gray-500 mb-1">Gamme</dt>
-                <dd className="font-medium">{figure.line}</dd>
-              </div>
-              <div>
-                <dt className="text-gray-500 mb-1">Série</dt>
-                <dd className="font-medium">{figure.series}</dd>
-              </div>
-              <div>
-                <dt className="text-gray-500 mb-1">Personnage</dt>
-                <dd className="font-medium">{figure.character}</dd>
-              </div>
-              <div>
-                <dt className="text-gray-500 mb-1">Échelle & Dimensions</dt>
-                <dd className="font-medium">{figure.scale} - {figure.height}</dd>
-              </div>
-              <div>
-                <dt className="text-gray-500 mb-1">Sculpteur</dt>
-                <dd className="font-medium">{figure.sculpteur}</dd>
-              </div>
-              <div>
-                <dt className="text-gray-500 mb-1">Peintre</dt>
-                <dd className="font-medium">{figure.painter}</dd>
-              </div>
-              <div>
-                <dt className="text-gray-500 mb-1">Prix de sortie</dt>
-                <dd className="font-medium">{figure.price}¥</dd>
-              </div>
-              <div>
-                <dt className="text-gray-500 mb-1">Date de sortie</dt>
-                <dd className="font-medium">
-                  {new Date(figure.releaseDate).toLocaleDateString("fr-FR", {
-                    year: "numeric",
-                    month: "long"
-                  })}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-gray-500 mb-1">Matériaux</dt>
-                <dd className="font-medium">{figure.material}</dd>
-              </div>
-            </dl>
-          </div>
+          <FigurineSpecs specs={figure} />
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Store size={20} />
-            Où acheter
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {figure.shops.map((shop, index) => (
-              <a
-                key={index}
-                href={shop.url}
-                className="block p-4 border rounded-lg hover:border-primary transition-colors"
-              >
-                <div className="font-medium mb-2">{shop.name}</div>
-                <div className="text-xl font-bold mb-2">{shop.price}</div>
-                <div className={`text-sm ${shop.stock ? 'text-green-600' : 'text-red-600'}`}>
-                  {shop.stock ? 'En stock' : 'Rupture de stock'}
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Newspaper size={20} />
-            Actualités
-          </h2>
-          {figure.news.map((news, index) => (
-            <a
-              key={index}
-              href={news.url}
-              className="block p-4 border rounded-lg hover:border-primary transition-colors mb-4 last:mb-0"
-            >
-              <div className="font-medium mb-1">{news.title}</div>
-              <div className="text-sm text-gray-500">
-                {new Date(news.date).toLocaleDateString("fr-FR", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric"
-                })}
-              </div>
-            </a>
-          ))}
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <List size={20} />
-            Autres figurines suggérées
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {figure.relatedFigures.map((related) => (
-              <Link
-                key={related.id}
-                to={`/figurines/${related.id}`}
-                className="flex items-center p-4 border rounded-lg hover:border-primary transition-colors"
-              >
-                <div className="w-20 h-20 rounded overflow-hidden flex-shrink-0">
-                  <img
-                    src={related.image}
-                    alt={related.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="ml-4 flex-grow">
-                  <div className="font-medium">{related.name}</div>
-                  <div className="text-sm text-gray-500">{related.manufacturer}</div>
-                  <div className="font-bold mt-1">{related.price}</div>
-                </div>
-                <ArrowRight size={20} className="text-gray-400" />
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <MessageCircle size={20} />
-            Commentaires
-          </h2>
-          {figure.comments.map((comment, index) => (
-            <div key={index} className="border-b last:border-0 py-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className="font-medium">{comment.author}</div>
-                <div className="flex items-center">
-                  <div className="flex gap-1 mr-2">
-                    {[...Array(comment.rating)].map((_, i) => (
-                      <Star key={i} size={16} className="text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    {new Date(comment.date).toLocaleDateString("fr-FR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric"
-                    })}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600">{comment.content}</p>
-            </div>
-          ))}
+        <div className="space-y-8">
+          <FigurineShops shops={figure.shops} />
+          <FigurineNews news={figure.news} />
+          <FigurineRelated figures={figure.relatedFigures} />
+          <FigurineComments comments={figure.comments} />
         </div>
       </main>
     </div>
