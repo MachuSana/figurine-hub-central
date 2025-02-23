@@ -1,23 +1,16 @@
-
 import MainNav from "../components/MainNav";
 import { useState } from "react";
 import { Star, Tag, Box, Calendar, Ruler, Info, List } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 type SortOption = "date" | "scale" | "name" | "series";
 
 const Figurines = () => {
+  const navigate = useNavigate();
   const [sortBy, setSortBy] = useState<SortOption>("date");
   const [selectedScales, setSelectedScales] = useState<string[]>([]);
   const [selectedManufacturers, setSelectedManufacturers] = useState<string[]>([]);
   const [selectedSeries, setSelectedSeries] = useState<string[]>([]);
-  const [selectedFigure, setSelectedFigure] = useState<typeof figures[0] | null>(null);
 
   const figures = [
     {
@@ -94,7 +87,6 @@ const Figurines = () => {
     }
   ];
 
-  // Fonction de tri des figurines
   const sortedFigures = [...figures].sort((a, b) => {
     switch (sortBy) {
       case "date":
@@ -110,7 +102,6 @@ const Figurines = () => {
     }
   });
 
-  // Fonction de filtrage des figurines
   const filteredFigures = sortedFigures.filter(figure => {
     const scale = selectedScales.length === 0 || 
       selectedScales.includes(figure.scale);
@@ -149,7 +140,6 @@ const Figurines = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Filtres sur le côté */}
           <div className="hidden lg:block lg:col-span-1">
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-semibold mb-4">Filtres</h2>
@@ -227,14 +217,13 @@ const Figurines = () => {
             </div>
           </div>
 
-          {/* Liste de figurines */}
           <div className="lg:col-span-3">
             <div className="grid grid-cols-1 gap-4">
               {filteredFigures.map((figure) => (
                 <div
                   key={figure.id}
                   className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
-                  onClick={() => setSelectedFigure(figure)}
+                  onClick={() => navigate(`/figurines/${figure.id}`)}
                 >
                   <div className="flex items-center p-4">
                     <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
@@ -277,136 +266,6 @@ const Figurines = () => {
           </div>
         </div>
       </main>
-
-      <Dialog open={!!selectedFigure} onOpenChange={(open) => !open && setSelectedFigure(null)}>
-        <DialogContent className="max-w-3xl">
-          {selectedFigure && (
-            <>
-              <DialogHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <Tag size={16} className="text-primary" />
-                      <span className="text-sm text-gray-600">{selectedFigure.series}</span>
-                    </div>
-                    <DialogTitle className="text-2xl mb-1">{selectedFigure.name}</DialogTitle>
-                    <DialogDescription className="text-base">
-                      Référence: {selectedFigure.reference}
-                    </DialogDescription>
-                  </div>
-                </div>
-              </DialogHeader>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <div className="relative aspect-square rounded-lg overflow-hidden mb-4">
-                    <img
-                      src={selectedFigure.image}
-                      alt={selectedFigure.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <h4 className="font-medium text-sm text-gray-500 mb-2">Informations de base</h4>
-                      <dl className="grid grid-cols-2 gap-2 text-sm">
-                        <dt className="text-gray-500">ID</dt>
-                        <dd className="font-medium">{selectedFigure.id}</dd>
-                        <dt className="text-gray-500">Référence</dt>
-                        <dd className="font-medium">{selectedFigure.reference}</dd>
-                        <dt className="text-gray-500">Série</dt>
-                        <dd className="font-medium">{selectedFigure.series}</dd>
-                        <dt className="text-gray-500">Fabricant</dt>
-                        <dd className="font-medium">{selectedFigure.manufacturer}</dd>
-                      </dl>
-                    </div>
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <h4 className="font-medium text-sm text-gray-500 mb-2">Dates</h4>
-                      <dl className="space-y-2 text-sm">
-                        <div className="flex items-center justify-between">
-                          <dt className="text-gray-500">Sortie</dt>
-                          <dd className="font-medium">
-                            {new Date(selectedFigure.releaseDate).toLocaleDateString("fr-FR", {
-                              year: "numeric",
-                              month: "long"
-                            })}
-                          </dd>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <dt className="text-gray-500">Ajout BDD</dt>
-                          <dd className="font-medium">
-                            {new Date(selectedFigure.articleDate).toLocaleDateString("fr-FR", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric"
-                            })}
-                          </dd>
-                        </div>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-medium mb-2 text-sm text-gray-500">Description</h3>
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-sm">{selectedFigure.description}</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h3 className="font-medium text-sm text-gray-500">Spécifications techniques</h3>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="p-4 bg-gray-50 rounded-lg">
-                        <h4 className="font-medium text-sm text-gray-500 mb-2">Dimensions</h4>
-                        <dl className="space-y-2 text-sm">
-                          <div className="flex items-center justify-between">
-                            <dt className="text-gray-500">Échelle</dt>
-                            <dd className="font-medium">{selectedFigure.scale}</dd>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <dt className="text-gray-500">Hauteur</dt>
-                            <dd className="font-medium">{selectedFigure.height}</dd>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <dt className="text-gray-500">Poids</dt>
-                            <dd className="font-medium">{selectedFigure.weight}</dd>
-                          </div>
-                        </dl>
-                      </div>
-
-                      <div className="p-4 bg-gray-50 rounded-lg">
-                        <h4 className="font-medium text-sm text-gray-500 mb-2">Production</h4>
-                        <dl className="space-y-2 text-sm">
-                          <div className="flex items-center justify-between">
-                            <dt className="text-gray-500">Sculpteur</dt>
-                            <dd className="font-medium">{selectedFigure.sculpteur}</dd>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <dt className="text-gray-500">Edition</dt>
-                            <dd className="font-medium">{selectedFigure.edition}</dd>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <dt className="text-gray-500">Matériaux</dt>
-                            <dd className="font-medium">{selectedFigure.material}</dd>
-                          </div>
-                        </dl>
-                      </div>
-                    </div>
-
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <h4 className="font-medium text-sm text-gray-500 mb-2">Packaging</h4>
-                      <p className="text-sm">{selectedFigure.packaging}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
