@@ -6,8 +6,6 @@ import MainNav from "../components/MainNav";
 const FigurineDetails = () => {
   const { id } = useParams();
   
-  // Pour l'instant, on utilise les mêmes données que dans Figurines.tsx
-  // Idéalement, cela devrait venir d'une API ou d'un état global
   const figures = [
     {
       id: 1,
@@ -27,13 +25,85 @@ const FigurineDetails = () => {
       packaging: "Window box with blister",
       articleDate: "2023-12-15"
     },
-    // ... autres figurines
+    {
+      id: 2,
+      name: "Eren Yeager - Version Titan",
+      series: "L'Attaque des Titans",
+      image: "https://images.unsplash.com/photo-1501286353178-1ec871214838",
+      manufacturer: "Good Smile Company",
+      releaseDate: "2023-12",
+      description: "Une représentation détaillée d'Eren dans sa forme de Titan, montrant toute la rage et la détermination du personnage.",
+      height: "45cm",
+      material: "PVC & ABS",
+      scale: "1/4",
+      weight: "2kg",
+      sculpteur: "Shinji Kosaka",
+      reference: "GSC94422",
+      edition: "Deluxe",
+      packaging: "Collector box with acrylic stand",
+      articleDate: "2023-08-20"
+    },
+    {
+      id: 3,
+      name: "Saitama - Edition Limitée",
+      series: "One Punch Man",
+      image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+      manufacturer: "Kotobukiya",
+      releaseDate: "2024-01",
+      description: "Edition limitée de Saitama dans sa pose iconique, avec effets spéciaux et base personnalisée.",
+      height: "25cm",
+      material: "PVC & ABS",
+      scale: "1/7",
+      weight: "600g",
+      sculpteur: "Keita Misonou",
+      reference: "KOT77123",
+      edition: "Limited",
+      packaging: "Collector box with numbering",
+      articleDate: "2023-11-05"
+    },
+    {
+      id: 4,
+      name: "Gojo Satoru",
+      series: "Jujutsu Kaisen",
+      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+      manufacturer: "Bandai",
+      releaseDate: "2024-07",
+      description: "Gojo Satoru dans une pose dynamique, avec ses yeux révélés et des effets de son pouvoir Domain Expansion.",
+      height: "24cm",
+      material: "PVC & ABS",
+      scale: "1/7",
+      weight: "550g",
+      sculpteur: "Yuki Ishiyama",
+      reference: "BAS66321",
+      edition: "Standard",
+      packaging: "Window box",
+      articleDate: "2024-01-10"
+    }
   ];
 
   const figure = figures.find(f => f.id === Number(id));
 
   if (!figure) {
-    return <div>Figurine non trouvée</div>;
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <MainNav />
+        <main className="container mx-auto px-4 py-8">
+          <div className="mb-8">
+            <Link 
+              to="/figurines"
+              className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+            >
+              <ArrowLeft size={16} className="mr-1" />
+              Retour à la liste
+            </Link>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm p-8 text-center">
+            <h1 className="text-xl font-semibold text-gray-900 mb-2">Figurine non trouvée</h1>
+            <p className="text-gray-600">La figurine demandée n'existe pas dans notre base de données.</p>
+          </div>
+        </main>
+      </div>
+    );
   }
 
   return (
