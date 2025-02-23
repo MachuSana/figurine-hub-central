@@ -298,74 +298,107 @@ const Figurines = () => {
               </DialogHeader>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="relative aspect-square rounded-lg overflow-hidden">
-                  <img
-                    src={selectedFigure.image}
-                    alt={selectedFigure.name}
-                    className="w-full h-full object-cover"
-                  />
+                <div>
+                  <div className="relative aspect-square rounded-lg overflow-hidden mb-4">
+                    <img
+                      src={selectedFigure.image}
+                      alt={selectedFigure.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="space-y-4">
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <h4 className="font-medium text-sm text-gray-500 mb-2">Informations de base</h4>
+                      <dl className="grid grid-cols-2 gap-2 text-sm">
+                        <dt className="text-gray-500">ID</dt>
+                        <dd className="font-medium">{selectedFigure.id}</dd>
+                        <dt className="text-gray-500">Référence</dt>
+                        <dd className="font-medium">{selectedFigure.reference}</dd>
+                        <dt className="text-gray-500">Série</dt>
+                        <dd className="font-medium">{selectedFigure.series}</dd>
+                        <dt className="text-gray-500">Fabricant</dt>
+                        <dd className="font-medium">{selectedFigure.manufacturer}</dd>
+                      </dl>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <h4 className="font-medium text-sm text-gray-500 mb-2">Dates</h4>
+                      <dl className="space-y-2 text-sm">
+                        <div className="flex items-center justify-between">
+                          <dt className="text-gray-500">Sortie</dt>
+                          <dd className="font-medium">
+                            {new Date(selectedFigure.releaseDate).toLocaleDateString("fr-FR", {
+                              year: "numeric",
+                              month: "long"
+                            })}
+                          </dd>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <dt className="text-gray-500">Ajout BDD</dt>
+                          <dd className="font-medium">
+                            {new Date(selectedFigure.articleDate).toLocaleDateString("fr-FR", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric"
+                            })}
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="space-y-6">
                   <div>
-                    <h3 className="font-medium mb-2">Informations</h3>
-                    <p className="text-gray-600">{selectedFigure.description}</p>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-4">
-                      <div>
-                        <div className="text-sm text-gray-500">Sculpteur</div>
-                        <div className="font-medium">{selectedFigure.sculpteur}</div>
-                      </div>
-                      <div>
-                        <div className="text-sm text-gray-500">Édition</div>
-                        <div className="font-medium">{selectedFigure.edition}</div>
-                      </div>
-                      <div>
-                        <div className="text-sm text-gray-500">Date de sortie</div>
-                        <div className="font-medium">
-                          {new Date(selectedFigure.releaseDate).toLocaleDateString("fr-FR", {
-                            year: "numeric",
-                            month: "long"
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="text-sm text-gray-500">Échelle</div>
-                        <div className="font-medium">{selectedFigure.scale}</div>
-                      </div>
-                      <div>
-                        <div className="text-sm text-gray-500">Hauteur</div>
-                        <div className="font-medium">{selectedFigure.height}</div>
-                      </div>
-                      <div>
-                        <div className="text-sm text-gray-500">Poids</div>
-                        <div className="font-medium">{selectedFigure.weight}</div>
-                      </div>
+                    <h3 className="font-medium mb-2 text-sm text-gray-500">Description</h3>
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <p className="text-sm">{selectedFigure.description}</p>
                     </div>
                   </div>
 
-                  <div>
-                    <div className="text-sm text-gray-500 mb-1">Matériaux</div>
-                    <div className="font-medium">{selectedFigure.material}</div>
-                  </div>
+                  <div className="space-y-4">
+                    <h3 className="font-medium text-sm text-gray-500">Spécifications techniques</h3>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                        <h4 className="font-medium text-sm text-gray-500 mb-2">Dimensions</h4>
+                        <dl className="space-y-2 text-sm">
+                          <div className="flex items-center justify-between">
+                            <dt className="text-gray-500">Échelle</dt>
+                            <dd className="font-medium">{selectedFigure.scale}</dd>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <dt className="text-gray-500">Hauteur</dt>
+                            <dd className="font-medium">{selectedFigure.height}</dd>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <dt className="text-gray-500">Poids</dt>
+                            <dd className="font-medium">{selectedFigure.weight}</dd>
+                          </div>
+                        </dl>
+                      </div>
 
-                  <div>
-                    <div className="text-sm text-gray-500 mb-1">Packaging</div>
-                    <div className="font-medium">{selectedFigure.packaging}</div>
-                  </div>
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                        <h4 className="font-medium text-sm text-gray-500 mb-2">Production</h4>
+                        <dl className="space-y-2 text-sm">
+                          <div className="flex items-center justify-between">
+                            <dt className="text-gray-500">Sculpteur</dt>
+                            <dd className="font-medium">{selectedFigure.sculpteur}</dd>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <dt className="text-gray-500">Edition</dt>
+                            <dd className="font-medium">{selectedFigure.edition}</dd>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <dt className="text-gray-500">Matériaux</dt>
+                            <dd className="font-medium">{selectedFigure.material}</dd>
+                          </div>
+                        </dl>
+                      </div>
+                    </div>
 
-                  <div className="pt-4 border-t">
-                    <div className="text-sm text-gray-500 mb-1">Ajouté à la base de données le</div>
-                    <div className="font-medium">
-                      {new Date(selectedFigure.articleDate).toLocaleDateString("fr-FR", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric"
-                      })}
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <h4 className="font-medium text-sm text-gray-500 mb-2">Packaging</h4>
+                      <p className="text-sm">{selectedFigure.packaging}</p>
                     </div>
                   </div>
                 </div>
@@ -379,4 +412,3 @@ const Figurines = () => {
 };
 
 export default Figurines;
-
