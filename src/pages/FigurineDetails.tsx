@@ -124,6 +124,7 @@ const FigurineDetails = () => {
               series={figure.series}
               name={figure.name}
               reference={figure.reference}
+              id={figure.id}
             />
             <FigurineGallery name={figure.name} images={figure.images} />
             <div className="mt-8">
