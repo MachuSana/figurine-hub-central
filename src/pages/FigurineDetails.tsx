@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import MainNav from "../components/MainNav";
@@ -126,6 +125,9 @@ const FigurineDetails = () => {
               reference={figure.reference}
             />
             <FigurineGallery name={figure.name} images={figure.images} />
+            <div className="mt-8">
+              <FigurineDescription description={figure.description} />
+            </div>
           </div>
           
           <div className="space-y-8">
