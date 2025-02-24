@@ -8,6 +8,7 @@ import { FigurineShops } from "../components/FigurineShops";
 import { FigurineNews } from "../components/FigurineNews";
 import { FigurineRelated } from "../components/FigurineRelated";
 import { FigurineComments } from "../components/FigurineComments";
+import { FigurineDescription } from "../components/FigurineDescription";
 
 const FigurineDetails = () => {
   const { id } = useParams();
