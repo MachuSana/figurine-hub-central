@@ -23,7 +23,7 @@ export const FigurineSpecs = ({ specs }: FigurineSpecsProps) => (
       <Info size={20} />
       Spécifications
     </h2>
-    <dl className="space-y-4 text-sm">
+    <dl className="grid grid-cols-1 gap-4 text-sm">
       {Object.entries({
         Fabricant: specs.manufacturer,
         Gamme: specs.line,
@@ -39,7 +39,7 @@ export const FigurineSpecs = ({ specs }: FigurineSpecsProps) => (
         }),
         Matériaux: specs.material
       }).map(([label, value]) => (
-        <div key={label}>
+        <div key={label} className="border-b pb-2 last:border-0">
           <dt className="text-gray-500 mb-1">{label}</dt>
           <dd className="font-medium">{value}</dd>
         </div>

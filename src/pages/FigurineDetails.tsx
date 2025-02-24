@@ -1,3 +1,4 @@
+
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import MainNav from "../components/MainNav";
@@ -117,22 +118,24 @@ const FigurineDetails = () => {
           </Link>
         </div>
 
-        <FigurineHeader
-          series={figure.series}
-          name={figure.name}
-          reference={figure.reference}
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          <div className="md:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <FigurineHeader
+              series={figure.series}
+              name={figure.name}
+              reference={figure.reference}
+            />
             <FigurineGallery name={figure.name} images={figure.images} />
           </div>
-          <FigurineSpecs specs={figure} />
+          
+          <div className="space-y-8">
+            <FigurineSpecs specs={figure} />
+            <FigurineShops shops={figure.shops} />
+            <FigurineNews news={figure.news} />
+          </div>
         </div>
 
-        <div className="space-y-8">
-          <FigurineShops shops={figure.shops} />
-          <FigurineNews news={figure.news} />
+        <div className="mt-8 space-y-8">
           <FigurineRelated figures={figure.relatedFigures} />
           <FigurineComments comments={figure.comments} />
         </div>
