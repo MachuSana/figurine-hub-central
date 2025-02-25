@@ -1,6 +1,8 @@
+
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Star, MapPin, Package, ArrowRight, Calendar } from "lucide-react";
 import MainNav from "../components/MainNav";
+import { FigurineGallery } from "../components/FigurineGallery";
 
 const ManufacturerDetails = () => {
   const { id } = useParams();
@@ -27,6 +29,11 @@ const ManufacturerDetails = () => {
         { name: "Nendoroid Monkey D. Luffy", date: "2024-02" },
         { name: "figma Saber", date: "2024-01" },
         { name: "Pop Up Parade Miku", date: "2023-12" }
+      ],
+      galleryImages: [
+        "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+        "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+        "https://images.unsplash.com/photo-1485827404703-89b55fcc595e"
       ]
     },
     {
@@ -50,6 +57,11 @@ const ManufacturerDetails = () => {
         { name: "ARTFX J Joker", date: "2024-03" },
         { name: "Bishoujo Harley Quinn", date: "2024-02" },
         { name: "Frame Arms Girl Hresvelgr", date: "2024-01" }
+      ],
+      galleryImages: [
+        "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+        "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+        "https://images.unsplash.com/photo-1485827404703-89b55fcc595e"
       ]
     },
     {
@@ -73,6 +85,11 @@ const ManufacturerDetails = () => {
         { name: "S.H.Figuarts Son Goku", date: "2024-04" },
         { name: "Gunpla RX-78-2 Gundam", date: "2024-03" },
         { name: "Tamashii Nations Sailor Moon", date: "2024-02" }
+      ],
+      galleryImages: [
+        "https://images.unsplash.com/photo-1485827404703-89b55fcc595e",
+        "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+        "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7"
       ]
     }
   ];
@@ -180,6 +197,14 @@ const ManufacturerDetails = () => {
               <ArrowRight size={20} />
             </a>
           </div>
+        </div>
+
+        {/* Galerie */}
+        <div className="mt-8">
+          <FigurineGallery 
+            name={manufacturer.name}
+            images={manufacturer.galleryImages}
+          />
         </div>
 
         {/* Histoire */}

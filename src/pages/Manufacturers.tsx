@@ -47,12 +47,10 @@ const Manufacturers = () => {
     },
   ];
 
-  // Récupérer toutes les spécialités uniques
   const allSpecialties = Array.from(
     new Set(manufacturers.flatMap((m) => m.specialties))
   );
 
-  // Filtrer les fabricants
   const filteredManufacturers = manufacturers.filter((manufacturer) => {
     const matchesSearch = manufacturer.name
       .toLowerCase()
@@ -70,7 +68,6 @@ const Manufacturers = () => {
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Fabricants</h1>
 
-        {/* Filtres et recherche */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
@@ -109,7 +106,6 @@ const Manufacturers = () => {
           {filteredManufacturers.map((manufacturer) => (
             <div
               key={manufacturer.id}
-              onClick={() => navigate(`/manufacturers/${manufacturer.id}`)}
               className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer"
             >
               <div className="md:flex">
@@ -164,15 +160,13 @@ const Manufacturers = () => {
                   </div>
 
                   <div className="mt-6">
-                    <a
-                      href={manufacturer.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      onClick={() => navigate(`/manufacturers/${manufacturer.id}`)}
                       className="flex items-center gap-2 text-primary hover:text-white hover:bg-primary px-4 py-2 rounded-lg transition-colors duration-200"
                     >
-                      Voir les produits
+                      En savoir plus
                       <ArrowRight size={16} />
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -180,7 +174,6 @@ const Manufacturers = () => {
           ))}
         </div>
 
-        {/* Statistiques */}
         <div className="mt-12 bg-white rounded-xl shadow-sm p-6">
           <h2 className="text-2xl font-bold mb-6 text-center">Nos Partenaires en Chiffres</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
