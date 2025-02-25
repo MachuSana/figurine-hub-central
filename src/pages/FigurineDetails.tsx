@@ -1,3 +1,4 @@
+
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import MainNav from "../components/MainNav";
@@ -9,6 +10,7 @@ import { FigurineNews } from "../components/FigurineNews";
 import { FigurineRelated } from "../components/FigurineRelated";
 import { FigurineComments } from "../components/FigurineComments";
 import { FigurineDescription } from "../components/FigurineDescription";
+import { SocialShare } from "../components/SocialShare";
 
 const FigurineDetails = () => {
   const { id } = useParams();
@@ -103,6 +105,9 @@ const FigurineDetails = () => {
     );
   }
 
+  const shareUrl = window.location.href;
+  const shareTitle = `${figure.name} - ${figure.series}`;
+
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
@@ -136,6 +141,7 @@ const FigurineDetails = () => {
             <FigurineSpecs specs={figure} />
             <FigurineShops shops={figure.shops} />
             <FigurineNews news={figure.news} />
+            <SocialShare title={shareTitle} url={shareUrl} />
           </div>
         </div>
 
