@@ -2,7 +2,6 @@
 import MainNav from "../components/MainNav";
 import { ArrowRight, Star, Package, Search, MapPin, Filter } from "lucide-react";
 import { useState } from "react";
-import { SocialShare } from "../components/SocialShare";
 
 const Manufacturers = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -162,7 +161,7 @@ const Manufacturers = () => {
                     </div>
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between">
+                  <div className="mt-6">
                     <a
                       href={manufacturer.website}
                       target="_blank"
@@ -172,10 +171,6 @@ const Manufacturers = () => {
                       Voir les produits
                       <ArrowRight size={16} />
                     </a>
-                    <SocialShare 
-                      title={`Découvrez ${manufacturer.name} sur FigureNews`}
-                      url={`${window.location.origin}/manufacturers/${manufacturer.id}`}
-                    />
                   </div>
                 </div>
               </div>
