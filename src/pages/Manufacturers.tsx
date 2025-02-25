@@ -1,9 +1,10 @@
-
 import MainNav from "../components/MainNav";
 import { ArrowRight, Star, Package, Search, MapPin, Filter } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Manufacturers = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSpecialty, setSelectedSpecialty] = useState<string | null>(null);
 
@@ -108,7 +109,8 @@ const Manufacturers = () => {
           {filteredManufacturers.map((manufacturer) => (
             <div
               key={manufacturer.id}
-              className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
+              onClick={() => navigate(`/manufacturers/${manufacturer.id}`)}
+              className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer"
             >
               <div className="md:flex">
                 <div className="md:w-1/3">
