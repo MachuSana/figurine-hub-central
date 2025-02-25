@@ -1,8 +1,13 @@
 
 import MainNav from "../components/MainNav";
-import { ArrowRight, Star, Package } from "lucide-react";
+import { ArrowRight, Star, Package, Search, MapPin, Filter } from "lucide-react";
+import { useState } from "react";
+import { SocialShare } from "../components/SocialShare";
 
 const Manufacturers = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string | null>(null);
+
   const manufacturers = [
     {
       id: 1,
@@ -14,6 +19,7 @@ const Manufacturers = () => {
       rating: 4.8,
       productsCount: 1500,
       specialties: ["Nendoroid", "Figma", "Scale Figures"],
+      website: "https://goodsmile.com",
     },
     {
       id: 2,
@@ -25,6 +31,7 @@ const Manufacturers = () => {
       rating: 4.7,
       productsCount: 1200,
       specialties: ["ARTFX", "Bishoujo", "Frame Arms"],
+      website: "https://kotobukiya.com",
     },
     {
       id: 3,
@@ -36,8 +43,25 @@ const Manufacturers = () => {
       rating: 4.9,
       productsCount: 2000,
       specialties: ["S.H.Figuarts", "Gunpla", "Dragon Ball"],
+      website: "https://bandai.com",
     },
   ];
+
+  // Récupérer toutes les spécialités uniques
+  const allSpecialties = Array.from(
+    new Set(manufacturers.flatMap((m) => m.specialties))
+  );
+
+  // Filtrer les fabricants
+  const filteredManufacturers = manufacturers.filter((manufacturer) => {
+    const matchesSearch = manufacturer.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const matchesSpecialty =
+      !selectedSpecialty ||
+      manufacturer.specialties.includes(selectedSpecialty);
+    return matchesSearch && matchesSpecialty;
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -46,8 +70,43 @@ const Manufacturers = () => {
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Fabricants</h1>
 
+        {/* Filtres et recherche */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <input
+                  type="text"
+                  placeholder="Rechercher un fabricant..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+              </div>
+            </div>
+            <div className="flex-1">
+              <div className="relative">
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <select
+                  value={selectedSpecialty || ""}
+                  onChange={(e) => setSelectedSpecialty(e.target.value || null)}
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 appearance-none bg-white"
+                >
+                  <option value="">Toutes les spécialités</option>
+                  {allSpecialties.map((specialty) => (
+                    <option key={specialty} value={specialty}>
+                      {specialty}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {manufacturers.map((manufacturer) => (
+          {filteredManufacturers.map((manufacturer) => (
             <div
               key={manufacturer.id}
               className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
@@ -78,7 +137,10 @@ const Manufacturers = () => {
                     </div>
                     <div>
                       <div className="text-sm text-gray-500">Localisation</div>
-                      <div className="font-medium">{manufacturer.location}</div>
+                      <div className="flex items-center gap-1">
+                        <MapPin size={16} className="text-gray-400" />
+                        <span className="font-medium">{manufacturer.location}</span>
+                      </div>
                     </div>
                     <div>
                       <div className="text-sm text-gray-500">Produits</div>
@@ -100,11 +162,20 @@ const Manufacturers = () => {
                     </div>
                   </div>
 
-                  <div className="mt-6 flex justify-end">
-                    <button className="flex items-center gap-2 text-primary hover:text-white hover:bg-primary px-4 py-2 rounded-lg transition-colors duration-200">
+                  <div className="mt-6 flex items-center justify-between">
+                    <a
+                      href={manufacturer.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-primary hover:text-white hover:bg-primary px-4 py-2 rounded-lg transition-colors duration-200"
+                    >
                       Voir les produits
                       <ArrowRight size={16} />
-                    </button>
+                    </a>
+                    <SocialShare 
+                      title={`Découvrez ${manufacturer.name} sur FigureNews`}
+                      url={`${window.location.origin}/manufacturers/${manufacturer.id}`}
+                    />
                   </div>
                 </div>
               </div>
