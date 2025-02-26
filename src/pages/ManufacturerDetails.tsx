@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Star, MapPin, Package, ArrowRight, Calendar, Building, Newspaper, ShoppingBag, Users } from "lucide-react";
+import { ArrowLeft, Star, MapPin, Package, ArrowRight, Calendar } from "lucide-react";
 import MainNav from "../components/MainNav";
+import { FigurineComments } from "../components/FigurineComments";
 
 const ManufacturerDetails = () => {
   const { id } = useParams();
