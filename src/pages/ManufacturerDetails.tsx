@@ -23,33 +23,29 @@ const ManufacturerDetails = () => {
         { name: "figma", description: "Figurines articulées hautement détaillées", count: 500 },
         { name: "Pop Up Parade", description: "Figurines abordables de haute qualité", count: 300 }
       ],
-      recentReleases: [
-        { name: "Nendoroid Monkey D. Luffy", date: "2024-02", price: "6900¥", series: "One Piece" },
-        { name: "figma Saber", date: "2024-01", price: "8900¥", series: "Fate/Stay Night" },
-        { name: "Pop Up Parade Miku", date: "2023-12", price: "4500¥", series: "Vocaloid" }
-      ],
       news: [
         { title: "Nouvelle collection Nendoroid annoncée", date: "2024-03-15", content: "Une nouvelle collection de Nendoroids basée sur la série Demon Slayer arrive bientôt !" },
         { title: "Augmentation de la production", date: "2024-03-01", content: "Notre usine augmente sa capacité de production de 30%" },
         { title: "Collaboration avec Studio Ghibli", date: "2024-02-15", content: "Nouvelle ligne de figurines en collaboration avec Studio Ghibli" }
       ],
-      retailers: [
-        { name: "HobbyLink Japan", location: "Japon", website: "https://hlj.com", authorized: true },
-        { name: "AmiAmi", location: "Japon", website: "https://amiami.com", authorized: true },
-        { name: "Tsume Store", location: "France", website: "https://tsume-art.com", authorized: true }
-      ],
-      statistics: {
-        salesGrowth: "15%",
-        marketShare: "35%",
-        customerSatisfaction: "92%",
-        internationalPresence: "45 pays",
-        annualProduction: "500000 unités",
-        employeeCount: "250+"
-      },
       popularFigurines: [
         { name: "Nendoroid Eren Yeager", series: "Attack on Titan", price: "6900¥", rating: 4.9 },
         { name: "figma Guts", series: "Berserk", price: "9800¥", rating: 4.8 },
         { name: "Pop Up Parade Rei", series: "Evangelion", price: "4500¥", rating: 4.7 }
+      ],
+      comments: [
+        {
+          author: "CollectorPro",
+          date: "2024-03-15",
+          content: "Un fabricant de référence pour les Nendoroids. La qualité est toujours au rendez-vous !",
+          rating: 5
+        },
+        {
+          author: "FigurinesFan",
+          date: "2024-03-10",
+          content: "J'adore leurs Pop Up Parade, excellent rapport qualité-prix.",
+          rating: 4
+        }
       ]
     },
     {
@@ -221,55 +217,31 @@ const ManufacturerDetails = () => {
           <p className="text-gray-600 leading-relaxed">{manufacturer.history}</p>
         </div>
 
-        {/* Statistiques détaillées */}
+        {/* Gammes */}
         <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-6">Statistiques</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gray-50 rounded-lg p-6">
-              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.marketShare}</div>
-              <div className="text-sm text-gray-600">Part de marché</div>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-6">
-              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.salesGrowth}</div>
-              <div className="text-sm text-gray-600">Croissance des ventes</div>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-6">
-              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.customerSatisfaction}</div>
-              <div className="text-sm text-gray-600">Satisfaction client</div>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-6">
-              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.internationalPresence}</div>
-              <div className="text-sm text-gray-600">Présence internationale</div>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-6">
-              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.annualProduction}</div>
-              <div className="text-sm text-gray-600">Production annuelle</div>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-6">
-              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.employeeCount}</div>
-              <div className="text-sm text-gray-600">Employés</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Gammes populaires */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-6">Gammes Populaires</h2>
+          <h2 className="text-2xl font-bold mb-6">Gammes</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {manufacturer.popularLines.map((line, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-6">
-                <h3 className="font-bold text-lg mb-2">{line.name}</h3>
+              <Link
+                key={index}
+                to={`/series/${line.name.toLowerCase()}`}
+                className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors group"
+              >
+                <h3 className="font-bold text-lg mb-2 group-hover:text-primary">{line.name}</h3>
                 <p className="text-gray-600 text-sm mb-3">{line.description}</p>
-                <div className="text-primary font-medium">{line.count}+ figurines</div>
-              </div>
+                <div className="flex items-center justify-between">
+                  <div className="text-primary font-medium">{line.count}+ figurines</div>
+                  <ArrowRight size={20} className="text-gray-400 group-hover:text-primary" />
+                </div>
+              </Link>
             ))}
           </div>
         </div>
 
-        {/* Figurines populaires */}
+        {/* Figurines */}
         <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
           <h2 className="text-2xl font-bold mb-6">Figurines Populaires</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="h-96 overflow-y-auto pr-4 space-y-4">
             {manufacturer.popularFigurines.map((figurine, index) => (
               <div key={index} className="bg-gray-50 rounded-lg p-6">
                 <h3 className="font-bold text-lg mb-2">{figurine.name}</h3>
@@ -302,45 +274,9 @@ const ManufacturerDetails = () => {
           </div>
         </div>
 
-        {/* Revendeurs officiels */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-6">Revendeurs Officiels</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {manufacturer.retailers.map((retailer, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-6">
-                <h3 className="font-bold text-lg mb-2">{retailer.name}</h3>
-                <div className="text-gray-600 mb-3">{retailer.location}</div>
-                <a
-                  href={retailer.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline inline-flex items-center gap-1"
-                >
-                  Visiter le site
-                  <ArrowRight size={16} />
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Sorties récentes */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-6">Sorties Récentes</h2>
-          <div className="space-y-4">
-            {manufacturer.recentReleases.map((release, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <span className="font-medium">{release.name}</span>
-                  <div className="text-sm text-gray-500">{release.series}</div>
-                </div>
-                <div className="text-right">
-                  <div className="font-medium text-primary">{release.price}</div>
-                  <div className="text-sm text-gray-500">{release.date}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Commentaires */}
+        <div className="mt-8">
+          <FigurineComments comments={manufacturer.comments} />
         </div>
       </main>
     </div>
