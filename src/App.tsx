@@ -10,6 +10,7 @@ import FigurineDetails from "./pages/FigurineDetails";
 import Manufacturers from "./pages/Manufacturers";
 import ManufacturerDetails from "./pages/ManufacturerDetails";
 import Series from "./pages/Series";
+import SeriesDetails from "./pages/SeriesDetails";
 import Licenses from "./pages/Licenses";
 import Characters from "./pages/Characters";
 import Shops from "./pages/Shops";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/manufacturers" element={<Manufacturers />} />
           <Route path="/manufacturers/:id" element={<ManufacturerDetails />} />
           <Route path="/series" element={<Series />} />
+          <Route path="/series/:name" element={<SeriesDetails />} />
           <Route path="/licenses" element={<Licenses />} />
           <Route path="/characters" element={<Characters />} />
           <Route path="/shops" element={<Shops />} />
