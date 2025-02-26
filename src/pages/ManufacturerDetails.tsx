@@ -1,8 +1,6 @@
-
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Star, MapPin, Package, ArrowRight, Calendar } from "lucide-react";
+import { ArrowLeft, Star, MapPin, Package, ArrowRight, Calendar, Building, Newspaper, ShoppingBag, Users } from "lucide-react";
 import MainNav from "../components/MainNav";
-import { FigurineGallery } from "../components/FigurineGallery";
 
 const ManufacturerDetails = () => {
   const { id } = useParams();
@@ -21,19 +19,37 @@ const ManufacturerDetails = () => {
       website: "https://goodsmile.com",
       history: "Good Smile Company a été fondée en 2001 et s'est rapidement imposée comme le leader des figurines Nendoroid. L'entreprise est connue pour sa qualité exceptionnelle et son attention aux détails.",
       popularLines: [
-        { name: "Nendoroid", description: "Figurines super deformed avec pièces interchangeables" },
-        { name: "figma", description: "Figurines articulées hautement détaillées" },
-        { name: "Pop Up Parade", description: "Figurines abordables de haute qualité" }
+        { name: "Nendoroid", description: "Figurines super deformed avec pièces interchangeables", count: 1200 },
+        { name: "figma", description: "Figurines articulées hautement détaillées", count: 500 },
+        { name: "Pop Up Parade", description: "Figurines abordables de haute qualité", count: 300 }
       ],
       recentReleases: [
-        { name: "Nendoroid Monkey D. Luffy", date: "2024-02" },
-        { name: "figma Saber", date: "2024-01" },
-        { name: "Pop Up Parade Miku", date: "2023-12" }
+        { name: "Nendoroid Monkey D. Luffy", date: "2024-02", price: "6900¥", series: "One Piece" },
+        { name: "figma Saber", date: "2024-01", price: "8900¥", series: "Fate/Stay Night" },
+        { name: "Pop Up Parade Miku", date: "2023-12", price: "4500¥", series: "Vocaloid" }
       ],
-      galleryImages: [
-        "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
-        "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
-        "https://images.unsplash.com/photo-1485827404703-89b55fcc595e"
+      news: [
+        { title: "Nouvelle collection Nendoroid annoncée", date: "2024-03-15", content: "Une nouvelle collection de Nendoroids basée sur la série Demon Slayer arrive bientôt !" },
+        { title: "Augmentation de la production", date: "2024-03-01", content: "Notre usine augmente sa capacité de production de 30%" },
+        { title: "Collaboration avec Studio Ghibli", date: "2024-02-15", content: "Nouvelle ligne de figurines en collaboration avec Studio Ghibli" }
+      ],
+      retailers: [
+        { name: "HobbyLink Japan", location: "Japon", website: "https://hlj.com", authorized: true },
+        { name: "AmiAmi", location: "Japon", website: "https://amiami.com", authorized: true },
+        { name: "Tsume Store", location: "France", website: "https://tsume-art.com", authorized: true }
+      ],
+      statistics: {
+        salesGrowth: "15%",
+        marketShare: "35%",
+        customerSatisfaction: "92%",
+        internationalPresence: "45 pays",
+        annualProduction: "500000 unités",
+        employeeCount: "250+"
+      },
+      popularFigurines: [
+        { name: "Nendoroid Eren Yeager", series: "Attack on Titan", price: "6900¥", rating: 4.9 },
+        { name: "figma Guts", series: "Berserk", price: "9800¥", rating: 4.8 },
+        { name: "Pop Up Parade Rei", series: "Evangelion", price: "4500¥", rating: 4.7 }
       ]
     },
     {
@@ -199,18 +215,41 @@ const ManufacturerDetails = () => {
           </div>
         </div>
 
-        {/* Galerie */}
-        <div className="mt-8">
-          <FigurineGallery 
-            name={manufacturer.name}
-            images={manufacturer.galleryImages}
-          />
-        </div>
-
         {/* Histoire */}
         <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
           <h2 className="text-2xl font-bold mb-4">Histoire</h2>
           <p className="text-gray-600 leading-relaxed">{manufacturer.history}</p>
+        </div>
+
+        {/* Statistiques détaillées */}
+        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
+          <h2 className="text-2xl font-bold mb-6">Statistiques</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-gray-50 rounded-lg p-6">
+              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.marketShare}</div>
+              <div className="text-sm text-gray-600">Part de marché</div>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-6">
+              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.salesGrowth}</div>
+              <div className="text-sm text-gray-600">Croissance des ventes</div>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-6">
+              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.customerSatisfaction}</div>
+              <div className="text-sm text-gray-600">Satisfaction client</div>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-6">
+              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.internationalPresence}</div>
+              <div className="text-sm text-gray-600">Présence internationale</div>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-6">
+              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.annualProduction}</div>
+              <div className="text-sm text-gray-600">Production annuelle</div>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-6">
+              <div className="text-2xl font-bold text-primary">{manufacturer.statistics.employeeCount}</div>
+              <div className="text-sm text-gray-600">Employés</div>
+            </div>
+          </div>
         </div>
 
         {/* Gammes populaires */}
@@ -219,8 +258,67 @@ const ManufacturerDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {manufacturer.popularLines.map((line, index) => (
               <div key={index} className="bg-gray-50 rounded-lg p-6">
-                <h3 className="font-bold mb-2">{line.name}</h3>
-                <p className="text-gray-600 text-sm">{line.description}</p>
+                <h3 className="font-bold text-lg mb-2">{line.name}</h3>
+                <p className="text-gray-600 text-sm mb-3">{line.description}</p>
+                <div className="text-primary font-medium">{line.count}+ figurines</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Figurines populaires */}
+        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
+          <h2 className="text-2xl font-bold mb-6">Figurines Populaires</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {manufacturer.popularFigurines.map((figurine, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-6">
+                <h3 className="font-bold text-lg mb-2">{figurine.name}</h3>
+                <div className="text-gray-600 text-sm mb-2">{figurine.series}</div>
+                <div className="flex justify-between items-center">
+                  <div className="text-primary font-medium">{figurine.price}</div>
+                  <div className="flex items-center gap-1">
+                    <Star size={14} className="text-yellow-400 fill-current" />
+                    <span>{figurine.rating}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Actualités */}
+        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
+          <h2 className="text-2xl font-bold mb-6">Actualités</h2>
+          <div className="space-y-6">
+            {manufacturer.news.map((item, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-6">
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="font-bold text-lg">{item.title}</h3>
+                  <span className="text-sm text-gray-500">{item.date}</span>
+                </div>
+                <p className="text-gray-600">{item.content}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Revendeurs officiels */}
+        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
+          <h2 className="text-2xl font-bold mb-6">Revendeurs Officiels</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {manufacturer.retailers.map((retailer, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-6">
+                <h3 className="font-bold text-lg mb-2">{retailer.name}</h3>
+                <div className="text-gray-600 mb-3">{retailer.location}</div>
+                <a
+                  href={retailer.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline inline-flex items-center gap-1"
+                >
+                  Visiter le site
+                  <ArrowRight size={16} />
+                </a>
               </div>
             ))}
           </div>
@@ -232,8 +330,14 @@ const ManufacturerDetails = () => {
           <div className="space-y-4">
             {manufacturer.recentReleases.map((release, index) => (
               <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <span className="font-medium">{release.name}</span>
-                <span className="text-gray-500">{release.date}</span>
+                <div>
+                  <span className="font-medium">{release.name}</span>
+                  <div className="text-sm text-gray-500">{release.series}</div>
+                </div>
+                <div className="text-right">
+                  <div className="font-medium text-primary">{release.price}</div>
+                  <div className="text-sm text-gray-500">{release.date}</div>
+                </div>
               </div>
             ))}
           </div>
