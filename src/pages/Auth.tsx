@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,21 +12,44 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Vérifier si l'utilisateur est déjà connecté
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        navigate("/admin");
+      }
+    });
+
+    // Écouter les changements d'état d'authentification
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        navigate("/admin");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
 
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Connexion réussie");
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
       navigate("/admin");
+      toast.success("Connexion réussie");
+    } catch (error: any) {
+      toast.error(error.message);
+      console.error("Erreur de connexion:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -34,31 +57,41 @@ const Auth = () => {
     setLoading(true);
     
     try {
+      if (!email || !password) {
+        throw new Error("L'email et le mot de passe sont requis");
+      }
+
       // 1. Créer le compte utilisateur
-      const { data: authData, error: signUpError } = await supabase.auth.signUp({
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            role: 'admin' // Stocké dans les métadonnées de l'utilisateur
+          }
+        }
       });
 
       if (signUpError) throw signUpError;
 
-      if (authData.user) {
+      if (data?.user) {
         // 2. Créer le profil admin
         const { error: profileError } = await supabase
           .from('profiles')
           .insert([
             { 
-              id: authData.user.id,
+              id: data.user.id,
               role: 'admin'
             }
           ]);
 
         if (profileError) throw profileError;
 
-        toast.success("Compte créé avec succès ! Vous pouvez maintenant vous connecter.");
+        toast.success("Compte créé avec succès ! Vérifiez votre email pour confirmer votre compte.");
       }
     } catch (error: any) {
       toast.error(error.message);
+      console.error("Erreur d'inscription:", error);
     } finally {
       setLoading(false);
     }
