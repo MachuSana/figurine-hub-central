@@ -32,17 +32,36 @@ const Auth = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    
+    try {
+      // 1. Créer le compte utilisateur
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
 
-    if (error) {
+      if (signUpError) throw signUpError;
+
+      if (authData.user) {
+        // 2. Créer le profil admin
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([
+            { 
+              id: authData.user.id,
+              role: 'admin'
+            }
+          ]);
+
+        if (profileError) throw profileError;
+
+        toast.success("Compte créé avec succès ! Vous pouvez maintenant vous connecter.");
+      }
+    } catch (error: any) {
       toast.error(error.message);
-    } else {
-      toast.success("Inscription réussie ! Vérifiez votre email.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
