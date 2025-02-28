@@ -15,8 +15,6 @@ import Licenses from "./pages/Licenses";
 import Characters from "./pages/Characters";
 import Shops from "./pages/Shops";
 import NotFound from "./pages/NotFound";
-import Auth from "./pages/Auth";
-import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -37,8 +35,6 @@ const App = () => (
           <Route path="/licenses" element={<Licenses />} />
           <Route path="/characters" element={<Characters />} />
           <Route path="/shops" element={<Shops />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
