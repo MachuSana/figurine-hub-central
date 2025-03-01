@@ -1,6 +1,6 @@
 
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Star, Calendar, Users, Package, ShoppingBag, TrendingUp, BadgeInfo, ExternalLink, Share2, Tag } from "lucide-react";
+import { ArrowLeft, Star, Calendar, Users, Package, ShoppingBag, TrendingUp, BadgeInfo, ExternalLink, Share2, Tag, ArrowRight } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { Button } from "../components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
