@@ -68,7 +68,10 @@ La série a été adaptée en anime par White Fox en 2016, et a rapidement gagn�
       externalLinks: [
         { name: "Site Officiel", url: "https://re-zero-anime.jp/" },
         { name: "MyFigureCollection", url: "https://myfigurecollection.net/entry/167274" },
-        { name: "AmiAmi", url: "https://www.amiami.com/eng/search/list/?s_keywords=re%3Azero" }
+        { name: "AmiAmi", url: "https://www.amiami.com/eng/search/list/?s_keywords=re%3Azero" },
+        { name: "Twitter", url: "https://twitter.com/rezero_official" },
+        { name: "Instagram", url: "https://www.instagram.com/rezero_official/" },
+        { name: "YouTube", url: "https://www.youtube.com/channel/UCXf-aXMJMQfi8VeSXpw0j_w" }
       ],
       events: [
         { name: "Re:Zero Festival 2023", date: "2023-11-25", location: "Tokyo, Japon" },
@@ -135,7 +138,10 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
       },
       externalLinks: [
         { name: "Site Officiel", url: "https://azurlane.yo-star.com/" },
-        { name: "MyFigureCollection", url: "https://myfigurecollection.net/entry/167274" }
+        { name: "MyFigureCollection", url: "https://myfigurecollection.net/entry/167274" },
+        { name: "Twitter", url: "https://twitter.com/AzurLane_EN" },
+        { name: "Facebook", url: "https://www.facebook.com/AzurLaneEN/" },
+        { name: "Discord", url: "https://discord.gg/azurlane" }
       ],
       events: [
         { name: "Azur Lane 6th Anniversary", date: "2023-05-25", location: "Shanghai, Chine" }
@@ -296,52 +302,27 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
                   <h2 className="text-xl font-bold mb-4">À propos de {license.name}</h2>
                   <p className="text-gray-700 whitespace-pre-line">{license.longDescription}</p>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 flex items-center">
-                        <TrendingUp size={18} className="mr-2 text-primary" />
-                        Statistiques
-                      </h3>
-                      <ul className="space-y-2">
-                        <li className="flex justify-between">
-                          <span className="text-gray-600">Ventes totales:</span>
-                          <span className="font-medium">{license.statistics.totalSales}</span>
-                        </li>
-                        <li className="flex justify-between">
-                          <span className="text-gray-600">Part de marché:</span>
-                          <span className="font-medium">{license.statistics.marketShare}</span>
-                        </li>
-                        <li className="flex justify-between">
-                          <span className="text-gray-600">Croissance:</span>
-                          <span className="font-medium text-green-600">{license.statistics.growthRate}</span>
-                        </li>
-                        <li className="flex justify-between">
-                          <span className="text-gray-600">Prix moyen:</span>
-                          <span className="font-medium">{license.statistics.averageFigurePrice}</span>
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 flex items-center">
-                        <BadgeInfo size={18} className="mr-2 text-primary" />
-                        Liens externes
-                      </h3>
-                      <ul className="space-y-2">
-                        {license.externalLinks.map((link, index) => (
-                          <li key={index}>
-                            <a 
-                              href={link.url} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="text-primary hover:text-primary/80 flex items-center"
-                            >
-                              {link.name}
-                              <ExternalLink size={14} className="ml-1" />
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
+                  <div className="mt-8">
+                    <h3 className="text-lg font-semibold mb-3 flex items-center">
+                      <BadgeInfo size={18} className="mr-2 text-primary" />
+                      Liens et réseaux sociaux
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {license.externalLinks.map((link, index) => (
+                        <a 
+                          key={index}
+                          href={link.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center p-3 rounded-lg border hover:bg-gray-50 transition-colors"
+                        >
+                          <ExternalLink size={16} className="mr-3 text-primary" />
+                          <div>
+                            <div className="font-medium">{link.name}</div>
+                            <div className="text-xs text-gray-500 truncate">{link.url}</div>
+                          </div>
+                        </a>
+                      ))}
                     </div>
                   </div>
                 </div>
