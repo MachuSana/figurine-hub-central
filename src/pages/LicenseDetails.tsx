@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Star, Calendar, Users, Package, ShoppingBag, TrendingUp, BadgeInfo, ExternalLink, Share2, Tag, ArrowRight } from "lucide-react";
 import MainNav from "../components/MainNav";
@@ -67,8 +66,7 @@ La série a été adaptée en anime par White Fox en 2016, et a rapidement gagn�
       },
       externalLinks: [
         { name: "Site Officiel", url: "https://re-zero-anime.jp/" },
-        { name: "MyFigureCollection", url: "https://myfigurecollection.net/entry/167274" },
-        { name: "AmiAmi", url: "https://www.amiami.com/eng/search/list/?s_keywords=re%3Azero" },
+        { name: "Crunchyroll", url: "https://www.crunchyroll.com/series/GRGG9798R/rezero--starting-life-in-another-world-" },
         { name: "Twitter", url: "https://twitter.com/rezero_official" },
         { name: "Instagram", url: "https://www.instagram.com/rezero_official/" },
         { name: "YouTube", url: "https://www.youtube.com/channel/UCXf-aXMJMQfi8VeSXpw0j_w" }
@@ -138,7 +136,7 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
       },
       externalLinks: [
         { name: "Site Officiel", url: "https://azurlane.yo-star.com/" },
-        { name: "MyFigureCollection", url: "https://myfigurecollection.net/entry/167274" },
+        { name: "Crunchyroll", url: "https://www.crunchyroll.com/series/GR0K8QPG2/azur-lane" },
         { name: "Twitter", url: "https://twitter.com/AzurLane_EN" },
         { name: "Facebook", url: "https://www.facebook.com/AzurLaneEN/" },
         { name: "Discord", url: "https://discord.gg/azurlane" }
