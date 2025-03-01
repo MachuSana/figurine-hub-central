@@ -18,12 +18,6 @@ const Index = () => {
             >
               Explorer les figurines
             </Link>
-            <Link 
-              to="/auth"
-              className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors"
-            >
-              Admin
-            </Link>
           </div>
         </div>
 
