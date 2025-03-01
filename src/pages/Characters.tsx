@@ -1,6 +1,8 @@
 
 import MainNav from "../components/MainNav";
 import { UserRound, Star, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "../components/ui/button";
 
 const Characters = () => {
   const characters = [
@@ -36,6 +38,39 @@ const Characters = () => {
       popularity: 4.7,
       traits: ["Persévérant", "Loyal", "Énergique"],
       affiliations: ["Village de Konoha", "Team 7"]
+    },
+    {
+      id: 4,
+      name: "Rem",
+      series: "Re:Zero",
+      description: "Une démone au service de la famille Roswaal",
+      image: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc",
+      figureCount: 95,
+      popularity: 4.9,
+      traits: ["Dévouée", "Déterminée", "Protectrice"],
+      affiliations: ["Manoir Roswaal", "Démone"]
+    },
+    {
+      id: 5,
+      name: "Asuka Langley Soryu",
+      series: "Neon Genesis Evangelion",
+      description: "Pilote de l'EVA-02",
+      image: "https://images.unsplash.com/photo-1547333590-47fae5f58d21",
+      figureCount: 80,
+      popularity: 4.7,
+      traits: ["Orgueilleuse", "Compétitive", "Complexe"],
+      affiliations: ["NERV", "Pilotes d'EVA"]
+    },
+    {
+      id: 6,
+      name: "Mikasa Ackerman",
+      series: "Attack on Titan",
+      description: "Une soldate d'élite du bataillon d'exploration",
+      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e",
+      figureCount: 110,
+      popularity: 4.8,
+      traits: ["Forte", "Protectrice", "Loyale"],
+      affiliations: ["Bataillon d'exploration", "104ème Brigade d'entraînement"]
     }
   ];
 
@@ -111,10 +146,12 @@ const Characters = () => {
                   </div>
 
                   <div className="mt-6 flex justify-end">
-                    <button className="flex items-center gap-2 text-primary hover:text-white hover:bg-primary px-4 py-2 rounded-lg transition-colors duration-200">
-                      Voir les figurines
-                      <ArrowRight size={16} />
-                    </button>
+                    <Link to={`/characters/${character.id}`}>
+                      <Button variant="ghost" className="flex items-center gap-2 text-primary hover:text-white hover:bg-primary">
+                        Voir le personnage
+                        <ArrowRight size={16} />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
