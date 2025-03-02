@@ -16,6 +16,7 @@ import LicenseDetails from "./pages/LicenseDetails";
 import Characters from "./pages/Characters";
 import CharacterDetails from "./pages/CharacterDetails";
 import Shops from "./pages/Shops";
+import ShopDetails from "./pages/ShopDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/characters" element={<Characters />} />
           <Route path="/characters/:id" element={<CharacterDetails />} />
           <Route path="/shops" element={<Shops />} />
+          <Route path="/shops/:id" element={<ShopDetails />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

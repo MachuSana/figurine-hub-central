@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import MainNav from "../components/MainNav";
@@ -49,11 +48,11 @@ const CharacterDetails = () => {
       },
     ],
     biography: {
-      age: 19,
-      birthday: "5 Mai",
+      age: "19", // Convertir de number à string
+      birthday: "5 mai",
       height: "174 cm",
-      bounty: "1 500 000 000 Berry",
-      devilFruit: "Gomu Gomu no Mi (Fruit du Gum-Gum)",
+      bounty: "1 500 000 000 Berrys",
+      devilFruit: "Gomu Gomu no Mi (Fruit du Caoutchoutier)",
       firstAppearance: "Chapitre 1 (Manga), Épisode 1 (Anime)",
       japaneseVoice: "Mayumi Tanaka",
       englishVoice: "Colleen Clinkenbeard",
