@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import MainNav from "../components/MainNav";
@@ -18,13 +17,12 @@ import {
   Shield,
   BadgeInfo,
 } from "lucide-react";
-import FigurineCard from "../components/FigurineCard";
+import { FigurineCard } from "../components/FigurineCard";
 
 const CharacterDetails = () => {
   const { id } = useParams();
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // In a real app, fetch this data based on the id parameter
   const character = {
     id: parseInt(id || "1"),
     name: "Monkey D. Luffy",
@@ -151,7 +149,6 @@ const CharacterDetails = () => {
 
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Left column - Character image and basic info */}
           <div className="md:col-span-1">
             <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
               <div className="relative">
@@ -243,7 +240,6 @@ const CharacterDetails = () => {
             </div>
           </div>
 
-          {/* Right column - Character details */}
           <div className="md:col-span-2">
             <Tabs defaultValue="description" className="w-full">
               <TabsList className="mb-4 w-full">
