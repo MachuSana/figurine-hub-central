@@ -1,6 +1,7 @@
 
 import MainNav from "../components/MainNav";
 import { UserRound, Star, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Characters = () => {
   const characters = [
@@ -111,10 +112,13 @@ const Characters = () => {
                   </div>
 
                   <div className="mt-6 flex justify-end">
-                    <button className="flex items-center gap-2 text-primary hover:text-white hover:bg-primary px-4 py-2 rounded-lg transition-colors duration-200">
-                      Voir les figurines
+                    <Link 
+                      to={`/characters/${character.id}`}
+                      className="flex items-center gap-2 text-primary hover:text-white hover:bg-primary px-4 py-2 rounded-lg transition-colors duration-200"
+                    >
+                      Voir les détails
                       <ArrowRight size={16} />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

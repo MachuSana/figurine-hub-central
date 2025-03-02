@@ -14,6 +14,7 @@ import SeriesDetails from "./pages/SeriesDetails";
 import Licenses from "./pages/Licenses";
 import LicenseDetails from "./pages/LicenseDetails";
 import Characters from "./pages/Characters";
+import CharacterDetails from "./pages/CharacterDetails";
 import Shops from "./pages/Shops";
 import NotFound from "./pages/NotFound";
 
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/licenses" element={<Licenses />} />
           <Route path="/licenses/:id" element={<LicenseDetails />} />
           <Route path="/characters" element={<Characters />} />
+          <Route path="/characters/:id" element={<CharacterDetails />} />
           <Route path="/shops" element={<Shops />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
