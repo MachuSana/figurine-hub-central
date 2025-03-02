@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import MainNav from "../components/MainNav";
@@ -142,6 +143,16 @@ const CharacterDetails = () => {
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
   };
+
+  // Convert the figurine data to match the required FigurineCard props structure
+  const mappedFigurines = character.figurines.map(figurine => ({
+    id: figurine.id,
+    name: figurine.name,
+    manufacturer: figurine.manufacturer,
+    series: character.series,
+    price: `${figurine.price}`, // Convert to string as expected by FigurineCard
+    images: [figurine.image], // Convert single image to array of images
+  }));
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -311,17 +322,10 @@ const CharacterDetails = () => {
                   </a>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {character.figurines.map((figurine) => (
+                  {mappedFigurines.map((figurine) => (
                     <FigurineCard
                       key={figurine.id}
-                      id={figurine.id}
-                      name={figurine.name}
-                      image={figurine.image}
-                      manufacturer={figurine.manufacturer}
-                      price={figurine.price}
-                      releaseDate={figurine.releaseDate}
-                      scale={figurine.scale}
-                      rating={figurine.rating}
+                      figurine={figurine}
                     />
                   ))}
                 </div>
