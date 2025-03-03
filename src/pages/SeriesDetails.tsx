@@ -1,8 +1,11 @@
 
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Star, Package, ArrowRight, Calendar } from "lucide-react";
+import { ArrowLeft, Star, Package, ArrowRight, Calendar, Info, Users, History } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineRelated } from "../components/FigurineRelated";
+import { FigurineDescription } from "../components/FigurineDescription";
+import { Button } from "../components/ui/button";
+import { Separator } from "../components/ui/separator";
 
 const SeriesDetails = () => {
   const { name } = useParams();
@@ -157,93 +160,200 @@ const SeriesDetails = () => {
         <div className="mb-8">
           <Link 
             to="/series"
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
             <ArrowLeft size={16} className="mr-1" />
             Retour aux gammes
           </Link>
         </div>
 
-        {/* En-tête */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <div className="relative h-64">
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8 animate-fade-in">
+          <div className="relative h-80">
             <img
               src={currentSeries.image}
               alt={currentSeries.name}
               className="w-full h-full object-cover"
             />
-          </div>
-          
-          <div className="p-8">
-            <div className="mb-4">
-              <div className="text-sm text-gray-500 mb-1">{currentSeries.manufacturer}</div>
-              <h1 className="text-3xl font-bold">{currentSeries.name}</h1>
-            </div>
-
-            <p className="text-xl text-gray-600 mb-8">{currentSeries.description}</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="flex items-center gap-3">
-                <Calendar size={24} className="text-primary" />
-                <div>
-                  <div className="text-sm text-gray-500">Création</div>
-                  <div className="font-medium">{currentSeries.startYear}</div>
-                </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+              <div className="mb-2">
+                <div className="text-sm text-gray-200 mb-1">{currentSeries.manufacturer}</div>
+                <h1 className="text-4xl font-bold">{currentSeries.name}</h1>
               </div>
-              <div className="flex items-center gap-3">
-                <Package size={24} className="text-primary" />
-                <div>
-                  <div className="text-sm text-gray-500">Figurines</div>
-                  <div className="font-medium">{currentSeries.totalReleases}+</div>
-                </div>
+              <div className="px-4 py-1.5 bg-primary/80 text-white rounded-full inline-block backdrop-blur-sm">
+                {currentSeries.price}
               </div>
-              <div className="flex items-center gap-3">
-                <Star size={24} className="text-primary" />
-                <div>
-                  <div className="text-sm text-gray-500">Taille moyenne</div>
-                  <div className="font-medium">{currentSeries.scale}</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="px-4 py-2 bg-primary/10 text-primary rounded-lg inline-block">
-              {currentSeries.price}
             </div>
           </div>
         </div>
 
-        {/* Caractéristiques */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-6">Caractéristiques</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {currentSeries.features.map((feature, index) => (
-              <div
-                key={index}
-                className="bg-gray-50 rounded-lg px-4 py-3 text-sm"
-              >
-                {feature}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            {/* Description */}
+            <FigurineDescription description={currentSeries.description} />
+
+            {/* Quick stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md hover:bg-primary/5">
+                <div className="flex items-center gap-3">
+                  <Calendar size={24} className="text-primary" />
+                  <div>
+                    <div className="text-sm text-gray-500">Création</div>
+                    <div className="font-medium text-lg">{currentSeries.startYear}</div>
+                  </div>
+                </div>
               </div>
-            ))}
+              
+              <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md hover:bg-primary/5">
+                <div className="flex items-center gap-3">
+                  <Package size={24} className="text-primary" />
+                  <div>
+                    <div className="text-sm text-gray-500">Figurines</div>
+                    <div className="font-medium text-lg">{currentSeries.totalReleases}+</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md hover:bg-primary/5">
+                <div className="flex items-center gap-3">
+                  <Star size={24} className="text-primary" />
+                  <div>
+                    <div className="text-sm text-gray-500">Taille moyenne</div>
+                    <div className="font-medium text-lg">{currentSeries.scale}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Characteristics */}
+            <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Info size={20} className="text-primary" />
+                Caractéristiques
+              </h2>
+              <Separator className="mb-4 bg-gray-100" />
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {currentSeries.features.map((feature, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-50 rounded-lg px-4 py-3 text-sm hover:bg-primary/5 transition-colors"
+                  >
+                    {feature}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Specifications */}
+            <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Package size={20} className="text-primary" />
+                Spécifications techniques
+              </h2>
+              <Separator className="mb-4 bg-gray-100" />
+              <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {Object.entries(currentSeries.specifications).map(([key, value]) => (
+                  <div key={key} className="bg-gray-50 rounded-lg p-4 hover:bg-primary/5 transition-colors">
+                    <dt className="text-gray-500 text-sm mb-1">
+                      {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </dt>
+                    <dd className="font-medium">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+
+          <div className="space-y-8">
+            {/* Popular figurines teaser */}
+            <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Star size={20} className="text-primary" />
+                Figurines populaires
+              </h2>
+              <Separator className="mb-4 bg-gray-100" />
+              <div className="space-y-4">
+                {currentSeries.popularFigurines.slice(0, 3).map((fig, index) => (
+                  <div key={index} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                    <img 
+                      src={fig.image} 
+                      alt={fig.name}
+                      className="w-12 h-12 object-cover rounded-md" 
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium truncate">{fig.name}</div>
+                      <div className="text-sm text-gray-500">{fig.series}</div>
+                    </div>
+                    <div className="text-primary font-medium">{fig.price}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4">
+                <Button variant="outline" className="w-full">
+                  Voir toutes les figurines
+                  <ArrowRight size={16} />
+                </Button>
+              </div>
+            </div>
+
+            {/* Upcoming releases */}
+            <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Calendar size={20} className="text-primary" />
+                Prochaines sorties
+              </h2>
+              <Separator className="mb-4 bg-gray-100" />
+              <div className="space-y-4">
+                {currentSeries.upcomingReleases.map((release, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-50 rounded-lg p-4 flex justify-between items-center hover:bg-primary/5 transition-colors"
+                  >
+                    <div>
+                      <div className="font-medium">{release.name}</div>
+                      <div className="text-sm text-gray-500">{release.series}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-medium text-primary">{release.price}</div>
+                      <div className="text-sm text-gray-500">{release.releaseDate}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Additional info links */}
+            <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+              <h2 className="text-xl font-semibold mb-4">En savoir plus</h2>
+              <Separator className="mb-4 bg-gray-100" />
+              <div className="space-y-3">
+                <Button variant="outline" className="w-full justify-start">
+                  <Users size={18} className="mr-2" />
+                  À propos du fabricant
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <History size={18} className="mr-2" />
+                  Histoire de la gamme
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Info size={18} className="mr-2" />
+                  Guide d'achat
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Spécifications */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-6">Spécifications techniques</h2>
-          <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {Object.entries(currentSeries.specifications).map(([key, value]) => (
-              <div key={key} className="bg-gray-50 rounded-lg p-4">
-                <dt className="text-gray-500 text-sm mb-1">
-                  {key.charAt(0).toUpperCase() + key.slice(1)}
-                </dt>
-                <dd className="font-medium">{value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-
-        {/* Figurines populaires */}
-        <div className="mt-8">
+        {/* Popular figurines full section */}
+        <div className="mt-12">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Figurines populaires</h2>
+            <Button variant="outline">
+              Voir toutes
+              <ArrowRight size={16} />
+            </Button>
+          </div>
           <FigurineRelated
             figures={currentSeries.popularFigurines.map(fig => ({
               id: fig.id,
@@ -253,28 +363,6 @@ const SeriesDetails = () => {
               price: fig.price
             }))}
           />
-        </div>
-
-        {/* Prochaines sorties */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-6">Prochaines sorties</h2>
-          <div className="space-y-4">
-            {currentSeries.upcomingReleases.map((release, index) => (
-              <div
-                key={index}
-                className="bg-gray-50 rounded-lg p-4 flex justify-between items-center"
-              >
-                <div>
-                  <div className="font-medium">{release.name}</div>
-                  <div className="text-sm text-gray-500">{release.series}</div>
-                </div>
-                <div className="text-right">
-                  <div className="font-medium text-primary">{release.price}</div>
-                  <div className="text-sm text-gray-500">{release.releaseDate}</div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </main>
     </div>
