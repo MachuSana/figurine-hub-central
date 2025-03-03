@@ -1,14 +1,17 @@
 
 import MainNav from "../components/MainNav";
-import { Tag, Star, ArrowRight, Search, Filter } from "lucide-react";
-import { useState } from "react";
+import { Tag, Star, ArrowRight, Search, Filter, SlidersHorizontal, Copyright, BookOpen, Trophy, Users } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Link } from "react-router-dom";
+import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 
 const Licenses = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [sortOption, setSortOption] = useState<"name" | "rating" | "figureCount">("rating");
+  const [isInitialRender, setIsInitialRender] = useState(true);
   
   const licenses = [
     {
@@ -97,6 +100,14 @@ const Licenses = () => {
     }
   ];
 
+  // On initial render, set isInitialRender to false after a short delay to allow animations
+  useEffect(() => {
+    if (isInitialRender) {
+      const timer = setTimeout(() => setIsInitialRender(false), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isInitialRender]);
+
   // Filter licenses based on search query and selected type
   const filteredLicenses = licenses.filter(license => {
     const matchesSearch = license.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -107,6 +118,20 @@ const Licenses = () => {
     return matchesSearch && matchesType;
   });
 
+  // Sort licenses based on selected sort option
+  const sortedAndFilteredLicenses = [...filteredLicenses].sort((a, b) => {
+    switch (sortOption) {
+      case "name":
+        return a.name.localeCompare(b.name);
+      case "rating":
+        return b.rating - a.rating;
+      case "figureCount":
+        return b.figureCount - a.figureCount;
+      default:
+        return 0;
+    }
+  });
+
   // Get unique license types for filter
   const licenseTypes = Array.from(new Set(licenses.map(license => license.type)));
 
@@ -115,140 +140,209 @@ const Licenses = () => {
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-          <h1 className="text-3xl font-bold">Licences</h1>
-          
-          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-            <div className="relative w-full md:w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-              <Input
-                type="text"
-                placeholder="Rechercher une licence..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+        <div className="mb-8">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
+            <div className="flex items-center gap-2">
+              <Copyright className="h-6 w-6 text-primary" />
+              <h1 className="text-3xl font-bold">Licences</h1>
             </div>
             
-            <div className="flex gap-2 overflow-x-auto pb-2 w-full sm:w-auto">
-              <Button
-                variant={selectedType === null ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedType(null)}
-                className="whitespace-nowrap"
-              >
-                Tous
-              </Button>
+            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+              <div className="relative w-full md:w-64">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                <Input
+                  type="text"
+                  placeholder="Rechercher une licence..."
+                  className="pl-8"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
               
-              {licenseTypes.map((type) => (
-                <Button
-                  key={type}
-                  variant={selectedType === type ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedType(type)}
-                  className="whitespace-nowrap"
-                >
-                  {type}
-                </Button>
-              ))}
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <SlidersHorizontal size={16} />
+                    <span>Trier et Filtrer</span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-72 p-4">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-medium mb-2 text-sm">Trier par</h4>
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          variant={sortOption === "rating" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSortOption("rating")}
+                          className="text-xs h-8"
+                        >
+                          Note
+                        </Button>
+                        <Button
+                          variant={sortOption === "name" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSortOption("name")}
+                          className="text-xs h-8"
+                        >
+                          Nom (A-Z)
+                        </Button>
+                        <Button
+                          variant={sortOption === "figureCount" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSortOption("figureCount")}
+                          className="text-xs h-8"
+                        >
+                          Nombre de Figurines
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2 text-sm">Filtrer par type</h4>
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          variant={selectedType === null ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSelectedType(null)}
+                          className="text-xs h-8"
+                        >
+                          Tous
+                        </Button>
+                        
+                        {licenseTypes.map((type) => (
+                          <Button
+                            key={type}
+                            variant={selectedType === type ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setSelectedType(type)}
+                            className="text-xs h-8"
+                          >
+                            {type}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-lg p-4 mb-6 shadow-sm">
+            <div className="flex items-center gap-3 text-sm text-gray-600">
+              <div className="flex items-center gap-1.5">
+                <BookOpen size={16} className="text-primary/70" />
+                <span>{licenses.length} licences au total</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Trophy size={16} className="text-yellow-500" />
+                <span>Top licences: Fate/Grand Order, Genshin Impact, Re:Zero</span>
+              </div>
+              <div className="hidden md:flex items-center gap-1.5">
+                <Users size={16} className="text-blue-500" />
+                <span>Plus de 1000 figurines disponibles</span>
+              </div>
             </div>
           </div>
         </div>
 
         {filteredLicenses.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm p-8 text-center">
+          <div className="bg-white rounded-xl shadow-sm p-8 text-center animate-fadeIn">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+              <Filter className="h-8 w-8 text-gray-400" />
+            </div>
             <h2 className="text-xl font-semibold mb-2">Aucune licence trouvée</h2>
-            <p className="text-gray-600">Essayez d'ajuster vos critères de recherche.</p>
+            <p className="text-gray-600 mb-4">Essayez d'ajuster vos critères de recherche ou de réinitialiser les filtres.</p>
+            <Button onClick={() => {setSearchQuery(""); setSelectedType(null);}}>
+              Réinitialiser les filtres
+            </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-8 animate-fade-in">
-            {filteredLicenses.map((license) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fadeIn">
+            {sortedAndFilteredLicenses.map((license, index) => (
               <div
                 key={license.id}
-                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
+                className={`bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden ${
+                  isInitialRender ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
+                }`}
+                style={{ 
+                  transitionDelay: `${index * 75}ms`,
+                  transitionProperty: 'all'
+                }}
               >
-                <div className="md:flex">
-                  <div className="md:w-1/3">
-                    <div className="h-64 md:h-full relative">
-                      <img
-                        src={license.image}
-                        alt={license.name}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
-                        <Star size={14} className="text-yellow-400 fill-current" />
-                        {license.rating}
-                      </div>
-                      <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm font-medium">
-                        {license.type}
-                      </div>
+                <div className="flex flex-col h-full">
+                  <div className="relative h-48">
+                    <img
+                      src={license.image}
+                      alt={license.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                      <Star size={14} className="text-yellow-400 fill-current" />
+                      <span>{license.rating}</span>
+                    </div>
+                    <div className="absolute top-2 left-2 bg-primary/90 text-white backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
+                      {license.type}
+                    </div>
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent text-white p-3">
+                      <h2 className="text-xl font-bold truncate">{license.name}</h2>
+                      <div className="text-sm opacity-90">{license.company}</div>
                     </div>
                   </div>
                   
-                  <div className="p-6 md:w-2/3">
-                    <div className="flex items-center gap-4 mb-3">
-                      <h2 className="text-2xl font-bold">{license.name}</h2>
-                      <div className="text-sm text-gray-500">{license.company}</div>
-                    </div>
+                  <div className="p-4 flex-grow">
+                    <p className="text-gray-600 mb-4 line-clamp-2 text-sm h-10">{license.description}</p>
                     
-                    <p className="text-gray-600 mb-4">{license.description}</p>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                      <div>
-                        <div className="text-sm text-gray-500">Figurines disponibles</div>
-                        <div className="font-medium">{license.figureCount}+</div>
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <div className="text-xs text-gray-500 mb-1">Figurines</div>
+                        <div className="font-semibold text-lg">{license.figureCount}+</div>
                       </div>
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <div className="text-xs text-gray-500 mb-1">Séries</div>
+                        <div className="font-semibold text-lg">{license.seriesCount}</div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
                       <div>
-                        <div className="text-sm text-gray-500">Personnages populaires</div>
-                        <div className="flex flex-wrap gap-1">
+                        <div className="text-xs text-gray-500 mb-1.5">Personnages populaires</div>
+                        <div className="flex flex-wrap gap-1.5">
                           {license.popularCharacters.map((character, index) => (
-                            <span key={index} className="text-sm font-medium">
-                              {character}{index < license.popularCharacters.length - 1 ? ", " : ""}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <div>
-                        <div className="text-sm text-gray-500 mb-2">Séries/Saisons</div>
-                        <div className="flex flex-wrap gap-2">
-                          {license.seasons.map((season, index) => (
-                            <span
-                              key={index}
-                              className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
-                            >
-                              {season}
+                            <span key={index} className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs">
+                              {character}
                             </span>
                           ))}
                         </div>
                       </div>
 
                       <div>
-                        <div className="text-sm text-gray-500 mb-2">Meilleures ventes</div>
-                        <div className="flex flex-wrap gap-2">
-                          {license.bestSellers.map((figure, index) => (
-                            <span
-                              key={index}
-                              className="bg-muted text-gray-700 px-3 py-1 rounded-full text-sm"
-                            >
+                        <div className="text-xs text-gray-500 mb-1.5">Meilleures ventes</div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {license.bestSellers.slice(0, 2).map((figure, index) => (
+                            <span key={index} className="bg-muted text-gray-700 px-2 py-0.5 rounded-full text-xs truncate max-w-full">
                               {figure}
                             </span>
                           ))}
+                          {license.bestSellers.length > 2 && (
+                            <span className="bg-muted text-gray-700 px-2 py-0.5 rounded-full text-xs">
+                              +{license.bestSellers.length - 2}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="mt-6 flex justify-end">
-                      <Link 
-                        to={`/licenses/${license.id}`}
-                        className="flex items-center gap-2 text-primary hover:text-white hover:bg-primary px-4 py-2 rounded-lg transition-colors duration-200"
-                      >
-                        Voir les détails
-                        <ArrowRight size={16} />
-                      </Link>
-                    </div>
+                  <div className="p-4 pt-0 mt-auto">
+                    <Link 
+                      to={`/licenses/${license.id}`}
+                      className="flex items-center justify-center gap-2 text-white bg-primary hover:bg-primary/90 px-4 py-2 rounded-lg transition-colors duration-200 w-full text-center"
+                    >
+                      Voir les détails
+                      <ArrowRight size={16} />
+                    </Link>
                   </div>
                 </div>
               </div>
