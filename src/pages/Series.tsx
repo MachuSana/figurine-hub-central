@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import MainNav from "../components/MainNav";
 import { Tag, Star, ArrowRight, Filter, Search, X } from "lucide-react";
@@ -109,7 +108,6 @@ const Series = () => {
   const filterProductLines = () => {
     let filtered = [...productLines];
 
-    // Search filter
     if (searchTerm) {
       filtered = filtered.filter(
         line => 
@@ -119,11 +117,8 @@ const Series = () => {
       );
     }
 
-    // Category filters
     if (activeFilters.length > 0) {
       filtered = filtered.filter(line => {
-        // For simplicity, let's just check if any of the active filters match the category
-        // In a real app, you'd have more sophisticated logic here
         return activeFilters.includes(line.category) ||
                (activeFilters.includes("Petite (<15cm)") && parseInt(line.scale) < 15) ||
                (activeFilters.includes("Moyenne (15-30cm)") && parseInt(line.scale) >= 15 && parseInt(line.scale) <= 30) ||
@@ -151,7 +146,6 @@ const Series = () => {
     setShowSearch(false);
   };
 
-  // Initialize filtered products on component mount
   useEffect(() => {
     setFilteredProductLines(productLines);
   }, []);
@@ -284,7 +278,7 @@ const Series = () => {
             <Button onClick={clearFilters}>Réinitialiser les filtres</Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-8">
+          <div className="grid grid-cols-1 gap-6">
             {filteredProductLines.map((line, index) => (
               <div
                 key={line.id}
@@ -292,14 +286,13 @@ const Series = () => {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="md:flex">
-                  <div className="md:w-1/3">
-                    <div className="h-64 md:h-full relative overflow-hidden group">
+                  <div className="md:w-1/4 lg:w-1/5">
+                    <div className="h-48 md:h-full relative overflow-hidden">
                       <img
                         src={line.image}
                         alt={line.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
                         <Star size={14} className="text-yellow-400 fill-current" />
                         {line.rating}
@@ -308,37 +301,37 @@ const Series = () => {
                     </div>
                   </div>
                   
-                  <div className="p-6 md:w-2/3">
-                    <div className="flex items-center gap-4 mb-3">
-                      <h2 className="text-2xl font-bold text-gray-800">{line.name}</h2>
-                      <div className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded-full">{line.company}</div>
+                  <div className="p-4 md:p-5 md:w-3/4 lg:w-4/5">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h2 className="text-xl font-bold text-gray-800">{line.name}</h2>
+                      <div className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full">{line.company}</div>
                     </div>
                     
-                    <p className="text-gray-600 mb-4">{line.description}</p>
+                    <p className="text-gray-600 mb-3 text-sm">{line.description}</p>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                      <div className="bg-gray-50 rounded-lg p-3">
-                        <div className="text-sm text-gray-500">Figurines disponibles</div>
-                        <div className="font-medium text-primary-800 text-lg">{line.figureCount}+</div>
+                    <div className="grid grid-cols-3 gap-2 mb-3">
+                      <div className="bg-gray-50 rounded-lg p-2">
+                        <div className="text-xs text-gray-500">Figurines</div>
+                        <div className="font-medium text-primary-800">{line.figureCount}+</div>
                       </div>
-                      <div className="bg-gray-50 rounded-lg p-3">
-                        <div className="text-sm text-gray-500">Taille moyenne</div>
-                        <div className="font-medium text-primary-800 text-lg">{line.scale}</div>
+                      <div className="bg-gray-50 rounded-lg p-2">
+                        <div className="text-xs text-gray-500">Taille</div>
+                        <div className="font-medium text-primary-800">{line.scale}</div>
                       </div>
-                      <div className="bg-gray-50 rounded-lg p-3">
-                        <div className="text-sm text-gray-500">Gamme de prix</div>
-                        <div className="font-medium text-primary-800 text-lg">{line.price}</div>
+                      <div className="bg-gray-50 rounded-lg p-2">
+                        <div className="text-xs text-gray-500">Prix</div>
+                        <div className="font-medium text-primary-800">{line.price}</div>
                       </div>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="flex flex-wrap gap-4">
                       <div>
-                        <div className="text-sm text-gray-500 mb-2">Caractéristiques</div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="text-xs text-gray-500 mb-1">Caractéristiques</div>
+                        <div className="flex flex-wrap gap-1">
                           {line.features.map((feature, index) => (
                             <span
                               key={index}
-                              className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs"
                             >
                               {feature}
                             </span>
@@ -347,12 +340,12 @@ const Series = () => {
                       </div>
 
                       <div>
-                        <div className="text-sm text-gray-500 mb-2">Figurines populaires</div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="text-xs text-gray-500 mb-1">Figurines populaires</div>
+                        <div className="flex flex-wrap gap-1">
                           {line.popularFigures.map((figure, index) => (
                             <span
                               key={index}
-                              className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                              className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full text-xs"
                             >
                               {figure}
                             </span>
@@ -361,13 +354,13 @@ const Series = () => {
                       </div>
                     </div>
 
-                    <div className="mt-6 flex justify-end">
+                    <div className="mt-4 flex justify-end">
                       <Link 
                         to={`/series/${line.name.toLowerCase()}`} 
-                        className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg transition-colors duration-200 hover:bg-primary-700 group"
+                        className="flex items-center gap-1 text-primary hover:text-primary-700 text-sm font-medium transition-colors duration-200 group"
                       >
                         Voir les détails
-                        <ArrowRight size={16} className="transform transition-transform group-hover:translate-x-1" />
+                        <ArrowRight size={14} className="transform transition-transform group-hover:translate-x-1" />
                       </Link>
                     </div>
                   </div>
