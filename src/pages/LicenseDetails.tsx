@@ -1,14 +1,17 @@
+
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Star, Calendar, Users, Package, ShoppingBag, TrendingUp, BadgeInfo, ExternalLink, Share2, Tag, ArrowRight } from "lucide-react";
+import { ArrowLeft, Star, Calendar, Users, Package, ShoppingBag, TrendingUp, BadgeInfo, ExternalLink, Share2, Tag, ArrowRight, Heart, Info, Globe, Clock } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { Button } from "../components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { Separator } from "../components/ui/separator";
 import { useEffect, useState } from "react";
+import { FigurineDescription } from "../components/FigurineDescription";
 
 const LicenseDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
   
   // Mock data for licenses
   const licenses = [
@@ -167,6 +170,10 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
     
     return () => clearInterval(interval);
   }, [license]);
+
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite);
+  };
   
   if (!license) {
     return (
@@ -199,23 +206,23 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
         <div className="mb-8">
           <Link 
             to="/licenses"
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+            className="inline-flex items-center text-sm font-medium text-gray-600 hover:text-primary transition-colors"
           >
             <ArrowLeft size={16} className="mr-1" />
             Retour aux licences
           </Link>
         </div>
         
-        <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-          <div className="relative h-64 md:h-80">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
+        <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8 transition-all duration-300 hover:shadow-lg">
+          <div className="relative h-72 md:h-96">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
             <img 
               src={license.images[activeImageIndex]} 
               alt={license.name} 
-              className="w-full h-full object-cover transition-opacity duration-500"
+              className="w-full h-full object-cover transition-opacity duration-700 animate-fade-in"
             />
             <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-3 mb-3">
                 <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
                   {license.type}
                 </span>
@@ -224,59 +231,79 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
                   {license.rating}
                 </div>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white">{license.name}</h1>
-              <p className="text-white/90 mt-1">{license.company}</p>
+              <h1 className="text-3xl md:text-5xl font-bold text-white mb-1">{license.name}</h1>
+              <p className="text-white/90 text-lg">{license.company}</p>
+            </div>
+            <div className="absolute top-4 right-4 z-20 flex space-x-2">
+              <button 
+                onClick={toggleFavorite}
+                className={`p-2 rounded-full backdrop-blur-sm transition-colors ${
+                  isFavorite 
+                    ? 'bg-primary/90 text-white' 
+                    : 'bg-white/80 text-gray-700 hover:bg-primary/20'
+                }`}
+                aria-label="Ajouter aux favoris"
+              >
+                <Heart size={20} className={isFavorite ? 'fill-current' : ''} />
+              </button>
+              <button 
+                className="p-2 rounded-full bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-primary/20 transition-colors"
+                aria-label="Partager"
+              >
+                <Share2 size={20} />
+              </button>
             </div>
           </div>
           
-          <div className="flex justify-center -mt-2 relative z-30">
-            <div className="flex space-x-2">
+          <div className="flex justify-center -mt-4 relative z-30">
+            <div className="flex space-x-2 bg-white/80 backdrop-blur-sm rounded-full px-3 py-2 shadow-sm">
               {license.images.map((_, index) => (
                 <button
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    index === activeImageIndex ? "bg-primary" : "bg-gray-300"
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === activeImageIndex ? "bg-primary" : "bg-gray-300 hover:bg-gray-400"
                   }`}
                   onClick={() => setActiveImageIndex(index)}
+                  aria-label={`Image ${index + 1}`}
                 />
               ))}
             </div>
           </div>
           
           <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div className="flex items-center gap-3">
-                <Calendar className="h-5 w-5 text-primary" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="flex items-center gap-3 p-4 rounded-lg border border-gray-100 hover:border-primary/20 transition-colors">
+                <Calendar className="h-6 w-6 text-primary" />
                 <div>
                   <div className="text-sm text-gray-500">Année de début</div>
-                  <div className="font-medium">{new Date(license.startDate).getFullYear()}</div>
+                  <div className="font-medium text-lg">{new Date(license.startDate).getFullYear()}</div>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                <Users className="h-5 w-5 text-primary" />
+              <div className="flex items-center gap-3 p-4 rounded-lg border border-gray-100 hover:border-primary/20 transition-colors">
+                <Users className="h-6 w-6 text-primary" />
                 <div>
                   <div className="text-sm text-gray-500">Personnages</div>
-                  <div className="font-medium">{license.popularCharacters.length}+ populaires</div>
+                  <div className="font-medium text-lg">{license.popularCharacters.length}+ populaires</div>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                <Package className="h-5 w-5 text-primary" />
+              <div className="flex items-center gap-3 p-4 rounded-lg border border-gray-100 hover:border-primary/20 transition-colors">
+                <Package className="h-6 w-6 text-primary" />
                 <div>
                   <div className="text-sm text-gray-500">Figurines</div>
-                  <div className="font-medium">{license.figureCount}+ disponibles</div>
+                  <div className="font-medium text-lg">{license.figureCount}+ disponibles</div>
                 </div>
               </div>
             </div>
             
-            <p className="text-gray-700 mb-6">{license.description}</p>
+            <FigurineDescription description={license.description} />
             
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 mt-6">
               {license.seasons.map((season, index) => (
                 <span
                   key={index}
-                  className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                  className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium hover:bg-primary/20 transition-colors"
                 >
                   {season}
                 </span>
@@ -288,21 +315,24 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="mb-6">
-                <TabsTrigger value="overview">Aperçu</TabsTrigger>
-                <TabsTrigger value="characters">Personnages</TabsTrigger>
-                <TabsTrigger value="figures">Figurines</TabsTrigger>
-                <TabsTrigger value="history">Histoire</TabsTrigger>
+              <TabsList className="mb-6 bg-white/90 backdrop-blur-sm p-1 rounded-full">
+                <TabsTrigger value="overview" className="rounded-full">Aperçu</TabsTrigger>
+                <TabsTrigger value="characters" className="rounded-full">Personnages</TabsTrigger>
+                <TabsTrigger value="figures" className="rounded-full">Figurines</TabsTrigger>
+                <TabsTrigger value="history" className="rounded-full">Histoire</TabsTrigger>
               </TabsList>
               
               <TabsContent value="overview" className="space-y-6 animate-fade-in">
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="text-xl font-bold mb-4">À propos de {license.name}</h2>
-                  <p className="text-gray-700 whitespace-pre-line">{license.longDescription}</p>
+                <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+                  <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <Info size={20} className="text-primary" />
+                    À propos de {license.name}
+                  </h2>
+                  <p className="text-gray-700 whitespace-pre-line leading-relaxed">{license.longDescription}</p>
                   
                   <div className="mt-8">
-                    <h3 className="text-lg font-semibold mb-3 flex items-center">
-                      <BadgeInfo size={18} className="mr-2 text-primary" />
+                    <h3 className="text-lg font-semibold mb-4 flex items-center">
+                      <Globe size={18} className="mr-2 text-primary" />
                       Liens et réseaux sociaux
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -312,7 +342,7 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
                           href={link.url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="flex items-center p-3 rounded-lg border hover:bg-gray-50 transition-colors"
+                          className="flex items-center p-4 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-all duration-300"
                         >
                           <ExternalLink size={16} className="mr-3 text-primary" />
                           <div>
@@ -325,13 +355,16 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
                   </div>
                 </div>
                 
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h3 className="text-lg font-semibold mb-4">Actualités récentes</h3>
+                <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Clock size={18} className="text-primary" />
+                    Actualités récentes
+                  </h3>
                   {license.news.map((item, index) => (
-                    <div key={index} className={index > 0 ? "mt-4 pt-4 border-t" : ""}>
+                    <div key={index} className={`${index > 0 ? "mt-4 pt-4 border-t" : ""} hover:bg-primary/5 p-2 rounded-lg transition-colors`}>
                       <div className="flex justify-between items-start">
                         <h4 className="font-medium">{item.title}</h4>
-                        <span className="text-sm text-gray-500">{item.date}</span>
+                        <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{item.date}</span>
                       </div>
                       <div className="text-sm text-gray-600 mt-1">Source: {item.source}</div>
                     </div>
@@ -339,20 +372,20 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
                 </div>
                 
                 {license.relatedLicenses.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
                     <h3 className="text-lg font-semibold mb-4">Licences similaires</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {license.relatedLicenses.map((related) => (
                         <Link 
                           key={related.id}
                           to={`/licenses/${related.id}`}
-                          className="flex items-center p-3 rounded-lg border hover:bg-gray-50 transition-colors"
+                          className="flex items-center p-4 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-all duration-300"
                         >
                           <div>
                             <div className="font-medium">{related.name}</div>
                             <div className="text-sm text-gray-500">{related.type}</div>
                           </div>
-                          <ArrowRight size={16} className="ml-auto text-gray-400" />
+                          <ArrowRight size={16} className="ml-auto text-primary" />
                         </Link>
                       ))}
                     </div>
@@ -361,13 +394,16 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
               </TabsContent>
               
               <TabsContent value="characters" className="animate-fade-in">
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="text-xl font-bold mb-6">Personnages populaires</h2>
+                <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+                  <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                    <Users size={20} className="text-primary" />
+                    Personnages populaires
+                  </h2>
                   
                   <div className="space-y-6">
                     {license.popularCharacters.map((character, index) => (
-                      <div key={index} className={index > 0 ? "pt-6 border-t" : ""}>
-                        <div className="flex justify-between items-center">
+                      <div key={index} className={`${index > 0 ? "pt-6 border-t" : ""} hover:bg-primary/5 p-3 rounded-lg transition-colors`}>
+                        <div className="flex justify-between items-center flex-wrap gap-2">
                           <h3 className="font-semibold text-lg">{character.name}</h3>
                           <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
                             Popularité: {character.popularity}%
@@ -376,6 +412,13 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
                         <p className="text-gray-600 mt-2">
                           Meilleure figurine: <span className="font-medium">{character.bestFigure}</span>
                         </p>
+                        <div className="mt-4">
+                          <Link to={`/characters?search=${character.name}`}>
+                            <Button size="sm" variant="outline" className="hover:bg-primary/10 transition-colors">
+                              Voir le personnage
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -383,15 +426,18 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
               </TabsContent>
               
               <TabsContent value="figures" className="animate-fade-in">
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="text-xl font-bold mb-6">Figurines les plus populaires</h2>
+                <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+                  <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                    <Package size={20} className="text-primary" />
+                    Figurines les plus populaires
+                  </h2>
                   
                   <div className="space-y-6">
                     {license.bestSellers.map((figure, index) => (
-                      <div key={index} className={index > 0 ? "pt-6 border-t" : ""}>
+                      <div key={index} className={`${index > 0 ? "pt-6 border-t" : ""} hover:bg-primary/5 p-3 rounded-lg transition-colors`}>
                         <div className="flex flex-wrap justify-between items-start gap-2">
                           <h3 className="font-semibold text-lg">{figure.name}</h3>
-                          <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
+                          <div className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-medium">
                             {figure.price}
                           </div>
                         </div>
@@ -403,10 +449,13 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
                             Date de sortie: <span className="font-medium">{figure.releaseDate}</span>
                           </p>
                         </div>
-                        <div className="mt-4">
+                        <div className="mt-4 flex gap-2">
                           <Button size="sm" variant="outline" className="flex items-center gap-2">
                             <ShoppingBag size={16} />
                             Voir les boutiques
+                          </Button>
+                          <Button size="sm" variant="secondary" className="flex items-center gap-2">
+                            Pré-commander
                           </Button>
                         </div>
                       </div>
@@ -416,20 +465,23 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
               </TabsContent>
               
               <TabsContent value="history" className="animate-fade-in">
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="text-xl font-bold mb-6">Chronologie de la licence</h2>
+                <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+                  <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                    <Clock size={20} className="text-primary" />
+                    Chronologie de la licence
+                  </h2>
                   
                   <div className="relative pl-8 ml-6 space-y-8 pb-4">
-                    <div className="absolute top-0 left-0 bottom-0 w-0.5 bg-gray-200"></div>
+                    <div className="absolute top-0 left-0 bottom-0 w-0.5 bg-primary/20"></div>
                     
                     {license.timeline.map((item, index) => (
                       <div key={index} className="relative">
-                        <div className="absolute -left-10 top-0 h-6 w-6 rounded-full bg-primary flex items-center justify-center text-white">
-                          <span className="text-xs">{index + 1}</span>
+                        <div className="absolute -left-10 top-0 h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white shadow-md">
+                          <span>{index + 1}</span>
                         </div>
-                        <div className="p-4 rounded-lg border">
-                          <div className="font-bold text-primary">{item.year}</div>
-                          <div className="mt-1">{item.event}</div>
+                        <div className="p-5 rounded-lg border border-gray-100 hover:border-primary/20 hover:bg-primary/5 transition-all duration-300">
+                          <div className="font-bold text-primary text-lg">{item.year}</div>
+                          <div className="mt-1 text-gray-700">{item.event}</div>
                         </div>
                       </div>
                     ))}
@@ -437,13 +489,16 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
                 </div>
                 
                 {license.events.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
-                    <h3 className="text-lg font-semibold mb-4">Événements à venir</h3>
+                  <div className="bg-white rounded-xl shadow-sm p-6 mt-6 transition-all duration-300 hover:shadow-md">
+                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                      <Calendar size={18} className="text-primary" />
+                      Événements à venir
+                    </h3>
                     <div className="space-y-4">
                       {license.events.map((event, index) => (
-                        <div key={index} className="flex items-start">
-                          <div className="min-w-24 text-sm text-gray-500">{event.date}</div>
-                          <div>
+                        <div key={index} className="flex items-start p-3 rounded-lg hover:bg-primary/5 transition-colors">
+                          <div className="min-w-24 text-sm bg-primary/10 text-primary px-3 py-1 rounded-full">{event.date}</div>
+                          <div className="ml-4">
                             <div className="font-medium">{event.name}</div>
                             <div className="text-sm text-gray-600">{event.location}</div>
                           </div>
@@ -457,39 +512,39 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
           </div>
           
           <div className="space-y-8">
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
               <h3 className="font-semibold mb-4 flex items-center gap-2">
-                <Tag size={18} className="text-primary" />
+                <BadgeInfo size={18} className="text-primary" />
                 Informations clés
               </h3>
               
               <div className="space-y-3">
-                <div className="flex justify-between">
+                <div className="flex justify-between p-2 rounded-lg hover:bg-primary/5 transition-colors">
                   <span className="text-gray-600">Type:</span>
                   <span className="font-medium">{license.type}</span>
                 </div>
-                <Separator />
-                <div className="flex justify-between">
+                <Separator className="bg-gray-100" />
+                <div className="flex justify-between p-2 rounded-lg hover:bg-primary/5 transition-colors">
                   <span className="text-gray-600">Entreprise:</span>
                   <span className="font-medium">{license.company}</span>
                 </div>
-                <Separator />
-                <div className="flex justify-between">
+                <Separator className="bg-gray-100" />
+                <div className="flex justify-between p-2 rounded-lg hover:bg-primary/5 transition-colors">
                   <span className="text-gray-600">Début:</span>
                   <span className="font-medium">{new Date(license.startDate).toLocaleDateString('fr-FR')}</span>
                 </div>
-                <Separator />
-                <div className="flex justify-between">
+                <Separator className="bg-gray-100" />
+                <div className="flex justify-between p-2 rounded-lg hover:bg-primary/5 transition-colors">
                   <span className="text-gray-600">Séries:</span>
                   <span className="font-medium">{license.seriesCount}</span>
                 </div>
-                <Separator />
-                <div className="flex justify-between">
+                <Separator className="bg-gray-100" />
+                <div className="flex justify-between p-2 rounded-lg hover:bg-primary/5 transition-colors">
                   <span className="text-gray-600">Figurines:</span>
                   <span className="font-medium">{license.figureCount}+</span>
                 </div>
-                <Separator />
-                <div className="flex justify-between">
+                <Separator className="bg-gray-100" />
+                <div className="flex justify-between p-2 rounded-lg hover:bg-primary/5 transition-colors">
                   <span className="text-gray-600">Note:</span>
                   <span className="font-medium flex items-center">
                     {license.rating}
@@ -497,21 +552,47 @@ Azur Lane a été adapté en anime et a connu un grand succès commercial, en pa
                   </span>
                 </div>
               </div>
+              
+              <div className="mt-6">
+                <Button className="w-full">Voir toutes les figurines</Button>
+              </div>
             </div>
             
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
+                <TrendingUp size={18} className="text-primary" />
+                Statistiques
+              </h3>
+              
+              <div className="space-y-3">
+                {license.statistics && Object.entries(license.statistics).map(([key, value]) => (
+                  <div key={key} className="flex justify-between p-2 rounded-lg hover:bg-primary/5 transition-colors">
+                    <span className="text-gray-600">
+                      {key.replace(/([A-Z])/g, ' $1')
+                        .replace(/^./, function(str){ return str.toUpperCase(); })
+                        .replace(/Total/g, 'Total des')
+                        .replace(/Average/g, 'Moyenne des')
+                        .replace(/Rate/g, 'Taux')}:
+                    </span>
+                    <span className="font-medium">{value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
               <h3 className="font-semibold mb-4 flex items-center gap-2">
                 <Share2 size={18} className="text-primary" />
                 Partager
               </h3>
-              <div className="flex gap-2">
-                <Button size="sm" variant="outline" className="flex-1">
+              <div className="grid grid-cols-3 gap-3">
+                <Button size="sm" variant="outline" className="flex-1 hover:bg-blue-50 hover:text-blue-600 transition-colors">
                   Twitter
                 </Button>
-                <Button size="sm" variant="outline" className="flex-1">
+                <Button size="sm" variant="outline" className="flex-1 hover:bg-blue-100 hover:text-blue-800 transition-colors">
                   Facebook
                 </Button>
-                <Button size="sm" variant="outline" className="flex-1">
+                <Button size="sm" variant="outline" className="flex-1 hover:bg-gray-100 transition-colors">
                   Copier
                 </Button>
               </div>
