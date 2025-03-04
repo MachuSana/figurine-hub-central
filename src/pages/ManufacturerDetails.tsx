@@ -1,7 +1,12 @@
+
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Star, MapPin, Package, ArrowRight, Calendar } from "lucide-react";
+import { ArrowLeft, Star, MapPin, Package, ArrowRight, Calendar, Globe, History, Award, Newspaper } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineComments } from "../components/FigurineComments";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const ManufacturerDetails = () => {
   const { id } = useParams();
@@ -123,10 +128,14 @@ const ManufacturerDetails = () => {
               Retour à la liste
             </Link>
           </div>
-          <div className="bg-white rounded-xl shadow-sm p-8 text-center">
-            <h1 className="text-xl font-semibold text-gray-900 mb-2">Fabricant non trouvé</h1>
-            <p className="text-gray-600">Le fabricant demandé n'existe pas dans notre base de données.</p>
-          </div>
+          <Card className="text-center">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold text-gray-900">Fabricant non trouvé</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Le fabricant demandé n'existe pas dans notre base de données.</p>
+            </CardContent>
+          </Card>
         </main>
       </div>
     );
@@ -137,10 +146,10 @@ const ManufacturerDetails = () => {
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
+        <div className="mb-6 animate-fade-in">
           <Link 
             to="/manufacturers"
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+            className="inline-flex items-center text-sm font-medium text-primary hover:underline"
           >
             <ArrowLeft size={16} className="mr-1" />
             Retour à la liste
@@ -148,136 +157,238 @@ const ManufacturerDetails = () => {
         </div>
 
         {/* Header */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <div className="relative h-64">
+        <Card className="border-none shadow-sm overflow-hidden mb-8 animate-fade-in">
+          <div className="relative h-80">
             <img
               src={manufacturer.image}
               alt={manufacturer.name}
               className="w-full h-full object-cover"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
             <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-1.5">
               <Star size={16} className="text-yellow-400 fill-current" />
               {manufacturer.rating}
             </div>
+            <div className="absolute bottom-0 left-0 w-full p-6 text-white">
+              <h1 className="text-4xl font-bold mb-2">{manufacturer.name}</h1>
+              <p className="text-xl opacity-90 max-w-2xl">{manufacturer.description}</p>
+            </div>
           </div>
           
-          <div className="p-8">
-            <h1 className="text-3xl font-bold mb-4">{manufacturer.name}</h1>
-            <p className="text-xl text-gray-600 mb-6">{manufacturer.description}</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="flex items-center gap-3">
-                <Calendar size={24} className="text-primary" />
-                <div>
-                  <div className="text-sm text-gray-500">Fondé en</div>
-                  <div className="font-medium">{manufacturer.founded}</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <MapPin size={24} className="text-primary" />
-                <div>
-                  <div className="text-sm text-gray-500">Localisation</div>
-                  <div className="font-medium">{manufacturer.location}</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <Package size={24} className="text-primary" />
-                <div>
-                  <div className="text-sm text-gray-500">Produits</div>
-                  <div className="font-medium">{manufacturer.productsCount}+</div>
-                </div>
-              </div>
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+              <Card className="bg-muted/50 border-none">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <Calendar className="text-primary h-5 w-5" />
+                  <div>
+                    <div className="text-sm text-gray-500">Fondé en</div>
+                    <div className="font-medium">{manufacturer.founded}</div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-muted/50 border-none">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <MapPin className="text-primary h-5 w-5" />
+                  <div>
+                    <div className="text-sm text-gray-500">Localisation</div>
+                    <div className="font-medium">{manufacturer.location}</div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-muted/50 border-none">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <Package className="text-primary h-5 w-5" />
+                  <div>
+                    <div className="text-sm text-gray-500">Produits</div>
+                    <div className="font-medium">{manufacturer.productsCount}+</div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-muted/50 border-none">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <Globe className="text-primary h-5 w-5" />
+                  <div>
+                    <div className="text-sm text-gray-500">Site Web</div>
+                    <div className="font-medium truncate">
+                      <a 
+                        href={manufacturer.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
+                        {manufacturer.website.replace('https://', '')}
+                      </a>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
-            <div className="flex flex-wrap gap-2 mb-8">
+            <div className="flex flex-wrap gap-2 mb-6">
               {manufacturer.specialties.map((specialty, index) => (
-                <span
+                <Badge
                   key={index}
-                  className="bg-primary/10 text-primary px-4 py-2 rounded-full"
+                  variant="outline"
+                  className="bg-primary/5 text-primary px-4 py-2 rounded-full text-sm hover:bg-primary/10 transition-colors border-primary/10"
                 >
                   {specialty}
-                </span>
+                </Badge>
               ))}
             </div>
 
-            <a
-              href={manufacturer.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-primary hover:text-white hover:bg-primary px-6 py-3 rounded-lg transition-colors duration-200 font-medium"
+            <Button
+              asChild
+              variant="default"
+              className="group"
             >
-              Visiter le site officiel
-              <ArrowRight size={20} />
-            </a>
-          </div>
-        </div>
-
-        {/* Histoire */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-4">Histoire</h2>
-          <p className="text-gray-600 leading-relaxed">{manufacturer.history}</p>
-        </div>
-
-        {/* Gammes */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-6">Gammes</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {manufacturer.popularLines.map((line, index) => (
-              <Link
-                key={index}
-                to={`/series/${line.name.toLowerCase()}`}
-                className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors group"
+              <a
+                href={manufacturer.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2"
               >
-                <h3 className="font-bold text-lg mb-2 group-hover:text-primary">{line.name}</h3>
-                <p className="text-gray-600 text-sm mb-3">{line.description}</p>
-                <div className="flex items-center justify-between">
-                  <div className="text-primary font-medium">{line.count}+ figurines</div>
-                  <ArrowRight size={20} className="text-gray-400 group-hover:text-primary" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+                Visiter le site officiel
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
 
-        {/* Figurines */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-6">Figurines Populaires</h2>
-          <div className="h-96 overflow-y-auto pr-4 space-y-4">
-            {manufacturer.popularFigurines.map((figurine, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-6">
-                <h3 className="font-bold text-lg mb-2">{figurine.name}</h3>
-                <div className="text-gray-600 text-sm mb-2">{figurine.series}</div>
-                <div className="flex justify-between items-center">
-                  <div className="text-primary font-medium">{figurine.price}</div>
-                  <div className="flex items-center gap-1">
-                    <Star size={14} className="text-yellow-400 fill-current" />
-                    <span>{figurine.rating}</span>
-                  </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            {/* Histoire */}
+            <Card className="border-none shadow-sm animate-fade-in">
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-2">
+                  <History className="text-primary h-5 w-5" />
+                  <CardTitle className="text-2xl">Histoire</CardTitle>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
+              </CardHeader>
+              <Separator className="mx-6" />
+              <CardContent className="pt-6">
+                <p className="text-gray-600 leading-relaxed">{manufacturer.history}</p>
+              </CardContent>
+            </Card>
 
-        {/* Actualités */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold mb-6">Actualités</h2>
-          <div className="space-y-6">
-            {manufacturer.news.map((item, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-6">
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="font-bold text-lg">{item.title}</h3>
-                  <span className="text-sm text-gray-500">{item.date}</span>
+            {/* Gammes */}
+            <Card className="border-none shadow-sm animate-fade-in">
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-2">
+                  <Award className="text-primary h-5 w-5" />
+                  <CardTitle className="text-2xl">Gammes populaires</CardTitle>
                 </div>
-                <p className="text-gray-600">{item.content}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+              </CardHeader>
+              <Separator className="mx-6" />
+              <CardContent className="pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {manufacturer.popularLines.map((line, index) => (
+                    <Link
+                      key={index}
+                      to={`/series/${line.name.toLowerCase()}`}
+                      className="bg-muted/50 rounded-lg p-5 hover:bg-muted transition-colors group"
+                    >
+                      <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">{line.name}</h3>
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">{line.description}</p>
+                      <div className="flex items-center justify-between">
+                        <div className="text-primary font-medium text-sm">{line.count}+ figurines</div>
+                        <ArrowRight size={16} className="text-gray-400 group-hover:text-primary transition-colors group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Commentaires */}
-        <div className="mt-8">
-          <FigurineComments comments={manufacturer.comments} />
+            {/* Actualités */}
+            <Card className="border-none shadow-sm animate-fade-in">
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-2">
+                  <Newspaper className="text-primary h-5 w-5" />
+                  <CardTitle className="text-2xl">Actualités</CardTitle>
+                </div>
+              </CardHeader>
+              <Separator className="mx-6" />
+              <CardContent className="pt-6">
+                <div className="space-y-4">
+                  {manufacturer.news.map((item, index) => (
+                    <Card key={index} className="border border-muted">
+                      <CardHeader className="p-4 pb-2">
+                        <div className="flex justify-between items-start">
+                          <CardTitle className="text-base font-bold">{item.title}</CardTitle>
+                          <Badge variant="outline" className="bg-muted/70 text-xs">
+                            {item.date}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="p-4 pt-2">
+                        <p className="text-gray-600 text-sm">{item.content}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="space-y-8">
+            {/* Figurines */}
+            <Card className="border-none shadow-sm animate-fade-in">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Figurines Populaires</CardTitle>
+                <CardDescription>Les plus vendues</CardDescription>
+              </CardHeader>
+              <Separator className="mx-6" />
+              <CardContent className="pt-6">
+                <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                  {manufacturer.popularFigurines.map((figurine, index) => (
+                    <Card key={index} className="border border-muted">
+                      <CardContent className="p-4">
+                        <h3 className="font-bold text-base mb-1">{figurine.name}</h3>
+                        <div className="text-gray-600 text-xs mb-3">{figurine.series}</div>
+                        <div className="flex justify-between items-center">
+                          <div className="text-primary font-medium">{figurine.price}</div>
+                          <div className="flex items-center gap-1">
+                            <Star size={14} className="text-yellow-400 fill-current" />
+                            <span className="text-sm">{figurine.rating}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+              <CardFooter className="pt-0 pb-4 px-6">
+                <Button asChild variant="outline" size="sm" className="w-full">
+                  <Link to="/figurines">
+                    Voir toutes les figurines
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+
+            {/* Commentaires */}
+            <div className="animate-fade-in">
+              <Card className="border-none shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl">Avis des collectionneurs</CardTitle>
+                  <CardDescription>Ce qu'en pensent les experts</CardDescription>
+                </CardHeader>
+                <Separator className="mx-6" />
+                <CardContent className="pt-6">
+                  <FigurineComments comments={manufacturer.comments} />
+                </CardContent>
+                <CardFooter className="pt-0 pb-4 px-6">
+                  <Button variant="outline" size="sm" className="w-full">
+                    Ajouter un commentaire
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
+          </div>
         </div>
       </main>
     </div>
