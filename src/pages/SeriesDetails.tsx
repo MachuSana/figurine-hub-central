@@ -1,6 +1,5 @@
-
 import { useParams, Link } from "react-router-dom";
-import { ArrowRight, ArrowLeft, Calendar, Info, Users, History, Star, Package } from "lucide-react";
+import { ArrowRight, ArrowLeft, Calendar, Info, Users, History, Star, Package, ExternalLink, FileText, Award, BookOpen } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineRelated } from "../components/FigurineRelated";
 import { FigurineDescription } from "../components/FigurineDescription";
@@ -10,6 +9,8 @@ import { SeriesQuickStats } from "../components/series/SeriesQuickStats";
 import { SeriesFeatures } from "../components/series/SeriesFeatures";
 import { SeriesSpecifications } from "../components/series/SeriesSpecifications";
 import { Separator } from "../components/ui/separator";
+import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
+import { Input } from "../components/ui/input";
 
 const SeriesDetails = () => {
   const { name } = useParams();
@@ -181,7 +182,6 @@ const SeriesDetails = () => {
           </div>
 
           <div className="space-y-8">
-            {/* Popular figurines teaser */}
             <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                 <Star size={20} className="text-primary" />
@@ -212,7 +212,6 @@ const SeriesDetails = () => {
               </div>
             </div>
 
-            {/* Upcoming releases */}
             <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                 <Calendar size={20} className="text-primary" />
@@ -238,29 +237,96 @@ const SeriesDetails = () => {
               </div>
             </div>
 
-            {/* Additional info links */}
             <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
-              <h2 className="text-xl font-semibold mb-4">En savoir plus</h2>
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Info size={20} className="text-primary" />
+                En savoir plus
+              </h2>
               <Separator className="mb-4 bg-gray-100" />
+              
               <div className="space-y-3">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="w-full justify-start">
+                      <Users size={18} className="mr-2 text-primary" />
+                      À propos du fabricant
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-4 bg-white rounded-xl shadow-md">
+                    <h3 className="font-semibold mb-2 text-lg">{currentSeries?.manufacturer}</h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      {currentSeries?.id === "nendoroid" 
+                        ? "Good Smile Company est un fabricant japonais de figurines fondé en 2001. La société est célèbre pour ses figurines de haute qualité et ses gammes populaires comme Nendoroid."
+                        : "Max Factory est l'un des principaux fabricants japonais de figurines, connu pour sa grande attention aux détails et sa qualité de finition exceptionnelle."}
+                    </p>
+                    <a 
+                      href={currentSeries?.id === "nendoroid" ? "https://www.goodsmile.info/" : "https://www.maxfactory.jp/"} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline flex items-center text-sm"
+                    >
+                      Site officiel <ExternalLink size={14} className="ml-1" />
+                    </a>
+                  </PopoverContent>
+                </Popover>
+                
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="w-full justify-start">
+                      <History size={18} className="mr-2 text-primary" />
+                      Histoire de la gamme
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-4 bg-white rounded-xl shadow-md">
+                    <h3 className="font-semibold mb-2 text-lg">Histoire de {currentSeries?.name}</h3>
+                    <p className="text-sm text-gray-600">
+                      {currentSeries?.id === "nendoroid" 
+                        ? "Lancée en 2006, la gamme Nendoroid a révolutionné les figurines chibi avec son style distinctif et ses pièces interchangeables. Nendoroid est devenue l'une des gammes de figurines les plus populaires avec plus de 2000 personnages différents produits."
+                        : "Lancée en 2008, la gamme figma s'est rapidement imposée comme une référence pour les figurines articulées. Le nom 'figma' vient de la combinaison de 'figure' et 'enigma', reflétant la philosophie de création de figurines mystérieuses et fascinantes."}
+                    </p>
+                    <Separator className="my-3" />
+                    <div className="flex items-center text-sm text-gray-700">
+                      <Calendar size={14} className="mr-1 text-primary" />
+                      Début: {currentSeries?.startYear}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+                
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="w-full justify-start">
+                      <FileText size={18} className="mr-2 text-primary" />
+                      Guide d'achat
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-4 bg-white rounded-xl shadow-md">
+                    <h3 className="font-semibold mb-2 text-lg">Conseils d'achat</h3>
+                    <ul className="text-sm text-gray-600 space-y-2 list-disc pl-5">
+                      <li>Vérifiez toujours l'authenticité du produit</li>
+                      <li>Comparez les prix entre différents revendeurs</li>
+                      <li>Précommandez pour éviter les ruptures de stock</li>
+                      <li>Inspectez l'état de la boîte à la réception</li>
+                      <li>Consultez les avis avant d'acheter</li>
+                    </ul>
+                    <Separator className="my-3" />
+                    <p className="text-xs text-gray-500 italic">Prix moyen: {currentSeries?.price}</p>
+                  </PopoverContent>
+                </Popover>
+                
                 <Button variant="outline" className="w-full justify-start">
-                  <Users size={18} className="mr-2" />
-                  À propos du fabricant
+                  <Award size={18} className="mr-2 text-primary" />
+                  Figurines exclusives
                 </Button>
+                
                 <Button variant="outline" className="w-full justify-start">
-                  <History size={18} className="mr-2" />
-                  Histoire de la gamme
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Info size={18} className="mr-2" />
-                  Guide d'achat
+                  <BookOpen size={18} className="mr-2 text-primary" />
+                  FAQ
                 </Button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Popular figurines full section */}
         <div className="mt-12">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold">Figurines populaires</h2>
