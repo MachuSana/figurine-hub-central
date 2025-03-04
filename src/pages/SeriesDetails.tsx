@@ -1,10 +1,13 @@
-
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Star, Package, ArrowRight, Calendar, Info, Users, History } from "lucide-react";
+import { ArrowRight, Calendar, Info, Users, History, Star, Package } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineRelated } from "../components/FigurineRelated";
 import { FigurineDescription } from "../components/FigurineDescription";
 import { Button } from "../components/ui/button";
+import { SeriesHeader } from "../components/series/SeriesHeader";
+import { SeriesQuickStats } from "../components/series/SeriesQuickStats";
+import { SeriesFeatures } from "../components/series/SeriesFeatures";
+import { SeriesSpecifications } from "../components/series/SeriesSpecifications";
 import { Separator } from "../components/ui/separator";
 
 const SeriesDetails = () => {
@@ -157,112 +160,23 @@ const SeriesDetails = () => {
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <Link 
-            to="/series"
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
-          >
-            <ArrowLeft size={16} className="mr-1" />
-            Retour aux gammes
-          </Link>
-        </div>
-
-        {/* Header */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8 animate-fade-in">
-          <div className="relative h-80">
-            <img
-              src={currentSeries.image}
-              alt={currentSeries.name}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-              <div className="mb-2">
-                <div className="text-sm text-gray-200 mb-1">{currentSeries.manufacturer}</div>
-                <h1 className="text-4xl font-bold">{currentSeries.name}</h1>
-              </div>
-              <div className="px-4 py-1.5 bg-primary/80 text-white rounded-full inline-block backdrop-blur-sm">
-                {currentSeries.price}
-              </div>
-            </div>
-          </div>
-        </div>
+        <SeriesHeader 
+          name={currentSeries.name}
+          manufacturer={currentSeries.manufacturer}
+          image={currentSeries.image}
+          price={currentSeries.price}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-            {/* Description */}
             <FigurineDescription description={currentSeries.description} />
-
-            {/* Quick stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md hover:bg-primary/5">
-                <div className="flex items-center gap-3">
-                  <Calendar size={24} className="text-primary" />
-                  <div>
-                    <div className="text-sm text-gray-500">Création</div>
-                    <div className="font-medium text-lg">{currentSeries.startYear}</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md hover:bg-primary/5">
-                <div className="flex items-center gap-3">
-                  <Package size={24} className="text-primary" />
-                  <div>
-                    <div className="text-sm text-gray-500">Figurines</div>
-                    <div className="font-medium text-lg">{currentSeries.totalReleases}+</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md hover:bg-primary/5">
-                <div className="flex items-center gap-3">
-                  <Star size={24} className="text-primary" />
-                  <div>
-                    <div className="text-sm text-gray-500">Taille moyenne</div>
-                    <div className="font-medium text-lg">{currentSeries.scale}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Characteristics */}
-            <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Info size={20} className="text-primary" />
-                Caractéristiques
-              </h2>
-              <Separator className="mb-4 bg-gray-100" />
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {currentSeries.features.map((feature, index) => (
-                  <div
-                    key={index}
-                    className="bg-gray-50 rounded-lg px-4 py-3 text-sm hover:bg-primary/5 transition-colors"
-                  >
-                    {feature}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Specifications */}
-            <div className="bg-white rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md">
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Package size={20} className="text-primary" />
-                Spécifications techniques
-              </h2>
-              <Separator className="mb-4 bg-gray-100" />
-              <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {Object.entries(currentSeries.specifications).map(([key, value]) => (
-                  <div key={key} className="bg-gray-50 rounded-lg p-4 hover:bg-primary/5 transition-colors">
-                    <dt className="text-gray-500 text-sm mb-1">
-                      {key.charAt(0).toUpperCase() + key.slice(1)}
-                    </dt>
-                    <dd className="font-medium">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+            <SeriesQuickStats 
+              startYear={currentSeries.startYear}
+              totalReleases={currentSeries.totalReleases}
+              scale={currentSeries.scale}
+            />
+            <SeriesFeatures features={currentSeries.features} />
+            <SeriesSpecifications specifications={currentSeries.specifications} />
           </div>
 
           <div className="space-y-8">
