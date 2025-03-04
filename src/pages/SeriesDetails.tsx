@@ -1,5 +1,6 @@
+
 import { useParams, Link } from "react-router-dom";
-import { ArrowRight, Calendar, Info, Users, History, Star, Package } from "lucide-react";
+import { ArrowRight, ArrowLeft, Calendar, Info, Users, History, Star, Package } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineRelated } from "../components/FigurineRelated";
 import { FigurineDescription } from "../components/FigurineDescription";
