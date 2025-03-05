@@ -1,6 +1,6 @@
 
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Heart } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineHeader } from "../components/FigurineHeader";
 import { FigurineGallery } from "../components/FigurineGallery";
@@ -11,9 +11,23 @@ import { FigurineRelated } from "../components/FigurineRelated";
 import { FigurineComments } from "../components/FigurineComments";
 import { FigurineDescription } from "../components/FigurineDescription";
 import { SocialShare } from "../components/SocialShare";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useState } from "react";
 
 const FigurineDetails = () => {
   const { id } = useParams();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Simulate loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   const figures = [
     {
@@ -82,6 +96,30 @@ const FigurineDetails = () => {
 
   const figure = figures.find(f => f.id === Number(id));
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <MainNav />
+        <main className="container mx-auto px-4 py-8">
+          <div className="animate-pulse space-y-8">
+            <div className="h-6 w-32 bg-gray-200 rounded"></div>
+            <div className="h-40 bg-gray-200 rounded-xl"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-8">
+                <div className="h-80 bg-gray-200 rounded-xl"></div>
+                <div className="h-40 bg-gray-200 rounded-xl"></div>
+              </div>
+              <div className="space-y-8">
+                <div className="h-60 bg-gray-200 rounded-xl"></div>
+                <div className="h-40 bg-gray-200 rounded-xl"></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   if (!figure) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -97,8 +135,12 @@ const FigurineDetails = () => {
             </Link>
           </div>
           <div className="bg-white rounded-xl shadow-sm p-8 text-center">
+            <Heart size={64} className="mx-auto text-gray-300 mb-4" />
             <h1 className="text-xl font-semibold text-gray-900 mb-2">Figurine non trouvée</h1>
-            <p className="text-gray-600">La figurine demandée n'existe pas dans notre base de données.</p>
+            <p className="text-gray-600 mb-6">La figurine demandée n'existe pas dans notre base de données.</p>
+            <Button asChild>
+              <Link to="/figurines">Parcourir les figurines</Link>
+            </Button>
           </div>
         </main>
       </div>
@@ -108,12 +150,20 @@ const FigurineDetails = () => {
   const shareUrl = window.location.href;
   const shareTitle = `${figure.name} - ${figure.series}`;
 
+  const handlePreorder = () => {
+    toast({
+      title: "Précommande ajoutée",
+      description: `Vous serez notifié lorsque ${figure.name} sera disponible.`,
+      duration: 3000,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
+        <div className="mb-8 animate-fade-in">
           <Link 
             to="/figurines"
             className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
@@ -124,7 +174,7 @@ const FigurineDetails = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-8 animate-fade-in">
             <FigurineHeader
               series={figure.series}
               name={figure.name}
@@ -137,15 +187,20 @@ const FigurineDetails = () => {
             </div>
           </div>
           
-          <div className="space-y-8">
+          <div className="space-y-8 animate-fade-in" style={{ animationDelay: "100ms" }}>
             <FigurineSpecs specs={figure} />
             <FigurineShops shops={figure.shops} />
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <Button onClick={handlePreorder} className="w-full">
+                Activer l'alerte de disponibilité
+              </Button>
+            </div>
             <FigurineNews news={figure.news} />
             <SocialShare title={shareTitle} url={shareUrl} />
           </div>
         </div>
 
-        <div className="mt-8 space-y-8">
+        <div className="mt-8 space-y-8 animate-fade-in" style={{ animationDelay: "200ms" }}>
           <FigurineRelated figures={figure.relatedFigures} />
           <FigurineComments comments={figure.comments} />
         </div>
