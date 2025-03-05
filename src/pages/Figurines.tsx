@@ -1,13 +1,13 @@
-
 import MainNav from "../components/MainNav";
 import { useState, useEffect } from "react";
-import { Star, Tag, Box, Calendar, Ruler, Grid, List as ListIcon, SlidersHorizontal, X } from "lucide-react";
+import { Star, Tag, Box, Calendar, Ruler, Grid, List as ListIcon, SlidersHorizontal, X, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { FigurineCard } from "@/components/FigurineCard";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 type SortOption = "date" | "scale" | "name" | "series";
 
@@ -19,8 +19,8 @@ const Figurines = () => {
   const [selectedSeries, setSelectedSeries] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Enhanced figurines data for better display
   const figures = [
     {
       id: 1,
@@ -132,23 +132,25 @@ const Figurines = () => {
 
     const series = selectedSeries.length === 0 ||
       selectedSeries.includes(figure.series);
+      
+    const search = searchQuery.trim() === "" || 
+      figure.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      figure.series.toLowerCase().includes(searchQuery.toLowerCase());
 
-    return scale && manufacturer && series;
+    return scale && manufacturer && series && search;
   });
 
-  // Toggle mobile filters visibility
   const toggleMobileFilters = () => {
     setMobileFiltersOpen(!mobileFiltersOpen);
   };
 
-  // Clear all filters
   const clearAllFilters = () => {
     setSelectedScales([]);
     setSelectedManufacturers([]);
     setSelectedSeries([]);
+    setSearchQuery("");
   };
 
-  // Function to count active filters
   const getActiveFiltersCount = () => {
     return selectedScales.length + selectedManufacturers.length + selectedSeries.length;
   };
@@ -211,7 +213,21 @@ const Figurines = () => {
           </div>
         </div>
 
-        {/* Mobile filters overlay */}
+        <div className="mb-6 animate-fade-in">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <Search className="h-4 w-4 text-gray-400" />
+            </div>
+            <Input
+              type="search"
+              placeholder="Rechercher par nom ou série..."
+              className="pl-10 bg-white"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
         {mobileFiltersOpen && (
           <div className="fixed inset-0 bg-black/50 z-40 lg:hidden animate-fade-in">
             <div className="absolute right-0 top-0 h-full w-80 bg-white p-4 overflow-y-auto animate-fade-in">
@@ -233,9 +249,7 @@ const Figurines = () => {
                 </Button>
               )}
               
-              {/* Mobile filters content - same as desktop */}
               <div className="space-y-5">
-                {/* Scale filter */}
                 <div>
                   <h3 className="font-medium mb-2 text-sm">Échelle</h3>
                   <div className="space-y-2">
@@ -261,7 +275,6 @@ const Figurines = () => {
 
                 <Separator />
 
-                {/* Manufacturers filter */}
                 <div>
                   <h3 className="font-medium mb-2 text-sm">Fabricants</h3>
                   <div className="space-y-2">
@@ -287,7 +300,6 @@ const Figurines = () => {
 
                 <Separator />
 
-                {/* Series filter */}
                 <div>
                   <h3 className="font-medium mb-2 text-sm">Séries</h3>
                   <div className="space-y-2">
@@ -322,7 +334,6 @@ const Figurines = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Desktop sidebar filters */}
           <div className="hidden lg:block lg:col-span-3">
             <Card className="overflow-hidden">
               <CardContent className="p-4">
@@ -341,7 +352,6 @@ const Figurines = () => {
                 </div>
                 
                 <div className="space-y-5">
-                  {/* Scale filter */}
                   <div>
                     <h3 className="font-medium mb-2 text-sm">Échelle</h3>
                     <div className="space-y-2">
@@ -367,7 +377,6 @@ const Figurines = () => {
 
                   <Separator />
 
-                  {/* Manufacturers filter */}
                   <div>
                     <h3 className="font-medium mb-2 text-sm">Fabricants</h3>
                     <div className="space-y-2">
@@ -393,7 +402,6 @@ const Figurines = () => {
 
                   <Separator />
 
-                  {/* Series filter */}
                   <div>
                     <h3 className="font-medium mb-2 text-sm">Séries</h3>
                     <div className="space-y-2">
@@ -421,58 +429,69 @@ const Figurines = () => {
             </Card>
           </div>
 
-          {/* Figurines list/grid */}
           <div className="lg:col-span-9">
-            {/* Applied filters display */}
-            {getActiveFiltersCount() > 0 && (
-              <div className="mb-4 flex flex-wrap gap-2 animate-fade-in">
-                {selectedScales.map(scale => (
-                  <Badge key={scale} variant="secondary" className="px-2 py-1 flex items-center gap-1">
-                    <Ruler size={12} />
-                    {scale}
-                    <button 
-                      className="ml-1 hover:text-primary" 
-                      onClick={() => setSelectedScales(selectedScales.filter(s => s !== scale))}
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
-                
-                {selectedManufacturers.map(manufacturer => (
-                  <Badge key={manufacturer} variant="secondary" className="px-2 py-1 flex items-center gap-1">
-                    <Box size={12} />
-                    {manufacturer}
-                    <button 
-                      className="ml-1 hover:text-primary" 
-                      onClick={() => setSelectedManufacturers(selectedManufacturers.filter(m => m !== manufacturer))}
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
-                
-                {selectedSeries.map(series => (
-                  <Badge key={series} variant="secondary" className="px-2 py-1 flex items-center gap-1">
-                    <Tag size={12} />
-                    {series}
-                    <button 
-                      className="ml-1 hover:text-primary" 
-                      onClick={() => setSelectedSeries(selectedSeries.filter(s => s !== series))}
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-            )}
+            <div className="mb-4 flex flex-wrap gap-2 animate-fade-in">
+              {getActiveFiltersCount() > 0 && (
+                <>
+                  {selectedScales.map(scale => (
+                    <Badge key={scale} variant="secondary" className="px-2 py-1 flex items-center gap-1">
+                      <Ruler size={12} />
+                      {scale}
+                      <button 
+                        className="ml-1 hover:text-primary" 
+                        onClick={() => setSelectedScales(selectedScales.filter(s => s !== scale))}
+                      >
+                        <X size={14} />
+                      </button>
+                    </Badge>
+                  ))}
+                  
+                  {selectedManufacturers.map(manufacturer => (
+                    <Badge key={manufacturer} variant="secondary" className="px-2 py-1 flex items-center gap-1">
+                      <Box size={12} />
+                      {manufacturer}
+                      <button 
+                        className="ml-1 hover:text-primary" 
+                        onClick={() => setSelectedManufacturers(selectedManufacturers.filter(m => m !== manufacturer))}
+                      >
+                        <X size={14} />
+                      </button>
+                    </Badge>
+                  ))}
+                  
+                  {selectedSeries.map(series => (
+                    <Badge key={series} variant="secondary" className="px-2 py-1 flex items-center gap-1">
+                      <Tag size={12} />
+                      {series}
+                      <button 
+                        className="ml-1 hover:text-primary" 
+                        onClick={() => setSelectedSeries(selectedSeries.filter(s => s !== series))}
+                      >
+                        <X size={14} />
+                      </button>
+                    </Badge>
+                  ))}
+                </>
+              )}
+              
+              {searchQuery && (
+                <Badge variant="secondary" className="px-2 py-1 flex items-center gap-1 bg-primary/10">
+                  <Search size={12} />
+                  "{searchQuery}"
+                  <button 
+                    className="ml-1 hover:text-primary" 
+                    onClick={() => setSearchQuery("")}
+                  >
+                    <X size={14} />
+                  </button>
+                </Badge>
+              )}
+            </div>
             
-            {/* Display count */}
             <div className="mb-4 text-sm text-gray-500">
               {filteredFigures.length} figurine{filteredFigures.length > 1 ? 's' : ''} trouvée{filteredFigures.length > 1 ? 's' : ''}
             </div>
             
-            {/* Grid view for figurines */}
             {viewMode === 'grid' && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredFigures.map((figure) => (
@@ -496,7 +515,6 @@ const Figurines = () => {
               </div>
             )}
             
-            {/* List view for figurines */}
             {viewMode === 'list' && (
               <div className="space-y-4">
                 {filteredFigures.map((figure) => (
@@ -557,15 +575,19 @@ const Figurines = () => {
               </div>
             )}
             
-            {/* Empty state */}
             {filteredFigures.length === 0 && (
               <div className="text-center py-12 bg-white rounded-lg shadow-sm animate-fade-in">
                 <Box className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Aucune figurine trouvée</h3>
                 <p className="text-gray-500 max-w-md mx-auto mb-6">
-                  Aucune figurine ne correspond à vos critères de recherche. Essayez de modifier vos filtres.
+                  Aucune figurine ne correspond à vos critères de recherche. Essayez de modifier vos filtres ou votre recherche.
                 </p>
-                <Button onClick={clearAllFilters}>Réinitialiser les filtres</Button>
+                <div className="flex flex-wrap justify-center gap-2">
+                  <Button onClick={clearAllFilters}>Réinitialiser les filtres</Button>
+                  {searchQuery && (
+                    <Button variant="outline" onClick={() => setSearchQuery("")}>Effacer la recherche</Button>
+                  )}
+                </div>
               </div>
             )}
           </div>
