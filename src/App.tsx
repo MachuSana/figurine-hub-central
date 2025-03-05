@@ -19,13 +19,20 @@ import Shops from "./pages/Shops";
 import ShopDetails from "./pages/ShopDetails";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
+      <Sonner richColors closeButton position="bottom-right" />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
