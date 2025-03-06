@@ -7,7 +7,7 @@ const MainNav = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { name: "Actualités", path: "/" },
+    { name: "Actualités", path: "/news" },
     { name: "Figurines", path: "/figurines" },
     { name: "Fabricants", path: "/manufacturers" },
     { name: "Gammes", path: "/series" },
