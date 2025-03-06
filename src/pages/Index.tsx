@@ -49,6 +49,41 @@ const fetchLatestNews = async () => {
   ];
 };
 
+const promotionalBanners = [
+  {
+    id: 1,
+    title: "Nouvelles Collections",
+    description: "Découvrez les dernières figurines des séries populaires",
+    image: "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64",
+    bgColor: "bg-violet-50"
+  },
+  {
+    id: 2,
+    title: "Précommandes",
+    description: "Ne manquez pas les figurines les plus attendues",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+    bgColor: "bg-blue-50"
+  }
+];
+
+const brands = [
+  {
+    id: 1,
+    name: "Good Smile Company",
+    logo: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
+  },
+  {
+    id: 2,
+    name: "Bandai Spirits",
+    logo: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+  },
+  {
+    id: 3,
+    name: "Kotobukiya",
+    logo: "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64"
+  }
+];
+
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSubscribed, setIsSubscribed] = useState(false);
