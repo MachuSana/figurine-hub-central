@@ -1,140 +1,220 @@
 import MainNav from "../components/MainNav";
-import { Calendar, Eye, MessageSquare, ArrowRight, Star, TrendingUp, Tag, Mail } from "lucide-react";
+import { Calendar, Eye, MessageSquare, ArrowRight, Star, TrendingUp, Tag, Mail, Bookmark, ChevronRight, ChevronLeft, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { NewsCard } from "@/components/NewsCard";
 
-const Index = () => {
-  const featuredNews = [
+const fetchLatestNews = async () => {
+  return [
     {
       id: 1,
       title: "Nouvelle Figurine Demon Slayer annoncée",
-      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+      summary: "Good Smile Company dévoile une nouvelle figurine de Tanjiro Kamado dans une pose dynamique.",
+      content:
+        "Good Smile Company dévoile une nouvelle figurine de Tanjiro Kamado dans une pose dynamique qui capture parfaitement l'essence du personnage. Cette figurine incroyablement détaillée rejoindra bientôt la collection Demon Slayer et promet d'être un incontournable pour les fans.",
+      coverImage: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
       date: "2024-04-10",
-      views: 1234,
-      comments: 45,
-      excerpt:
-        "Good Smile Company dévoile une nouvelle figurine de Tanjiro Kamado dans une pose dynamique qui capture parfaitement l'essence du personnage...",
       category: "Nouveautés",
+      source: "Figure News",
+      author: "Jean Martin",
     },
     {
       id: 2,
       title: "One Piece : La collection Grandista s'agrandit",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+      summary: "Découvrez les nouvelles figurines de la collection Grandista avec Luffy et Zoro.",
+      content:
+        "Découvrez les nouvelles figurines de la collection Grandista avec Luffy et Zoro dans des poses emblématiques qui raviront tous les fans. Chaque figurine est méticuleusement sculptée pour capturer la personnalité unique de ces personnages iconiques.",
+      coverImage: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
       date: "2024-04-09",
-      views: 987,
-      comments: 32,
-      excerpt:
-        "Découvrez les nouvelles figurines de la collection Grandista avec Luffy et Zoro dans des poses emblématiques qui raviront tous les fans...",
       category: "Collections",
+      source: "MangaCollect",
+      author: "Sophie Dubois",
     },
-  ];
-
-  const recentNews = [
     {
       id: 3,
       title: "Précommandes : Les dates à ne pas manquer",
+      summary: "Toutes les précommandes importantes du mois à ne pas manquer pour les collectionneurs.",
+      content:
+        "Voici les dates de précommandes importantes pour le mois à venir. Plusieurs figurines très attendues seront disponibles, notamment la nouvelle série de My Hero Academia et les exclusivités du Tokyo Game Show.",
+      coverImage: "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64",
       date: "2024-04-08",
-      views: 756,
-      comments: 23,
-      thumbnail: "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64",
-    },
-    {
-      id: 4,
-      title: "Guide du débutant : Comment bien choisir sa première figurine",
-      date: "2024-04-07",
-      views: 1543,
-      comments: 67,
-      thumbnail: "https://images.unsplash.com/photo-1608889824875-56aa13be3ff0",
+      category: "Précommandes",
+      source: "FigureAlert",
+      author: "Luc Bernard",
     },
   ];
+};
 
-  const popularFigures = [
-    {
-      id: 5,
-      title: "Naruto Uzumaki Mode Sage",
-      price: "129.99 €",
-      rating: 4.8,
-      image: "https://images.unsplash.com/photo-1608889175123-8ee362201f81",
-    },
-    {
-      id: 6,
-      title: "Monkey D. Luffy Gear 5",
-      price: "199.99 €",
-      rating: 4.9,
-      image: "https://images.unsplash.com/photo-1608889175638-48e13d0f104f",
-    },
-  ];
+const Index = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+  
+  const { data: latestNews, isLoading } = useQuery({
+    queryKey: ['latestNews'],
+    queryFn: fetchLatestNews,
+  });
 
-  const categories = [
-    { name: "Anime", count: 145 },
-    { name: "Jeux Vidéo", count: 89 },
-    { name: "Comics", count: 67 },
-    { name: "Films", count: 54 },
-  ];
-
-  const latestReleases = [
-    {
-      id: 7,
-      title: "Gon Freecss - Hunter × Hunter",
-      price: "89.99 €",
-      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e",
-      brand: "Good Smile Company",
-      releaseDate: "Mai 2024",
-    },
-    {
-      id: 8,
-      title: "Mikasa Ackerman - L'Attaque des Titans",
-      price: "159.99 €",
-      image: "https://images.unsplash.com/photo-1501286353178-1ec881214838",
-      brand: "Kotobukiya",
-      releaseDate: "Juin 2024",
-    },
-  ];
-
-  const promotionalBanners = [
+  const featuredFigurines = [
     {
       id: 1,
-      title: "Pré-commandes printemps 2024",
-      description: "Découvrez les nouveautés à venir",
-      image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
-      bgColor: "bg-violet-100",
-    },
-    {
-      id: 2,
-      title: "Collection Dragon Ball",
-      description: "Éditions limitées en stock",
+      name: "Eren Yeager - Final Season",
       image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
-      bgColor: "bg-orange-100",
-    },
-  ];
-
-  const brands = [
-    {
-      id: 1,
-      name: "Good Smile Company",
-      logo: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+      price: "189,99 €",
+      brand: "Good Smile Company",
+      badges: ["Nouveau", "Exclusif"],
+      rating: 4.9,
     },
     {
       id: 2,
-      name: "Kotobukiya",
-      logo: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+      name: "Goku Ultra Instinct",
+      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+      price: "139,99 €",
+      brand: "Bandai Spirits",
+      badges: ["Précommande", "Limité"],
+      rating: 4.8,
     },
     {
       id: 3,
-      name: "Bandai",
-      logo: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+      name: "Nezuko Kamado - Blood Demon Art",
+      image: "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64",
+      price: "169,99 €",
+      brand: "Aniplex",
+      badges: ["Édition spéciale"],
+      rating: 5.0,
     },
   ];
+
+  const handlePrevSlide = () => {
+    setCurrentSlide((prev) => (prev === 0 ? featuredFigurines.length - 1 : prev - 1));
+  };
+
+  const handleNextSlide = () => {
+    setCurrentSlide((prev) => (prev === featuredFigurines.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (emailRef.current?.value) {
+      setIsSubscribed(true);
+      toast.success("Merci pour votre inscription à la newsletter!");
+    } else {
+      toast.error("Veuillez entrer une adresse email valide");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
-        {/* Promotional Banners */}
+        <section className="relative mb-12 rounded-xl overflow-hidden bg-gradient-to-r from-violet-500 to-purple-700 shadow-lg">
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="relative z-10 p-8 md:p-12 flex flex-col items-start text-white max-w-3xl">
+            <Badge className="mb-4 bg-primary/90 hover:bg-primary text-white text-sm">Bienvenue sur FigureNews</Badge>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">Découvrez l'univers fascinant des figurines</h1>
+            <p className="text-lg mb-8 text-white/90 max-w-2xl">
+              Toute l'actualité, les sorties et les précommandes des plus grandes marques de figurines.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button asChild size="lg" className="font-semibold">
+                <Link to="/figurines">Explorer les figurines</Link>
+              </Button>
+              <Button variant="outline" size="lg" className="bg-white/20 hover:bg-white/30 border-white text-white font-semibold">
+                <Link to="/news">Voir les actualités</Link>
+              </Button>
+            </div>
+          </div>
+          <div className="absolute right-0 bottom-0 w-1/3 h-full hidden md:block">
+            <div className="h-full w-full bg-gradient-to-l from-transparent to-violet-500/90"></div>
+          </div>
+        </section>
+
+        <section className="mb-16">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold flex items-center">
+              <Star className="mr-2 text-primary" size={24} />
+              Figurines à la Une
+            </h2>
+            <div className="flex gap-2">
+              <Button variant="outline" size="icon" onClick={handlePrevSlide} className="rounded-full">
+                <ChevronLeft />
+              </Button>
+              <Button variant="outline" size="icon" onClick={handleNextSlide} className="rounded-full">
+                <ChevronRight />
+              </Button>
+            </div>
+          </div>
+          
+          <div className="relative overflow-hidden rounded-xl bg-white shadow-md">
+            <div 
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {featuredFigurines.map((figurine) => (
+                <div key={figurine.id} className="w-full flex-shrink-0">
+                  <div className="grid md:grid-cols-2 h-full">
+                    <div className="relative h-64 md:h-96">
+                      <img 
+                        src={figurine.image} 
+                        alt={figurine.name} 
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                        {figurine.badges.map((badge, index) => (
+                          <Badge key={index} className="bg-primary/90">{badge}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="p-6 md:p-8 flex flex-col justify-center">
+                      <div className="text-sm text-primary font-medium mb-2">{figurine.brand}</div>
+                      <h3 className="text-2xl md:text-3xl font-bold mb-3">{figurine.name}</h3>
+                      <div className="flex items-center mb-4">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            size={18} 
+                            className={`${i < Math.floor(figurine.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} 
+                          />
+                        ))}
+                        <span className="ml-2 text-sm text-gray-600">{figurine.rating}/5</span>
+                      </div>
+                      <p className="text-3xl font-bold text-gray-900 mb-6">{figurine.price}</p>
+                      <div className="flex flex-wrap gap-3">
+                        <Button>Voir détails</Button>
+                        <Button variant="outline" className="gap-2">
+                          <Heart size={16} /> Ajouter aux favoris
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+              {featuredFigurines.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    currentSlide === index ? "bg-primary" : "bg-gray-300"
+                  }`}
+                  onClick={() => setCurrentSlide(index)}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
         <div className="grid md:grid-cols-2 gap-6 mb-12">
           {promotionalBanners.map((banner) => (
             <div
               key={banner.id}
-              className={`${banner.bgColor} rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group`}
+              className={`${banner.bgColor} rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group animate-fade-up`}
             >
               <div className="flex items-center p-6">
                 <div className="flex-1">
@@ -156,219 +236,90 @@ const Index = () => {
           ))}
         </div>
 
-        {/* Latest Releases Carousel */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-12">
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <Star className="mr-2 text-primary" size={24} />
-            Dernières Sorties
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {latestReleases.map((release) => (
-              <div
-                key={release.id}
-                className="group cursor-pointer bg-gray-50 rounded-lg overflow-hidden hover:bg-gray-100 transition-colors duration-300"
-              >
-                <div className="flex p-4">
-                  <div className="w-36 h-36 relative overflow-hidden rounded-lg">
-                    <img
-                      src={release.image}
-                      alt={release.title}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="flex-1 ml-4">
-                    <span className="text-sm text-primary font-medium">{release.brand}</span>
-                    <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors duration-200">
-                      {release.title}
-                    </h3>
-                    <p className="text-2xl font-bold text-gray-900 mb-2">{release.price}</p>
-                    <p className="text-sm text-gray-500">
-                      Sortie prévue : {release.releaseDate}
-                    </p>
-                  </div>
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold flex items-center">
+              <Bookmark className="mr-2 text-primary" size={24} />
+              Dernières Actualités
+            </h2>
+            <Button variant="outline" asChild>
+              <Link to="/news" className="inline-flex items-center">
+                Toutes les actualités <ChevronRight size={16} className="ml-1" />
+              </Link>
+            </Button>
+          </div>
+          
+          <div className="space-y-6">
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <div className="animate-pulse space-y-6">
+                  {[1, 2].map((i) => (
+                    <div key={i} className="bg-white rounded-lg h-48 w-full max-w-4xl"></div>
+                  ))}
                 </div>
               </div>
-            ))}
+            ) : (
+              latestNews?.map((news) => (
+                <NewsCard key={news.id} news={news} />
+              ))
+            )}
           </div>
-        </div>
+        </section>
 
-        <h1 className="text-4xl font-bold text-center mb-12">
-          L'actualité des <span className="text-primary">Figurines</span>
-        </h1>
-
-        {/* Featured Articles Grid */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-12">
-          {/* Main Articles */}
-          <div className="lg:col-span-2 space-y-8">
-            {featuredNews.map((news) => (
-              <article
-                key={news.id}
-                className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 group"
-              >
-                <div className="md:flex">
-                  <div className="md:w-2/5 relative overflow-hidden">
-                    <img
-                      src={news.image}
-                      alt={news.title}
-                      className="w-full h-64 md:h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <span className="absolute top-4 left-4 bg-primary text-white px-3 py-1 rounded-full text-sm">
-                      {news.category}
-                    </span>
-                  </div>
-                  <div className="md:w-3/5 p-6">
-                    <h2 className="text-2xl font-semibold mb-3 group-hover:text-primary transition-colors duration-200">
-                      {news.title}
-                    </h2>
-                    <p className="text-gray-600 mb-4 line-clamp-3">{news.excerpt}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center text-sm text-gray-500 space-x-4">
-                        <div className="flex items-center">
-                          <Calendar size={16} className="mr-1" />
-                          {news.date}
-                        </div>
-                        <div className="flex items-center">
-                          <Eye size={16} className="mr-1" />
-                          {news.views}
-                        </div>
-                        <div className="flex items-center">
-                          <MessageSquare size={16} className="mr-1" />
-                          {news.comments}
-                        </div>
-                      </div>
-                      <div className="text-primary hidden group-hover:flex items-center transition-all duration-200">
-                        Lire plus <ArrowRight size={16} className="ml-1" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-8">
-            {/* Recent Articles */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 flex items-center">
-                <TrendingUp className="mr-2 text-primary" size={20} />
-                Articles Récents
-              </h3>
-              <div className="space-y-4">
-                {recentNews.map((news) => (
-                  <article key={news.id} className="group cursor-pointer flex gap-4">
-                    <div className="w-20 h-20 overflow-hidden rounded-lg">
-                      <img 
-                        src={news.thumbnail} 
-                        alt={news.title}
-                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-medium mb-2 group-hover:text-primary transition-colors duration-200 line-clamp-2">
-                        {news.title}
-                      </h4>
-                      <div className="flex items-center text-sm text-gray-500 space-x-4">
-                        <div className="flex items-center">
-                          <Calendar size={14} className="mr-1" />
-                          {news.date}
-                        </div>
-                        <div className="flex items-center">
-                          <Eye size={14} className="mr-1" />
-                          {news.views}
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-
-            {/* Popular Figures */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 flex items-center">
-                <Star className="mr-2 text-primary" size={20} />
-                Figurines Populaires
-              </h3>
-              <div className="space-y-4">
-                {popularFigures.map((figure) => (
-                  <div key={figure.id} className="group cursor-pointer">
-                    <div className="relative overflow-hidden rounded-lg mb-2">
-                      <img
-                        src={figure.image}
-                        alt={figure.title}
-                        className="w-full h-40 object-cover transform group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                        <p className="text-white font-semibold">{figure.price}</p>
-                      </div>
-                    </div>
-                    <h4 className="font-medium group-hover:text-primary transition-colors duration-200">
-                      {figure.title}
-                    </h4>
-                    <div className="flex items-center text-yellow-400">
-                      <Star size={16} className="fill-current" />
-                      <span className="ml-1 text-sm text-gray-600">{figure.rating}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Categories */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 flex items-center">
-                <Tag className="mr-2 text-primary" size={20} />
-                Catégories
-              </h3>
-              <div className="space-y-2">
-                {categories.map((category) => (
-                  <div
-                    key={category.name}
-                    className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg cursor-pointer group"
-                  >
-                    <span className="group-hover:text-primary transition-colors duration-200">
-                      {category.name}
-                    </span>
-                    <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                      {category.count}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Newsletter Section */}
-        <div className="bg-violet-50 rounded-xl shadow-sm p-8 mb-12">
+        <div className="bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl shadow-sm p-8 mb-12">
           <div className="max-w-2xl mx-auto text-center">
             <Mail className="w-12 h-12 text-primary mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-4">Restez informé des dernières sorties</h2>
             <p className="text-gray-600 mb-6">
               Inscrivez-vous à notre newsletter pour ne manquer aucune nouveauté et promotion exclusive.
             </p>
-            <div className="flex gap-4 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Votre adresse email"
-                className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors duration-300">
-                S'inscrire
-              </button>
-            </div>
+            {isSubscribed ? (
+              <div className="bg-green-50 text-green-700 rounded-lg p-4 animate-fade-in">
+                <p className="font-medium">Merci pour votre inscription!</p>
+                <p className="text-sm">Vous recevrez bientôt nos actualités.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex gap-4 max-w-md mx-auto">
+                <input
+                  type="email"
+                  ref={emailRef}
+                  placeholder="Votre adresse email"
+                  className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  required
+                />
+                <Button type="submit">
+                  S'inscrire
+                </Button>
+              </form>
+            )}
           </div>
         </div>
 
-        {/* Brands Slider */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          {[
+            { value: "10,000+", label: "Figurines" },
+            { value: "50+", label: "Marques" },
+            { value: "25,000+", label: "Clients Satisfaits" },
+            { value: "1,000+", label: "Avis Clients" }
+          ].map((stat, index) => (
+            <div 
+              key={index} 
+              className="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow duration-300 animate-fade-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <div className="text-3xl font-bold text-primary mb-2">{stat.value}</div>
+              <div className="text-gray-600">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
         <div className="bg-white rounded-xl shadow-sm p-6 mb-12">
           <h2 className="text-2xl font-bold mb-6 text-center">Nos Marques Partenaires</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             {brands.map((brand) => (
               <div
                 key={brand.id}
-                className="group cursor-pointer bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-300"
+                className="group cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg p-4 transition-colors duration-300 animate-fade-up"
               >
                 <div className="aspect-video relative overflow-hidden rounded-lg mb-3">
                   <img
@@ -385,27 +336,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Statistics Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
-            <div className="text-3xl font-bold text-primary mb-2">10,000+</div>
-            <div className="text-gray-600">Figurines</div>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
-            <div className="text-3xl font-bold text-primary mb-2">50+</div>
-            <div className="text-gray-600">Marques</div>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
-            <div className="text-3xl font-bold text-primary mb-2">25,000+</div>
-            <div className="text-gray-600">Clients Satisfaits</div>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
-            <div className="text-3xl font-bold text-primary mb-2">1,000+</div>
-            <div className="text-gray-600">Avis Clients</div>
-          </div>
-        </div>
-
-        {/* Advanced Search Widget */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-12">
           <h2 className="text-2xl font-bold mb-6">Recherche Avancée</h2>
           <div className="grid md:grid-cols-3 gap-4">
@@ -420,9 +350,9 @@ const Index = () => {
               <option value="kotobukiya">Kotobukiya</option>
               <option value="bandai">Bandai</option>
             </select>
-            <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors duration-300">
+            <Button>
               Rechercher
-            </button>
+            </Button>
           </div>
         </div>
       </main>
