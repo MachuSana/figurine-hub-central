@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { NewsCard } from "@/components/NewsCard";
+import { Card, CardContent } from "@/components/ui/card";
 
 const fetchLatestNews = async () => {
   return [
@@ -169,60 +170,60 @@ const Index = () => {
           </div>
         </section>
 
-        <section className="mb-16">
-          <div className="flex items-center justify-between mb-6">
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold flex items-center">
-              <Star className="mr-2 text-primary" size={24} />
+              <Star className="mr-2 text-primary" size={22} />
               Figurines à la Une
             </h2>
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" onClick={handlePrevSlide} className="rounded-full">
-                <ChevronLeft />
+              <Button variant="outline" size="icon" onClick={handlePrevSlide} className="rounded-full h-8 w-8">
+                <ChevronLeft size={16} />
               </Button>
-              <Button variant="outline" size="icon" onClick={handleNextSlide} className="rounded-full">
-                <ChevronRight />
+              <Button variant="outline" size="icon" onClick={handleNextSlide} className="rounded-full h-8 w-8">
+                <ChevronRight size={16} />
               </Button>
             </div>
           </div>
           
-          <div className="relative overflow-hidden rounded-xl bg-white shadow-md">
+          <Card className="overflow-hidden border-none shadow-md">
             <div 
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
               {featuredFigurines.map((figurine) => (
                 <div key={figurine.id} className="w-full flex-shrink-0">
-                  <div className="grid md:grid-cols-2 h-full">
-                    <div className="relative h-64 md:h-96">
+                  <div className="grid md:grid-cols-5 h-full">
+                    <div className="md:col-span-2 relative h-48 md:h-64">
                       <img 
                         src={figurine.image} 
                         alt={figurine.name} 
                         className="w-full h-full object-cover"
                       />
-                      <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                      <div className="absolute top-2 left-2 flex flex-wrap gap-1">
                         {figurine.badges.map((badge, index) => (
-                          <Badge key={index} className="bg-primary/90">{badge}</Badge>
+                          <Badge key={index} className="bg-primary/90 text-xs">{badge}</Badge>
                         ))}
                       </div>
                     </div>
-                    <div className="p-6 md:p-8 flex flex-col justify-center">
-                      <div className="text-sm text-primary font-medium mb-2">{figurine.brand}</div>
-                      <h3 className="text-2xl md:text-3xl font-bold mb-3">{figurine.name}</h3>
-                      <div className="flex items-center mb-4">
+                    <div className="md:col-span-3 p-4 flex flex-col justify-center">
+                      <div className="text-xs text-primary font-medium mb-1">{figurine.brand}</div>
+                      <h3 className="text-lg md:text-xl font-bold mb-2">{figurine.name}</h3>
+                      <div className="flex items-center mb-3">
                         {[...Array(5)].map((_, i) => (
                           <Star 
                             key={i} 
-                            size={18} 
+                            size={14} 
                             className={`${i < Math.floor(figurine.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} 
                           />
                         ))}
-                        <span className="ml-2 text-sm text-gray-600">{figurine.rating}/5</span>
+                        <span className="ml-2 text-xs text-gray-600">{figurine.rating}/5</span>
                       </div>
-                      <p className="text-3xl font-bold text-gray-900 mb-6">{figurine.price}</p>
-                      <div className="flex flex-wrap gap-3">
-                        <Button>Voir détails</Button>
-                        <Button variant="outline" className="gap-2">
-                          <Heart size={16} /> Ajouter aux favoris
+                      <p className="text-xl font-bold text-gray-900 mb-3">{figurine.price}</p>
+                      <div className="flex flex-wrap gap-2">
+                        <Button size="sm">Voir détails</Button>
+                        <Button variant="outline" size="sm" className="gap-1">
+                          <Heart size={14} /> Favoris
                         </Button>
                       </div>
                     </div>
@@ -231,18 +232,18 @@ const Index = () => {
               ))}
             </div>
             
-            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+            <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1">
               {featuredFigurines.map((_, index) => (
                 <button
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-colors ${
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
                     currentSlide === index ? "bg-primary" : "bg-gray-300"
                   }`}
                   onClick={() => setCurrentSlide(index)}
                 />
               ))}
             </div>
-          </div>
+          </Card>
         </section>
 
         <div className="grid md:grid-cols-2 gap-6 mb-12">
