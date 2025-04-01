@@ -1,7 +1,7 @@
 
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, User, MapPin, Clock, Users, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar, User, MapPin, Clock, Users, ExternalLink, Image, Ticket, Info } from "lucide-react";
 import MainNav from "@/components/MainNav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,41 +9,68 @@ import { SocialShare } from "@/components/SocialShare";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Dummy data - in a real app, this would come from an API
+// Données fictives pour les événements, adaptées au format Wonder Festival
 const eventsData = [
   {
     id: 3,
-    title: "Exposition de figurines à Paris en janvier 2024",
-    summary: "Le plus grand salon de figurines d'Europe se tiendra à Paris",
-    content: "Le Paris Figure Expo, considéré comme le plus grand salon européen dédié aux figurines et aux collectibles, se tiendra du 15 au 17 janvier 2024 au Parc des Expositions de la Porte de Versailles. Plus de 200 exposants du monde entier présenteront leurs dernières créations et des pièces exclusives. Des artistes renommés dans le domaine des figurines seront présents pour des sessions de dédicaces et des masterclass sur la peinture et la sculpture.\n\nLes visiteurs pourront découvrir les nouvelles collections des plus grands fabricants comme Bandai, Good Smile Company, Kotobukiya, et bien d'autres. Des pièces exclusives seront mises en vente uniquement pendant l'événement.\n\nEn plus des stands d'exposition et de vente, le salon proposera des conférences, des ateliers de peinture et de customisation, ainsi que des concours pour les créateurs amateurs.",
+    title: "Wonder Festival 2024 Winter",
+    summary: "Le plus grand salon mondial dédié aux figurines et à la culture pop japonaise",
+    content: "Le Wonder Festival 2024 Winter se tiendra au Makuhari Messe International Exhibition Hall à Chiba, Japon. Il s'agit du plus grand salon mondial dédié aux figurines, garage kits et collectibles japonais. Cet événement semestriel rassemble des fabricants professionnels et des créateurs amateurs (cercles) qui présentent et vendent leurs dernières créations.\n\nChaque Wonder Festival attire plus de 50 000 visiteurs et compte plus de 2 000 exposants. Des grandes entreprises comme Good Smile Company, Kotobukiya et Bandai y dévoilent leurs prochaines figurines, tandis que des milliers de cercles indépendants proposent leurs créations uniques en édition limitée.\n\nLes visiteurs pourront découvrir en avant-première les figurines qui sortiront dans les mois à venir, acheter des pièces exclusives uniquement disponibles lors de l'événement, et participer à diverses activités comme des séances de dédicaces avec des sculpteurs renommés.",
     coverImage: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1600",
-    date: "2023-10-25",
+    date: "2023-11-15",
     category: "Événement",
-    source: "Paris Figure Expo",
+    source: "Wonder Festival Official",
     author: "FigureNews",
     // Event specific fields
-    eventDate: "2024-01-15",
-    eventEndDate: "2024-01-17",
-    location: "Parc des Expositions de la Porte de Versailles, Paris",
-    ticketPrice: "15€ - 45€",
-    website: "https://parisfigureexpo.com",
-    expectedAttendees: "10,000+",
+    eventDate: "2024-02-11",
+    location: "Makuhari Messe International Exhibition Hall, Chiba, Japon",
+    ticketPrice: "2000¥ (adulte), 1000¥ (enfant)",
+    website: "https://wonfes.jp",
+    expectedAttendees: "50,000+",
     schedule: [
-      { time: "09:00", description: "Ouverture des portes" },
-      { time: "10:30", description: "Conférence: Les nouvelles technologies d'impression 3D" },
-      { time: "12:00", description: "Pause déjeuner" },
-      { time: "14:00", description: "Masterclass: Techniques de peinture avancées" },
-      { time: "16:30", description: "Session de dédicaces: Artistes invités" },
-      { time: "18:00", description: "Fermeture des stands" }
+      { time: "10:00", description: "Ouverture des portes (entrée public)" },
+      { time: "10:30", description: "Présentation des nouveautés Good Smile Company" },
+      { time: "12:00", description: "Défilé de cosplay sur scène principale" },
+      { time: "14:00", description: "Démonstration de sculpture par des artistes professionnels" },
+      { time: "16:00", description: "Tirage au sort pour les produits exclusifs" },
+      { time: "17:00", description: "Fermeture de l'événement" }
     ],
     exhibitors: [
-      "Bandai Namco Collectibles",
       "Good Smile Company",
+      "Max Factory",
       "Kotobukiya",
-      "Tsume Art",
-      "First 4 Figures",
-      "MegaHouse"
+      "Bandai Spirits",
+      "Alter",
+      "MegaHouse",
+      "FREEing",
+      "Orange Rouge"
+    ],
+    exclusiveItems: [
+      {
+        name: "Nendoroid Hatsune Miku: Wonder Festival Edition",
+        manufacturer: "Good Smile Company",
+        price: "6000¥",
+        limited: true
+      },
+      {
+        name: "figma Rem: Crystal Dress Ver.",
+        manufacturer: "Max Factory",
+        price: "8500¥",
+        limited: true
+      },
+      {
+        name: "ARTFX J Jujutsu Kaisen: Gojo Satoru Special Color",
+        manufacturer: "Kotobukiya",
+        price: "13800¥",
+        limited: false
+      }
+    ],
+    gallery: [
+      "https://images.unsplash.com/photo-1567306226408-c302e8433c9a?q=80&w=1600",
+      "https://images.unsplash.com/photo-1558507676-62229a0f63ed?q=80&w=1600",
+      "https://images.unsplash.com/photo-1571173729635-1bb0efd7c696?q=80&w=1600"
     ]
   }
 ];
@@ -53,6 +80,7 @@ const EventDetail = () => {
   const [event, setEvent] = useState<typeof eventsData[0] | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("info");
 
   useEffect(() => {
     // Simulate fetching data from an API
@@ -218,7 +246,7 @@ const EventDetail = () => {
                 {event.ticketPrice && (
                   <div className="flex items-start gap-2 col-span-1 md:col-span-2">
                     <div className="rounded-full bg-purple-100 p-1 text-purple-500 mt-0.5">
-                      <span className="text-xs font-bold">€</span>
+                      <Ticket size={16} />
                     </div>
                     <div>
                       <div className="font-medium text-gray-700">Tarifs</div>
@@ -240,48 +268,125 @@ const EventDetail = () => {
             </CardContent>
           </Card>
           
-          {/* Main content */}
-          <div className="prose prose-gray max-w-none mb-8">
-            <p className="text-lg font-medium mb-6 text-gray-700">{event.summary}</p>
+          {/* Tabs for different sections */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+            <TabsList className="w-full border-b grid grid-cols-3">
+              <TabsTrigger value="info" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-purple-500">
+                <Info size={16} className="mr-2" /> Informations
+              </TabsTrigger>
+              <TabsTrigger value="schedule" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-purple-500">
+                <Clock size={16} className="mr-2" /> Programme
+              </TabsTrigger>
+              <TabsTrigger value="exclusives" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-purple-500">
+                <Image size={16} className="mr-2" /> Exclusivités
+              </TabsTrigger>
+            </TabsList>
             
-            {event.content.split('\n\n').map((paragraph, index) => (
-              <p key={index} className="mb-4">{paragraph}</p>
-            ))}
-          </div>
-          
-          {/* Event schedule */}
-          {event.schedule && (
-            <div className="mb-8 bg-white p-6 rounded-lg shadow-sm">
-              <h2 className="text-xl font-semibold mb-4">Programme</h2>
-              <div className="space-y-3">
-                {event.schedule.map((item, index) => (
-                  <div key={index} className="flex gap-4 items-start">
-                    <div className="bg-purple-100 text-purple-700 font-medium px-2 py-1 rounded-md w-16 text-center">
-                      {item.time}
-                    </div>
-                    <div className="flex-1">{item.description}</div>
+            {/* Info tab content */}
+            <TabsContent value="info" className="pt-6">
+              <div className="prose prose-gray max-w-none mb-8">
+                <p className="text-lg font-medium mb-6 text-gray-700">{event.summary}</p>
+                
+                {event.content.split('\n\n').map((paragraph, index) => (
+                  <p key={index} className="mb-4">{paragraph}</p>
+                ))}
+                
+                <div className="mt-8 bg-white p-6 rounded-lg shadow-sm">
+                  <h3 className="text-xl font-semibold mb-4">Exposants principaux</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {event.exhibitors.map((exhibitor, index) => (
+                      <span 
+                        key={index} 
+                        className="bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-sm"
+                      >
+                        {exhibitor}
+                      </span>
+                    ))}
                   </div>
-                ))}
+                </div>
+                
+                {event.gallery && (
+                  <div className="mt-8 bg-white p-6 rounded-lg shadow-sm">
+                    <h3 className="text-xl font-semibold mb-4">Galerie des éditions précédentes</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {event.gallery.map((image, index) => (
+                        <img 
+                          key={index}
+                          src={image}
+                          alt={`Wonder Festival image ${index + 1}`}
+                          className="rounded-lg w-full h-48 object-cover hover:opacity-90 transition-all cursor-pointer"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
-          
-          {/* Exhibitors */}
-          {event.exhibitors && (
-            <div className="mb-12 bg-white p-6 rounded-lg shadow-sm">
-              <h2 className="text-xl font-semibold mb-4">Exposants</h2>
-              <div className="flex flex-wrap gap-2">
-                {event.exhibitors.map((exhibitor, index) => (
-                  <span 
-                    key={index} 
-                    className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
-                  >
-                    {exhibitor}
-                  </span>
-                ))}
+            </TabsContent>
+            
+            {/* Schedule tab content */}
+            <TabsContent value="schedule" className="pt-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-semibold mb-4">Programme de l'événement</h3>
+                <div className="space-y-3">
+                  {event.schedule.map((item, index) => (
+                    <div key={index} className="flex gap-4 items-start border-l-2 border-purple-200 pl-4 pb-4 relative">
+                      <div className="absolute -left-1.5 top-1">
+                        <div className="h-3 w-3 rounded-full bg-purple-500"></div>
+                      </div>
+                      <div className="bg-purple-100 text-purple-700 font-medium px-3 py-1 rounded-md w-16 text-center">
+                        {item.time}
+                      </div>
+                      <div className="flex-1 pt-1">{item.description}</div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="mt-8 p-4 bg-purple-50 rounded-lg">
+                  <p className="text-sm text-purple-700">
+                    <Info size={14} className="inline mr-1" /> 
+                    Le programme peut être sujet à des modifications. Consultez le site officiel pour les dernières mises à jour.
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            </TabsContent>
+            
+            {/* Exclusives tab content */}
+            <TabsContent value="exclusives" className="pt-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-semibold mb-4">Figurines exclusives</h3>
+                <p className="text-gray-600 mb-6">
+                  Ces figurines sont disponibles uniquement pendant l'événement et produites en quantité limitée.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {event.exclusiveItems && event.exclusiveItems.map((item, index) => (
+                    <div key={index} className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="bg-purple-50 p-3 border-b">
+                        <h4 className="font-medium">{item.name}</h4>
+                      </div>
+                      <div className="p-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-gray-600">{item.manufacturer}</span>
+                          <span className="font-semibold">{item.price}</span>
+                        </div>
+                        {item.limited && (
+                          <div className="text-amber-600 text-sm flex items-center mt-2">
+                            <Info size={14} className="mr-1" />
+                            Édition ultra limitée
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <p className="text-sm text-gray-500 mt-6">
+                  Les produits exclusifs sont généralement vendus selon le principe du premier arrivé, premier servi. 
+                  Pour les articles les plus populaires, un système de loterie peut être mis en place.
+                </p>
+              </div>
+            </TabsContent>
+          </Tabs>
           
           <Separator className="mb-6" />
           
