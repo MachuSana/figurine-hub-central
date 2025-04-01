@@ -3,6 +3,7 @@ import { useState } from "react";
 import MainNav from "@/components/MainNav";
 import { NewsCard } from "@/components/NewsCard";
 import { NewsFilters } from "@/components/NewsFilters";
+import { ReleaseCalendarPreview } from "@/components/ReleaseCalendarPreview";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
@@ -87,8 +88,11 @@ const News = () => {
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8 text-center">Actualités des Figurines</h1>
         
-        <div className="max-w-4xl mx-auto mb-8">
-          <div className="flex gap-4 flex-col md:flex-row">
+        <div className="max-w-4xl mx-auto">
+          {/* Intégration du composant ReleaseCalendarPreview */}
+          <ReleaseCalendarPreview />
+          
+          <div className="flex gap-4 flex-col md:flex-row mb-8">
             <div className="relative flex-1">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-gray-400" />
@@ -107,28 +111,28 @@ const News = () => {
               onSelectCategory={setSelectedCategory}
             />
           </div>
-        </div>
-        
-        {searchQuery && (
-          <div className="max-w-4xl mx-auto mb-6">
-            <p className="text-sm text-gray-500">
-              {filteredNews.length === 0 
-                ? `Aucun résultat pour "${searchQuery}"` 
-                : `${filteredNews.length} résultat(s) pour "${searchQuery}"`}
-            </p>
-          </div>
-        )}
-        
-        <div className="max-w-4xl mx-auto space-y-6">
-          {filteredNews.length > 0 ? (
-            filteredNews.map(news => (
-              <NewsCard key={news.id} news={news} />
-            ))
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-gray-500">Aucun article trouvé</p>
+          
+          {searchQuery && (
+            <div className="mb-6">
+              <p className="text-sm text-gray-500">
+                {filteredNews.length === 0 
+                  ? `Aucun résultat pour "${searchQuery}"` 
+                  : `${filteredNews.length} résultat(s) pour "${searchQuery}"`}
+              </p>
             </div>
           )}
+          
+          <div className="space-y-6">
+            {filteredNews.length > 0 ? (
+              filteredNews.map(news => (
+                <NewsCard key={news.id} news={news} />
+              ))
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-gray-500">Aucun article trouvé</p>
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </div>
