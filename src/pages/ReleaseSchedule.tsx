@@ -1,248 +1,353 @@
 
 import { useState } from "react";
 import MainNav from "../components/MainNav";
-import { Card, CardContent } from "@/components/ui/card";
-import { format, addMonths } from "date-fns";
-import { fr } from "date-fns/locale";
-import { ArrowLeft } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+import { format, addMonths, startOfMonth, getDaysInMonth, isSameDay } from "date-fns";
+import { fr } from "date-fns/locale";
+import { ArrowLeft, ArrowRight, CalendarDays, List, Calendar as CalendarIcon, Info } from "lucide-react";
 
 // Sample data - in a real app, this would come from an API
 const releaseData = [
   {
     id: 1,
-    name: "Rem: Winter Clothes Ver.",
-    character: "Rem",
-    series: "Re:Zero − Starting Life in Another World",
-    manufacturer: "Good Smile Company",
-    releaseDate: new Date(2025, 2, 15), // March 15, 2025
-    price: "19,500¥",
-    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e",
-    dimensions: "240mm (H) x 120mm (W) x 120mm (D)"
+    name: "Monkey D. Luffy - Gear 5",
+    manufacturer: "Bandai",
+    series: "One Piece",
+    releaseDate: new Date(2024, 5, 15), // June 15, 2024
+    price: "24800¥",
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e"
   },
   {
     id: 2,
-    name: "Monkey D. Luffy: Wano Country Ver.",
-    character: "Monkey D. Luffy",
-    series: "One Piece",
-    manufacturer: "MegaHouse",
-    releaseDate: new Date(2025, 2, 12), // March 12, 2025
-    price: "18,700¥",
-    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
-    dimensions: "220mm (H) x 150mm (W) x 140mm (D)"
+    name: "Rei Ayanami - EVA 01",
+    manufacturer: "Good Smile Company",
+    series: "Evangelion",
+    releaseDate: new Date(2024, 6, 20), // July 20, 2024
+    price: "18500¥",
+    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952"
   },
   {
     id: 3,
-    name: "Miku Hatsune: Magical Mirai 2023",
-    character: "Miku Hatsune",
-    series: "Vocaloid",
-    manufacturer: "Good Smile Company",
-    releaseDate: new Date(2025, 2, 18), // March 18, 2025
-    price: "16,500¥",
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
-    dimensions: "240mm (H) x 150mm (W) x 120mm (D)"
+    name: "Gojo Satoru - Jujutsu Kaisen",
+    manufacturer: "MegaHouse",
+    series: "Jujutsu Kaisen",
+    releaseDate: new Date(2024, 5, 10), // June 10, 2024
+    price: "22000¥",
+    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
   },
   {
     id: 4,
-    name: "Eren Yaeger: Final Season Ver.",
-    character: "Eren Yaeger",
-    series: "Attack on Titan",
+    name: "Eren Yaeger - Final Season",
     manufacturer: "Kotobukiya",
-    releaseDate: new Date(2025, 2, 20), // March 20, 2025
-    price: "22,000¥",
-    image: "https://images.unsplash.com/photo-1591267990532-e5bdb1b0ceb8",
-    dimensions: "200mm (H) x 260mm (W) x 230mm (D)"
+    series: "Attack on Titan",
+    releaseDate: new Date(2024, 7, 5), // August 5, 2024
+    price: "19800¥",
+    image: "https://images.unsplash.com/photo-1591267990532-e5bdb1b0ceb8"
   },
   {
     id: 5,
-    name: "Nezuko Kamado: Blood Demon Art",
-    character: "Nezuko Kamado",
-    series: "Demon Slayer",
-    manufacturer: "Aniplex",
-    releaseDate: new Date(2025, 2, 23), // March 23, 2025
-    price: "23,800¥",
-    image: "https://images.unsplash.com/photo-1508693926297-1d61f13ab8b8",
-    dimensions: "210mm (H) x 182mm (W) x 140mm (D)"
+    name: "Asuka Langley - Test Plug Suit",
+    manufacturer: "Alter",
+    series: "Evangelion",
+    releaseDate: new Date(2024, 5, 25), // June 25, 2024
+    price: "21500¥",
+    image: "https://images.unsplash.com/photo-1508693926297-1d61f13ab8b8"
   },
   {
     id: 6,
-    name: "Saitama: Serious Punch",
-    character: "Saitama",
+    name: "Saitama - Serious Mode",
+    manufacturer: "Max Factory",
     series: "One Punch Man",
-    manufacturer: "Tsume Art",
-    releaseDate: new Date(2025, 2, 27), // March 27, 2025
-    price: "19,800¥",
-    image: "https://images.unsplash.com/photo-1501432377862-3d0432b87a14",
-    dimensions: "270mm (H) x 254mm (W) x 240mm (D)"
-  },
-  {
-    id: 7,
-    name: "Violet Evergarden: Memories",
-    character: "Violet Evergarden",
-    series: "Violet Evergarden",
-    manufacturer: "Kotobukiya",
-    releaseDate: new Date(2025, 2, 30), // March 30, 2025
-    price: "25,800¥",
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-    dimensions: "235mm (H) x 150mm (W) x 180mm (D)"
+    releaseDate: new Date(2024, 6, 30), // July 30, 2024
+    price: "18000¥",
+    image: "https://images.unsplash.com/photo-1501432377862-3d0432b87a14"
   }
 ];
 
-const monthNames = [
-  "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-  "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-];
+// Group releases by month
+const groupReleasesByMonth = (releases: typeof releaseData) => {
+  const grouped: Record<string, typeof releaseData> = {};
+  
+  releases.forEach(release => {
+    const monthKey = format(release.releaseDate, "yyyy-MM");
+    if (!grouped[monthKey]) {
+      grouped[monthKey] = [];
+    }
+    grouped[monthKey].push(release);
+  });
+  
+  return grouped;
+};
+
+// Get releases for a specific date
+const getReleasesForDate = (date: Date, releases: typeof releaseData) => {
+  return releases.filter(release => isSameDay(release.releaseDate, date));
+};
 
 const ReleaseSchedule = () => {
-  const [selectedMonth, setSelectedMonth] = useState<Date>(new Date(2025, 2, 1)); // March 2025
-  const [searchQuery, setSearchQuery] = useState("");
+  const [date, setDate] = useState<Date>(new Date());
+  const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
+  const [view, setView] = useState<"calendar" | "list" | "month">("month");
   
-  // Filter releases for the selected month
+  const groupedReleases = groupReleasesByMonth(releaseData);
+  const monthsList = Object.keys(groupedReleases).map(key => {
+    const [year, month] = key.split("-").map(Number);
+    return new Date(year, month - 1);
+  }).sort((a, b) => a.getTime() - b.getTime());
+  
+  // Get the days in the selected month that have releases
+  const daysWithReleases = releaseData
+    .filter(release => 
+      release.releaseDate.getMonth() === selectedMonth.getMonth() &&
+      release.releaseDate.getFullYear() === selectedMonth.getFullYear()
+    )
+    .map(release => release.releaseDate);
+  
+  // Get all releases for the selected month
   const releasesForSelectedMonth = releaseData.filter(release => 
     release.releaseDate.getMonth() === selectedMonth.getMonth() &&
-    release.releaseDate.getFullYear() === selectedMonth.getFullYear() &&
-    (
-      release.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      release.manufacturer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      release.series.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      release.character.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+    release.releaseDate.getFullYear() === selectedMonth.getFullYear()
   );
-  
+
   const navigateMonth = (direction: "next" | "prev") => {
     setSelectedMonth(prev => addMonths(prev, direction === "next" ? 1 : -1));
   };
   
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       <MainNav />
       
-      <main className="container mx-auto px-4 py-8 max-w-5xl">
-        {/* Back button and title */}
-        <div className="mb-6">
-          <Link to="/news" className="text-gray-600 flex items-center gap-1 mb-2 text-sm hover:underline">
-            <ArrowLeft size={14} />
-            <span>Retour aux actualités</span>
-          </Link>
+      <main className="container mx-auto px-4 py-8">
+        <div className="mb-8 flex justify-between items-center">
+          <h1 className="text-3xl font-bold">Planning des sorties</h1>
           
-          <h1 className="text-3xl font-bold">Sorties de {format(selectedMonth, 'MMMM yyyy', { locale: fr })}</h1>
-          
-          <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
-            <span>{format(new Date(), 'dd MMMM yyyy', { locale: fr })}</span>
-            <span>•</span>
-            <span>Figurines</span>
-            <span>•</span>
-            <span className="bg-red-500 text-white px-1.5 py-0.5 rounded text-xs">News</span>
+          <div className="flex items-center space-x-4">
+            <Tabs 
+              value={view} 
+              onValueChange={(v) => setView(v as "calendar" | "list" | "month")}
+              className="w-auto"
+            >
+              <TabsList>
+                <TabsTrigger value="month" className="flex items-center gap-1">
+                  <CalendarIcon size={16} />
+                  <span className="hidden sm:inline">Mois</span>
+                </TabsTrigger>
+                <TabsTrigger value="calendar" className="flex items-center gap-1">
+                  <CalendarDays size={16} />
+                  <span className="hidden sm:inline">Calendrier</span>
+                </TabsTrigger>
+                <TabsTrigger value="list" className="flex items-center gap-1">
+                  <List size={16} />
+                  <span className="hidden sm:inline">Liste</span>
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
         </div>
         
-        {/* Banner image */}
-        <div className="mb-8">
-          <img
-            src="public/lovable-uploads/bb62b038-1c21-49e0-ad4c-14fec882c03e.png"
-            alt="Planning des sorties figurines"
-            className="w-full rounded-lg object-cover max-h-[300px]"
-          />
-        </div>
-        
-        {/* Description */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">Figurines en sortie ce mois-ci</h2>
-          <p className="text-gray-700">
-            Découvrez toutes les figurines sorties et éditées qui sortent en mars 2025. Utilisez les filtres ci-dessous pour 
-            trouver facilement les figurines qui vous intéressent.
-          </p>
-        </div>
-        
-        {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <div>
-            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">Série</label>
-            <Input
-              id="search"
-              placeholder="Toutes les séries"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <label htmlFor="manufacturer" className="block text-sm font-medium text-gray-700 mb-1">Fabricant</label>
-            <Select>
-              <SelectTrigger id="manufacturer">
-                <SelectValue placeholder="Tous les fabricants" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous les fabricants</SelectItem>
-                <SelectItem value="gsc">Good Smile Company</SelectItem>
-                <SelectItem value="megahouse">MegaHouse</SelectItem>
-                <SelectItem value="kotobukiya">Kotobukiya</SelectItem>
-                <SelectItem value="aniplex">Aniplex</SelectItem>
-                <SelectItem value="tsume">Tsume Art</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        
-        {/* Month heading with figurine count */}
-        <div className="border-b pb-4 mb-6">
-          <h3 className="text-xl font-semibold">
-            Mars 2025 ({releasesForSelectedMonth.length} figurines)
-          </h3>
-        </div>
-        
-        {/* Figurine list */}
-        <div className="space-y-8">
-          {releasesForSelectedMonth.map((figurine) => (
-            <div key={figurine.id} className="grid grid-cols-[auto_1fr] gap-6 border-b pb-8">
-              {/* Release date */}
-              <div className="text-center">
-                <div className="bg-gray-50 border rounded-md p-3 flex flex-col items-center">
-                  <span className="text-sm text-gray-500">{format(figurine.releaseDate, 'MMM', { locale: fr })}</span>
-                  <span className="text-2xl font-bold">{format(figurine.releaseDate, 'dd')}</span>
-                </div>
-              </div>
-              
-              {/* Figurine details */}
-              <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6">
-                <img 
-                  src={figurine.image} 
-                  alt={figurine.name}
-                  className="rounded-md object-cover w-full aspect-square"
-                />
-                
-                <div>
-                  <h3 className="text-xl font-semibold mb-1">{figurine.name}</h3>
-                  <p className="text-gray-600 mb-4">{figurine.character} • {figurine.series}</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
-                    <div>
-                      <p className="text-gray-500 text-sm">Fabricant</p>
-                      <p>{figurine.manufacturer}</p>
-                    </div>
-                    
-                    <div>
-                      <p className="text-gray-500 text-sm">Dimensions</p>
-                      <p>{figurine.dimensions}</p>
-                    </div>
-                    
-                    <div>
-                      <p className="text-gray-500 text-sm">Prix</p>
-                      <p className="font-medium">{figurine.price}</p>
-                    </div>
-                    
-                    <div>
-                      <p className="text-gray-500 text-sm">Date de sortie</p>
-                      <p>{format(figurine.releaseDate, 'dd MMMM yyyy', { locale: fr })}</p>
-                    </div>
+        <Card className="animate-fade-in">
+          <CardHeader className="pb-2">
+            {/* Fixed issue: Wrapped each TabsContent inside a Tabs component */}
+            <Tabs value={view}>
+              <TabsContent value="month" className="m-0">
+                <div className="flex justify-between items-center">
+                  <CardTitle>
+                    {format(selectedMonth, 'MMMM yyyy', { locale: fr })}
+                  </CardTitle>
+                  <div className="flex space-x-2">
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      onClick={() => navigateMonth("prev")}
+                    >
+                      <ArrowLeft size={16} />
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      onClick={() => navigateMonth("next")}
+                    >
+                      <ArrowRight size={16} />
+                    </Button>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
+                <CardDescription>
+                  {releasesForSelectedMonth.length} figurine{releasesForSelectedMonth.length !== 1 ? 's' : ''} à sortir ce mois-ci
+                </CardDescription>
+              </TabsContent>
+              
+              <TabsContent value="calendar" className="m-0">
+                <CardTitle>Calendrier des sorties</CardTitle>
+                <CardDescription>
+                  Cliquez sur une date pour voir les figurines qui sortent ce jour-là
+                </CardDescription>
+              </TabsContent>
+              
+              <TabsContent value="list" className="m-0">
+                <CardTitle>Liste des sorties à venir</CardTitle>
+                <CardDescription>
+                  Toutes les figurines prévues dans les prochains mois
+                </CardDescription>
+              </TabsContent>
+            </Tabs>
+          </CardHeader>
+          
+          <CardContent>
+            {/* Fixed issue: Wrapped all TabsContent in a single Tabs component */}
+            <Tabs value={view}>
+              <TabsContent value="month" className="space-y-6 m-0">
+                <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+                  {Array.from({ length: getDaysInMonth(selectedMonth) }).map((_, i) => {
+                    const day = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), i + 1);
+                    const dayReleases = getReleasesForDate(day, releaseData);
+                    const hasReleases = dayReleases.length > 0;
+                    
+                    return (
+                      <div 
+                        key={i}
+                        className={`border rounded-lg p-2 ${hasReleases ? 'bg-white shadow-sm' : 'bg-gray-50'}`}
+                      >
+                        <div className="text-sm font-medium mb-2">
+                          {format(day, 'd EEEE', { locale: fr })}
+                        </div>
+                        
+                        {hasReleases ? (
+                          <div className="space-y-2">
+                            {dayReleases.map(release => (
+                              <Link 
+                                to={`/figurines/${release.id}`} 
+                                key={release.id}
+                                className="block p-2 hover:bg-gray-100 rounded-md transition-colors"
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <img 
+                                    src={release.image} 
+                                    alt={release.name} 
+                                    className="w-10 h-10 object-cover rounded"
+                                  />
+                                  <div>
+                                    <div className="text-sm font-medium line-clamp-1">{release.name}</div>
+                                    <div className="text-xs text-gray-500">{release.manufacturer}</div>
+                                  </div>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-xs text-gray-400 italic">Pas de sortie</div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="calendar" className="m-0">
+                <div className="flex flex-col items-center space-y-4">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={(newDate) => newDate && setDate(newDate)}
+                    className="rounded-md border"
+                    modifiers={{
+                      hasRelease: daysWithReleases,
+                    }}
+                    modifiersStyles={{
+                      hasRelease: { 
+                        fontWeight: 'bold', 
+                        textDecoration: 'underline',
+                        color: 'var(--primary)' 
+                      }
+                    }}
+                  />
+                  
+                  <Card className="w-full mt-4">
+                    <CardHeader>
+                      <CardTitle className="text-lg">
+                        Sorties du {format(date, 'dd MMMM yyyy', { locale: fr })}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {getReleasesForDate(date, releaseData).length > 0 ? (
+                        <div className="space-y-4">
+                          {getReleasesForDate(date, releaseData).map(release => (
+                            <Link 
+                              to={`/figurines/${release.id}`}
+                              key={release.id} 
+                              className="flex border rounded-lg p-4 hover:shadow-md transition-all"
+                            >
+                              <img 
+                                src={release.image} 
+                                alt={release.name}
+                                className="w-16 h-16 object-cover rounded-md"
+                              />
+                              <div className="ml-4">
+                                <h3 className="font-medium">{release.name}</h3>
+                                <div className="text-sm text-gray-600 mt-1">
+                                  {release.manufacturer} • {release.series}
+                                </div>
+                                <div className="text-sm font-medium text-primary mt-1">
+                                  {release.price}
+                                </div>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center py-8 text-center">
+                          <Info size={48} className="text-gray-300 mb-2" />
+                          <p className="text-gray-500">Pas de sortie à cette date</p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="list" className="space-y-8 m-0">
+                {monthsList.map(month => (
+                  <div key={format(month, 'yyyy-MM')} className="space-y-4">
+                    <h2 className="text-xl font-semibold capitalize">
+                      {format(month, 'MMMM yyyy', { locale: fr })}
+                    </h2>
+                    
+                    <div className="space-y-4">
+                      {groupedReleases[format(month, 'yyyy-MM')].map(release => (
+                        <Link 
+                          to={`/figurines/${release.id}`}
+                          key={release.id} 
+                          className="flex items-center border rounded-lg p-4 hover:shadow-md transition-all"
+                        >
+                          <img 
+                            src={release.image} 
+                            alt={release.name}
+                            className="w-20 h-20 object-cover rounded-md"
+                          />
+                          <div className="ml-4 flex-grow">
+                            <h3 className="font-medium">{release.name}</h3>
+                            <div className="text-sm text-gray-600 mt-1">
+                              {release.manufacturer} • {release.series}
+                            </div>
+                            <div className="text-sm font-medium mt-1">
+                              {format(release.releaseDate, 'dd MMMM yyyy', { locale: fr })}
+                            </div>
+                          </div>
+                          <div className="text-lg font-medium text-primary">
+                            {release.price}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
       </main>
     </div>
   );
