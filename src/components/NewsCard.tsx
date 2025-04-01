@@ -34,15 +34,11 @@ export const NewsCard = ({ news }: NewsCardProps) => {
     });
   };
   
-  // Determine if it's an event to use the appropriate link path
-  const isEvent = news.category === "Événement";
-  const detailPath = isEvent ? `/events/${news.id}` : `/news/${news.id}`;
-  
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-md animate-fade-up">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="md:col-span-1">
-          <Link to={detailPath}>
+          <Link to={`/news/${news.id}`}>
             <img 
               src={news.coverImage} 
               alt={news.title} 
@@ -53,13 +49,13 @@ export const NewsCard = ({ news }: NewsCardProps) => {
         <div className="md:col-span-2 flex flex-col">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
-              <Badge className={`mb-2 ${isEvent ? 'bg-purple-500 hover:bg-purple-600' : ''}`}>{news.category}</Badge>
+              <Badge className="mb-2">{news.category}</Badge>
               <span className="text-sm text-gray-500 flex items-center">
                 <Calendar size={14} className="mr-1" />
                 {formatDate(news.date)}
               </span>
             </div>
-            <Link to={detailPath} className="hover:text-primary transition-colors">
+            <Link to={`/news/${news.id}`} className="hover:text-primary transition-colors">
               <CardTitle className="text-xl">{news.title}</CardTitle>
             </Link>
             <CardDescription>{news.summary}</CardDescription>
@@ -82,8 +78,8 @@ export const NewsCard = ({ news }: NewsCardProps) => {
             
             <div className="flex gap-2">
               <Button variant="outline" size="sm" asChild>
-                <Link to={detailPath}>
-                  {isEvent ? "Voir l'événement" : "Lire l'article"}
+                <Link to={`/news/${news.id}`}>
+                  Lire l'article
                 </Link>
               </Button>
               
