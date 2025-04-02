@@ -9,6 +9,7 @@ const MainNav = () => {
   const navItems = [
     { name: "Actualités", path: "/news" },
     { name: "Figurines", path: "/figurines" },
+    { name: "Planning des sorties", path: "/release-schedule" },
     { name: "Fabricants", path: "/manufacturers" },
     { name: "Gammes", path: "/series" },
     { name: "Licences", path: "/licenses" },
