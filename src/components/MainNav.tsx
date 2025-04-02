@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Calendar } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const MainNav = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +9,6 @@ const MainNav = () => {
   const navItems = [
     { name: "Actualités", path: "/news" },
     { name: "Figurines", path: "/figurines" },
-    { name: "Planning des sorties", path: "/release-schedule", icon: <Calendar size={16} className="mr-1" /> },
     { name: "Fabricants", path: "/manufacturers" },
     { name: "Gammes", path: "/series" },
     { name: "Licences", path: "/licenses" },
@@ -31,9 +30,8 @@ const MainNav = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className="text-gray-600 hover:text-primary transition-colors duration-200 flex items-center"
+                className="text-gray-600 hover:text-primary transition-colors duration-200"
               >
-                {item.icon}
                 {item.name}
               </Link>
             ))}
@@ -57,10 +55,9 @@ const MainNav = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className="text-gray-600 hover:text-primary transition-colors duration-200 py-2 flex items-center"
+                  className="text-gray-600 hover:text-primary transition-colors duration-200 py-2"
                   onClick={() => setIsOpen(false)}
                 >
-                  {item.icon}
                   {item.name}
                 </Link>
               ))}
