@@ -1,12 +1,9 @@
 
-import { Calendar, ExternalLink } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Calendar, ArrowRight } from "lucide-react";
 
-type News = {
+type NewsItem = {
   id: number;
   title: string;
   summary: string;
@@ -16,82 +13,69 @@ type News = {
   category: string;
   source: string;
   author: string;
+  scheduleMonth?: string;
 };
 
 interface NewsCardProps {
-  news: News;
+  news: NewsItem;
+  isSchedule?: boolean;
+  scheduleLink?: string;
 }
 
-export const NewsCard = ({ news }: NewsCardProps) => {
-  const [expanded, setExpanded] = useState(false);
-  
+export const NewsCard = ({ news, isSchedule = false, scheduleLink }: NewsCardProps) => {
+  // Formater la date pour l'affichage
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("fr-FR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    });
+    return new Intl.DateTimeFormat('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }).format(date);
   };
-  
+
+  // Déterminer le lien approprié en fonction du type d'actualité
+  const newsLink = isSchedule && scheduleLink ? scheduleLink : `/news/${news.id}`;
+
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md animate-fade-up">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="md:col-span-1">
-          <Link to={`/news/${news.id}`}>
+    <Card className="overflow-hidden border-none shadow-sm hover:shadow-md transition-shadow">
+      <Link to={newsLink}>
+        <div className="flex flex-col md:flex-row">
+          <div className="md:w-1/3 h-48 md:h-auto bg-gray-100">
             <img 
               src={news.coverImage} 
               alt={news.title} 
-              className="h-48 w-full object-cover hover:opacity-90 transition-opacity"
+              className="w-full h-full object-cover"
             />
-          </Link>
-        </div>
-        <div className="md:col-span-2 flex flex-col">
-          <CardHeader className="pb-2">
-            <div className="flex justify-between items-start">
-              <Badge className="mb-2">{news.category}</Badge>
-              <span className="text-sm text-gray-500 flex items-center">
-                <Calendar size={14} className="mr-1" />
-                {formatDate(news.date)}
+          </div>
+          
+          <CardContent className="flex-1 p-6">
+            <div className="flex flex-wrap gap-2 mb-3">
+              <span className={`px-3 py-1 text-xs font-medium rounded-full 
+                ${news.category === "Planning des sorties" ? 'bg-primary/10 text-primary' : 'bg-gray-200 text-gray-800'}`}>
+                {news.category}
+              </span>
+              <span className="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">
+                {news.source}
               </span>
             </div>
-            <Link to={`/news/${news.id}`} className="hover:text-primary transition-colors">
-              <CardTitle className="text-xl">{news.title}</CardTitle>
-            </Link>
-            <CardDescription>{news.summary}</CardDescription>
-          </CardHeader>
-          
-          <CardContent className="pb-2 flex-grow">
-            <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'max-h-96' : 'max-h-20'}`}>
-              <p className="text-gray-600">{news.content}</p>
+            
+            <h2 className="text-xl font-bold mb-2">{news.title}</h2>
+            <p className="text-gray-600 mb-4 line-clamp-2">{news.summary}</p>
+            
+            <div className="flex items-center justify-between">
+              <span className="text-gray-500 text-sm flex items-center gap-1">
+                <Calendar size={14} />
+                {formatDate(news.date)}
+              </span>
+              
+              <span className="text-primary inline-flex items-center gap-1 hover:underline">
+                {isSchedule ? "Voir le planning complet" : "Lire l'article"} 
+                <ArrowRight size={16} />
+              </span>
             </div>
           </CardContent>
-          
-          <CardFooter className="flex justify-between items-center pt-2">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => setExpanded(!expanded)}
-            >
-              {expanded ? 'Voir moins' : 'Lire la suite'}
-            </Button>
-            
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" asChild>
-                <Link to={`/news/${news.id}`}>
-                  Lire l'article
-                </Link>
-              </Button>
-              
-              <div className="text-sm text-gray-500">
-                Source: <a href="#" className="text-primary inline-flex items-center hover:underline">
-                  {news.source} <ExternalLink size={12} className="ml-1" />
-                </a>
-              </div>
-            </div>
-          </CardFooter>
         </div>
-      </div>
+      </Link>
     </Card>
   );
 };

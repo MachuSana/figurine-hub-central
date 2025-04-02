@@ -5,6 +5,7 @@ import { NewsCard } from "@/components/NewsCard";
 import { NewsFilters } from "@/components/NewsFilters";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import ReleaseCalendarPreview from "@/components/ReleaseCalendarPreview";
 
 // Données fictives pour les actualités
 const newsData = [
@@ -62,6 +63,30 @@ const newsData = [
     category: "Anniversaire",
     source: "Kotobukiya",
     author: "FigureNews"
+  },
+  {
+    id: 6,
+    title: "Sorties de figurines - Mars 2025",
+    summary: "Découvrez toutes les figurines prévues pour le mois de mars 2025",
+    content: "Le mois de mars 2025 s'annonce riche en sorties de figurines avec des pièces très attendues comme la Rem en tenue d'hiver de Good Smile Company et le Goku Ultra Instinct de Bandai. Consultez notre planning détaillé pour ne manquer aucune sortie !",
+    coverImage: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1600",
+    date: "2023-12-15",
+    category: "Planning des sorties",
+    source: "FigureNews",
+    author: "FigureNews",
+    scheduleMonth: "mars-2025"
+  },
+  {
+    id: 7,
+    title: "Sorties de figurines - Avril 2025",
+    summary: "Aperçu des figurines à paraître en avril 2025",
+    content: "Découvrez en avant-première les figurines prévues pour le mois d'avril 2025, dont la magnifique Saber en kimono d'Aniplex et l'impressionnant Midoriya en costume de héros de Kotobukiya.",
+    coverImage: "/placeholder.svg",
+    date: "2023-12-10",
+    category: "Planning des sorties",
+    source: "FigureNews",
+    author: "FigureNews",
+    scheduleMonth: "avril-2025"
   }
 ];
 
@@ -79,6 +104,11 @@ const News = () => {
     const matchesCategory = selectedCategory ? news.category === selectedCategory : true;
     return matchesSearch && matchesCategory;
   });
+  
+  // Séparer les actualités régulières des plannings de sortie
+  const isReleaseSchedule = (news: typeof newsData[0]) => news.category === "Planning des sorties";
+  const regularNews = filteredNews.filter(news => !isReleaseSchedule(news));
+  const scheduleNews = filteredNews.filter(news => isReleaseSchedule(news));
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -119,16 +149,43 @@ const News = () => {
           </div>
         )}
         
-        <div className="max-w-4xl mx-auto space-y-6">
-          {filteredNews.length > 0 ? (
-            filteredNews.map(news => (
-              <NewsCard key={news.id} news={news} />
-            ))
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-gray-500">Aucun article trouvé</p>
+        <div className="max-w-4xl mx-auto">
+          {/* Planning des sorties en haut si aucun filtre n'est appliqué ou si le filtre est sur "Planning des sorties" */}
+          {(!selectedCategory || selectedCategory === "Planning des sorties") && !searchQuery && (
+            <div className="mb-8">
+              <ReleaseCalendarPreview />
             </div>
           )}
+          
+          {/* Liste des actualités */}
+          <div className="space-y-6">
+            {/* Actualités de type plannings */}
+            {scheduleNews.length > 0 && (
+              <>
+                {scheduleNews.map(news => (
+                  <NewsCard 
+                    key={news.id} 
+                    news={news}
+                    isSchedule={true}
+                    scheduleLink={`/release-schedule/${news.scheduleMonth}`}
+                  />
+                ))}
+              </>
+            )}
+            
+            {/* Actualités régulières */}
+            {regularNews.length > 0 ? (
+              regularNews.map(news => (
+                <NewsCard key={news.id} news={news} />
+              ))
+            ) : (
+              !scheduleNews.length && (
+                <div className="text-center py-12">
+                  <p className="text-gray-500">Aucun article trouvé</p>
+                </div>
+              )
+            )}
+          </div>
         </div>
       </main>
     </div>
