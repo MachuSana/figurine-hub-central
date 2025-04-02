@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { format, addMonths, isSameDay } from "date-fns";
 import { fr } from "date-fns/locale";
-import { ArrowLeft, ArrowRight, CalendarDays } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarDays, Clock, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // Sample data - using the same as in ReleaseSchedule.tsx
@@ -101,61 +101,70 @@ export const ReleaseCalendarPreview = () => {
   };
   
   return (
-    <Card className="mb-8 overflow-hidden border-primary/20 bg-primary/5">
+    <Card className="mb-8 overflow-hidden border-primary/20 shadow-md">
       <CardHeader className="bg-primary/10 pb-2">
         <div className="flex justify-between items-center">
           <CardTitle className="flex items-center gap-2 text-xl">
             <CalendarDays size={20} className="text-primary" />
-            Planning des sorties - {format(selectedMonth, 'MMMM yyyy', { locale: fr })}
+            Planning des sorties
           </CardTitle>
           
-          <div className="flex space-x-2">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={() => navigateMonth("prev")}
-              className="h-8 w-8"
-            >
-              <ArrowLeft size={16} />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={() => navigateMonth("next")}
-              className="h-8 w-8"
-            >
-              <ArrowRight size={16} />
-            </Button>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">
+              {format(selectedMonth, 'MMMM yyyy', { locale: fr })}
+            </span>
+            <div className="flex space-x-1">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => navigateMonth("prev")}
+                className="h-7 w-7"
+              >
+                <ArrowLeft size={14} />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => navigateMonth("next")}
+                className="h-7 w-7"
+              >
+                <ArrowRight size={14} />
+              </Button>
+            </div>
           </div>
         </div>
       </CardHeader>
       
       <CardContent className="pt-4">
         {releasesForMonth.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {sortedDates.slice(0, 3).map(dateKey => {
               const date = new Date(dateKey);
               return (
                 <div key={dateKey} className="border-l-2 border-primary pl-4">
-                  <h3 className="font-medium mb-2">
+                  <h3 className="font-medium mb-3">
                     {format(date, 'EEEE d', { locale: fr })}
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <div className="space-y-3">
                     {groupedReleases[dateKey].map(release => (
                       <Link 
                         to={`/figurines/${release.id}`}
                         key={release.id}
-                        className="flex items-center p-2 hover:bg-gray-100 rounded-md transition-colors"
+                        className="flex items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors"
                       >
                         <img 
                           src={release.image} 
                           alt={release.name}
-                          className="w-12 h-12 object-cover rounded-sm"
+                          className="w-14 h-14 object-cover rounded-sm"
                         />
-                        <div className="ml-3">
+                        <div className="ml-3 flex-grow">
                           <div className="font-medium line-clamp-1">{release.name}</div>
-                          <div className="text-sm text-gray-500">{release.manufacturer}</div>
+                          <div className="text-sm text-gray-600 flex items-center gap-1 mt-1">
+                            <Package size={12} className="text-gray-400" />
+                            {release.manufacturer}
+                          </div>
                         </div>
+                        <div className="text-sm font-medium text-primary">{release.price}</div>
                       </Link>
                     ))}
                   </div>
@@ -170,14 +179,15 @@ export const ReleaseCalendarPreview = () => {
             )}
           </div>
         ) : (
-          <div className="text-center py-4 text-gray-500">
+          <div className="text-center py-8 text-gray-500">
             Aucune sortie prévue ce mois-ci
           </div>
         )}
         
-        <div className="mt-4 flex justify-end">
-          <Button asChild>
-            <Link to="/release-schedule">
+        <div className="mt-6 flex justify-end">
+          <Button asChild variant="default">
+            <Link to="/release-schedule" className="flex items-center gap-2">
+              <Clock size={16} />
               Voir le calendrier complet
             </Link>
           </Button>
