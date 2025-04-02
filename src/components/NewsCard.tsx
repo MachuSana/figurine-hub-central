@@ -34,7 +34,9 @@ export const NewsCard = ({ news, isSchedule = false, scheduleLink }: NewsCardPro
   };
 
   // Déterminer le lien approprié en fonction du type d'actualité
-  const newsLink = isSchedule && scheduleLink ? scheduleLink : `/news/${news.id}`;
+  const newsLink = isSchedule && news.scheduleMonth 
+    ? `/release-schedule/${news.scheduleMonth}` 
+    : `/news/${news.id}`;
 
   return (
     <Card className="overflow-hidden border-none shadow-sm hover:shadow-md transition-shadow">
