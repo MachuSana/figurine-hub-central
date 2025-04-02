@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { NewsCard } from "@/components/NewsCard";
 import { Card, CardContent } from "@/components/ui/card";
+import { EventLink } from "@/components/EventLink";
 
 const fetchLatestNews = async () => {
   return [
@@ -148,6 +149,8 @@ const Index = () => {
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
+        <EventLink eventId={1} />
+        
         <section className="relative mb-12 rounded-xl overflow-hidden bg-gradient-to-r from-violet-500 to-purple-700 shadow-lg">
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative z-10 p-8 md:p-12 flex flex-col items-start text-white max-w-3xl">
