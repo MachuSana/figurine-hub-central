@@ -34,9 +34,13 @@ export const NewsCard = ({ news, isSchedule = false, scheduleLink }: NewsCardPro
   };
 
   // Déterminer le lien approprié en fonction du type d'actualité
-  const newsLink = isSchedule && news.scheduleMonth 
-    ? `/release-schedule/${news.scheduleMonth}` 
-    : `/news/${news.id}`;
+  let newsLink = `/news/${news.id}`;
+  
+  if (isSchedule && news.scheduleMonth) {
+    newsLink = `/release-schedule/${news.scheduleMonth}`;
+  } else if (news.category === "Événement") {
+    newsLink = `/events/${news.id}`;
+  }
 
   return (
     <Card className="overflow-hidden border-none shadow-sm hover:shadow-md transition-shadow">
@@ -53,7 +57,8 @@ export const NewsCard = ({ news, isSchedule = false, scheduleLink }: NewsCardPro
           <CardContent className="flex-1 p-6">
             <div className="flex flex-wrap gap-2 mb-3">
               <span className={`px-3 py-1 text-xs font-medium rounded-full 
-                ${news.category === "Planning des sorties" ? 'bg-primary/10 text-primary' : 'bg-gray-200 text-gray-800'}`}>
+                ${news.category === "Planning des sorties" ? 'bg-primary/10 text-primary' : 
+                  news.category === "Événement" ? 'bg-indigo-100 text-indigo-800' : 'bg-gray-200 text-gray-800'}`}>
                 {news.category}
               </span>
               <span className="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">
@@ -71,7 +76,8 @@ export const NewsCard = ({ news, isSchedule = false, scheduleLink }: NewsCardPro
               </span>
               
               <span className="text-primary inline-flex items-center gap-1 hover:underline">
-                {isSchedule ? "Voir le planning complet" : "Lire l'article"} 
+                {isSchedule ? "Voir le planning complet" : 
+                 news.category === "Événement" ? "Voir l'événement" : "Lire l'article"} 
                 <ArrowRight size={16} />
               </span>
             </div>
