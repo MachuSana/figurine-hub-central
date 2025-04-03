@@ -17,7 +17,7 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Search, Calendar, Filter, Tag, Building, BadgeJapan } from "lucide-react";
+import { Search, Calendar, Filter, Tag, Building, Tags } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { NewsCategory } from "@/components/NewsCategory";
@@ -309,7 +309,7 @@ const ReleaseScheduleDetail = () => {
             
             <Select onValueChange={(value) => setSelectedLine(value === "all" ? null : value)}>
               <SelectTrigger className="flex gap-2 items-center">
-                <BadgeJapan size={16} className="text-gray-400" />
+                <Tags size={16} className="text-gray-400" />
                 <SelectValue placeholder="Gamme" />
               </SelectTrigger>
               <SelectContent>
