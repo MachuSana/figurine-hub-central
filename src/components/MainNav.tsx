@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Lock } from "lucide-react";
 
 const MainNav = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +35,13 @@ const MainNav = () => {
                 {item.name}
               </Link>
             ))}
+            <Link
+              to="/admin"
+              className="text-primary hover:text-primary/80 transition-colors duration-200 flex items-center gap-1"
+            >
+              <Lock size={16} />
+              Admin
+            </Link>
           </div>
 
           {/* Mobile Navigation Toggle */}
@@ -61,6 +68,14 @@ const MainNav = () => {
                   {item.name}
                 </Link>
               ))}
+              <Link
+                to="/admin"
+                className="text-primary hover:text-primary/80 transition-colors duration-200 py-2 flex items-center gap-1"
+                onClick={() => setIsOpen(false)}
+              >
+                <Lock size={16} />
+                Admin
+              </Link>
             </div>
           </div>
         )}
