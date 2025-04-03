@@ -7,9 +7,10 @@ interface NewsCategoryProps {
   initialActive?: boolean;
   title: string;
   children: React.ReactNode;
+  icon?: React.ReactNode;
 }
 
-export const NewsCategory = ({ initialActive = false, title, children }: NewsCategoryProps) => {
+export const NewsCategory = ({ initialActive = false, title, children, icon }: NewsCategoryProps) => {
   const [isOpen, setIsOpen] = useState(initialActive);
 
   return (
@@ -19,7 +20,10 @@ export const NewsCategory = ({ initialActive = false, title, children }: NewsCat
         className="w-full flex justify-between items-center p-4 h-auto"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h2 className="text-xl font-semibold text-left">{title}</h2>
+        <h2 className="text-xl font-semibold text-left flex items-center">
+          {icon && <span className="mr-2 text-primary">{icon}</span>}
+          {title}
+        </h2>
         <ChevronDown
           size={20}
           className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
