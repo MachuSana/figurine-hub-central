@@ -1,3 +1,4 @@
+
 import MainNav from "../components/MainNav";
 import { Calendar, Eye, MessageSquare, ArrowRight, Star, TrendingUp, Tag, Mail, Bookmark, ChevronRight, ChevronLeft, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -149,7 +150,7 @@ const Index = () => {
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
-        <EventLink eventId={1} />
+        <EventLink limit={2} />
         
         <section className="relative mb-12 rounded-xl overflow-hidden bg-gradient-to-r from-violet-500 to-purple-700 shadow-lg">
           <div className="absolute inset-0 bg-black/20"></div>
