@@ -10,6 +10,7 @@ interface AuthContextProps {
   session: Session | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   isAdmin: boolean;
 }
@@ -76,6 +77,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const signUp = async (email: string, password: string) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            role: 'admin', // Set the user role as admin during signup
+          }
+        }
+      });
+
+      if (error) throw error;
+      
+      // If there's a user in the response, we need to create a profile
+      if (data.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([
+            { id: data.user.id, role: 'admin' }
+          ]);
+
+        if (profileError) {
+          console.error("Error creating profile:", profileError);
+          throw profileError;
+        }
+      }
+      
+      toast({
+        title: "Inscription réussie",
+        description: "Votre compte administrateur a été créé. Vous pouvez maintenant vous connecter.",
+      });
+      
+      // Switch to login tab
+      navigate("/admin/login");
+    } catch (error: any) {
+      toast({
+        title: "Erreur d'inscription",
+        description: error.message || "Une erreur est survenue lors de la création du compte.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const signIn = async (email: string, password: string) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -124,6 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         session,
         loading,
         signIn,
+        signUp,
         signOut,
         isAdmin
       }}
