@@ -79,9 +79,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signUp({
+      // Since email auth is disabled, we'll use magic link instead
+      const { data, error } = await supabase.auth.signInWithOtp({
         email,
-        password,
         options: {
           data: {
             role: 'admin', // Set the user role as admin during signup
@@ -91,27 +91,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (error) throw error;
       
-      // If there's a user in the response, we need to create a profile
-      if (data.user) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert([
-            { id: data.user.id, role: 'admin' }
-          ]);
-
-        if (profileError) {
-          console.error("Error creating profile:", profileError);
-          throw profileError;
-        }
-      }
-      
       toast({
-        title: "Inscription réussie",
-        description: "Votre compte administrateur a été créé. Vous pouvez maintenant vous connecter.",
+        title: "Email de connexion envoyé",
+        description: "Veuillez vérifier votre boite mail et cliquer sur le lien pour vous connecter.",
       });
       
-      // Switch to login tab
-      navigate("/admin/login");
     } catch (error: any) {
       toast({
         title: "Erreur d'inscription",
@@ -123,19 +107,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
+      // Since email/password is disabled, we'll use magic link instead
+      const { data, error } = await supabase.auth.signInWithOtp({
+        email
       });
 
       if (error) throw error;
       
       toast({
-        title: "Connexion réussie",
-        description: "Vous êtes maintenant connecté.",
+        title: "Email de connexion envoyé",
+        description: "Veuillez vérifier votre boite mail et cliquer sur le lien pour vous connecter.",
       });
       
-      navigate("/admin");
     } catch (error: any) {
       toast({
         title: "Erreur de connexion",
