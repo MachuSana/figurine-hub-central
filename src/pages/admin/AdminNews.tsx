@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { PlusCircle, Search, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,7 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "@/components/ui/toast";
+import { toast } from "@/components/ui/use-toast";
 
 type NewsItem = {
   id: string;
@@ -136,7 +135,6 @@ export default function AdminNews() {
 
   const handleCreateNews = async () => {
     try {
-      // Get the current user
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
@@ -317,7 +315,6 @@ export default function AdminNews() {
         </div>
       </div>
 
-      {/* Create News Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
@@ -385,7 +382,6 @@ export default function AdminNews() {
         </DialogContent>
       </Dialog>
 
-      {/* Edit News Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>

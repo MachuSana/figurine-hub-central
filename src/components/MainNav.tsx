@@ -1,15 +1,14 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Lock, LogIn } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/components/ui/use-toast";
+import { Menu, X, Lock, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const MainNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user, signOut } = useAuth();
   
   const navItems = [
     { name: "Actualités", path: "/news" },
@@ -20,29 +19,6 @@ const MainNav = () => {
     { name: "Personnages", path: "/characters" },
     { name: "Boutiques", path: "/shops" },
   ];
-
-  // Check if user is logged in
-  supabase.auth.getSession().then(({ data }) => {
-    setUser(data.session?.user || null);
-  });
-
-  // Handle logout
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      toast({
-        title: "Déconnexion réussie",
-        description: "Vous avez été déconnecté avec succès.",
-      });
-      navigate("/");
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de la déconnexion.",
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <nav className="bg-white shadow-sm">
@@ -74,9 +50,10 @@ const MainNav = () => {
             {user ? (
               <Button 
                 variant="ghost" 
-                onClick={handleLogout}
+                onClick={signOut}
                 className="text-gray-600 hover:text-primary transition-colors duration-200"
               >
+                <LogOut size={16} className="mr-2" />
                 Déconnexion
               </Button>
             ) : (
@@ -127,11 +104,12 @@ const MainNav = () => {
                 <Button 
                   variant="ghost" 
                   onClick={() => {
-                    handleLogout();
+                    signOut();
                     setIsOpen(false);
                   }}
                   className="text-gray-600 hover:text-primary transition-colors duration-200 py-2 justify-start"
                 >
+                  <LogOut size={16} className="mr-2" />
                   Déconnexion
                 </Button>
               ) : (

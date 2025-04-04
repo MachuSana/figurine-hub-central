@@ -1,16 +1,15 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Database } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/components/ui/use-toast";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@/hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Adresse email invalide" }),
@@ -20,8 +19,13 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function AdminLogin() {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { user, signIn } = useAuth();
+
+  // Redirect if already logged in
+  if (user) {
+    return <Navigate to="/admin" />;
+  }
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -34,28 +38,7 @@ export default function AdminLogin() {
   const onSubmit = async (values: LoginFormValues) => {
     setIsLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: values.email,
-        password: values.password,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      toast({
-        title: "Connexion réussie",
-        description: "Vous êtes maintenant connecté.",
-      });
-      
-      // Redirect to admin dashboard
-      navigate("/admin");
-    } catch (error: any) {
-      toast({
-        title: "Erreur de connexion",
-        description: error.message || "Vérifiez vos identifiants et réessayez.",
-        variant: "destructive",
-      });
+      await signIn(values.email, values.password);
     } finally {
       setIsLoading(false);
     }

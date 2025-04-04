@@ -28,9 +28,8 @@ import {
   SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "../ui/button";
-import { toast } from "../ui/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 type AdminLayoutProps = {
   children: ReactNode;
@@ -38,24 +37,8 @@ type AdminLayoutProps = {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const location = useLocation();
+  const { signOut } = useAuth();
   
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      toast({
-        title: "Déconnexion réussie",
-        description: "Vous avez été déconnecté avec succès.",
-      });
-      // Redirect to login will be handled by auth state change
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de la déconnexion.",
-        variant: "destructive",
-      });
-    }
-  };
-
   const menuItems = [
     { 
       title: "Dashboard", 
@@ -150,7 +133,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Button 
               variant="outline" 
               className="w-full flex justify-start" 
-              onClick={handleLogout}
+              onClick={signOut}
             >
               <LogOut className="mr-2 h-4 w-4" />
               Déconnexion
