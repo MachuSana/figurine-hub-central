@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { AdminProtectedRoute } from "@/components/auth/AdminProtectedRoute";
 
 // Main site pages
 import Index from "./pages/Index";
@@ -32,6 +33,8 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminNews from "./pages/admin/AdminNews";
 import AdminFigurines from "./pages/admin/AdminFigurines";
+import AdminManufacturers from "./pages/admin/AdminManufacturers";
+import AdminCharacters from "./pages/admin/AdminCharacters";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -71,9 +74,11 @@ const App = () => (
             
             {/* Admin routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-            <Route path="/admin/news" element={<ProtectedRoute><AdminNews /></ProtectedRoute>} />
-            <Route path="/admin/figurines" element={<ProtectedRoute><AdminFigurines /></ProtectedRoute>} />
+            <Route path="/admin" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
+            <Route path="/admin/news" element={<AdminProtectedRoute><AdminNews /></AdminProtectedRoute>} />
+            <Route path="/admin/figurines" element={<AdminProtectedRoute><AdminFigurines /></AdminProtectedRoute>} />
+            <Route path="/admin/manufacturers" element={<AdminProtectedRoute><AdminManufacturers /></AdminProtectedRoute>} />
+            <Route path="/admin/characters" element={<AdminProtectedRoute><AdminCharacters /></AdminProtectedRoute>} />
             
             {/* Not Found route */}
             <Route path="*" element={<NotFound />} />
