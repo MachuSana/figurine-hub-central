@@ -1,8 +1,9 @@
+
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Heart } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineHeader } from "../components/FigurineHeader";
-import { FigurineGallery } from "../components/FigurineGallery";
+import { FigurineCarousel } from "../components/FigurineCarousel";
 import { FigurineSpecs } from "../components/FigurineSpecs";
 import { FigurineShops } from "../components/FigurineShops";
 import { FigurineNews } from "../components/FigurineNews";
@@ -182,7 +183,7 @@ const FigurineDetails = () => {
               id={figure.id}
             />
             
-            <FigurineGallery name={figure.name} images={figure.images} />
+            <FigurineCarousel name={figure.name} images={figure.images} />
             
             <FigurineDescription description={figure.description} />
           </div>
