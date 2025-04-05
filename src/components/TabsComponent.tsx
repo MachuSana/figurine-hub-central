@@ -1,5 +1,6 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +19,7 @@ interface TabsComponentProps {
   tabsTriggerClassName?: string;
   tabsContentClassName?: string;
   onChange?: (value: string) => void;
+  useHash?: boolean;
 }
 
 export const TabsComponent = ({
@@ -28,11 +30,31 @@ export const TabsComponent = ({
   tabsTriggerClassName,
   tabsContentClassName,
   onChange,
+  useHash = false,
 }: TabsComponentProps) => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(defaultValue || tabs[0]?.id);
+
+  // Initialize from URL hash if useHash is true
+  useEffect(() => {
+    if (useHash && location.hash) {
+      const hashValue = location.hash.replace("#", "");
+      const tabExists = tabs.some(tab => tab.id === hashValue);
+      if (tabExists) {
+        setActiveTab(hashValue);
+      }
+    }
+  }, [location.hash, tabs, useHash]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
+    
+    // Update URL hash if useHash is true
+    if (useHash) {
+      navigate(`${location.pathname}#${value}`, { replace: true });
+    }
+    
     if (onChange) {
       onChange(value);
     }
@@ -54,6 +76,7 @@ export const TabsComponent = ({
               "data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm flex gap-2 items-center",
               tabsTriggerClassName
             )}
+            id={`tab-${tab.id}`}
           >
             {tab.icon}
             {tab.label}
@@ -65,6 +88,7 @@ export const TabsComponent = ({
           key={tab.id}
           value={tab.id}
           className={cn("mt-0 animate-fade-in", tabsContentClassName)}
+          id={tab.id}
         >
           {tab.content}
         </TabsContent>
