@@ -1,15 +1,11 @@
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Lock, LogIn, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
+import { Link } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 const MainNav = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
-  const { user, signOut } = useAuth();
-  
+
   const navItems = [
     { name: "Actualités", path: "/news" },
     { name: "Figurines", path: "/figurines" },
@@ -39,32 +35,6 @@ const MainNav = () => {
                 {item.name}
               </Link>
             ))}
-            <Link
-              to="/admin"
-              className="text-primary hover:text-primary/80 transition-colors duration-200 flex items-center gap-1"
-            >
-              <Lock size={16} />
-              Admin
-            </Link>
-            
-            {user ? (
-              <Button 
-                variant="ghost" 
-                onClick={signOut}
-                className="text-gray-600 hover:text-primary transition-colors duration-200"
-              >
-                <LogOut size={16} className="mr-2" />
-                Déconnexion
-              </Button>
-            ) : (
-              <Link
-                to="/admin/login"
-                className="text-gray-600 hover:text-primary transition-colors duration-200 flex items-center gap-1"
-              >
-                <LogIn size={16} />
-                Connexion
-              </Link>
-            )}
           </div>
 
           {/* Mobile Navigation Toggle */}
@@ -91,37 +61,6 @@ const MainNav = () => {
                   {item.name}
                 </Link>
               ))}
-              <Link
-                to="/admin"
-                className="text-primary hover:text-primary/80 transition-colors duration-200 py-2 flex items-center gap-1"
-                onClick={() => setIsOpen(false)}
-              >
-                <Lock size={16} />
-                Admin
-              </Link>
-              
-              {user ? (
-                <Button 
-                  variant="ghost" 
-                  onClick={() => {
-                    signOut();
-                    setIsOpen(false);
-                  }}
-                  className="text-gray-600 hover:text-primary transition-colors duration-200 py-2 justify-start"
-                >
-                  <LogOut size={16} className="mr-2" />
-                  Déconnexion
-                </Button>
-              ) : (
-                <Link
-                  to="/admin/login"
-                  className="text-gray-600 hover:text-primary transition-colors duration-200 py-2 flex items-center gap-1"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <LogIn size={16} />
-                  Connexion
-                </Link>
-              )}
             </div>
           </div>
         )}
