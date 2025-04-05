@@ -14,6 +14,8 @@ import { SocialShare } from "../components/SocialShare";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
+import { TabsComponent } from "@/components/TabsComponent";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const FigurineDetails = () => {
   const { id } = useParams();
@@ -158,9 +160,34 @@ const FigurineDetails = () => {
     });
   };
 
+  // Define tabs for the figure details
+  const figurineTabs = [
+    {
+      id: "gallery",
+      label: "Galerie",
+      content: <FigurineGallery name={figure.name} images={figure.images} />
+    },
+    {
+      id: "description",
+      label: "Description",
+      content: <FigurineDescription description={figure.description} />
+    },
+    {
+      id: "related",
+      label: "Figurines Similaires",
+      content: <FigurineRelated figures={figure.relatedFigures} />
+    },
+    {
+      id: "comments",
+      label: "Avis & Commentaires",
+      content: <FigurineComments comments={figure.comments} />
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
+      <ScrollToTop />
       
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8 animate-fade-in">
@@ -181,10 +208,14 @@ const FigurineDetails = () => {
               reference={figure.reference}
               id={figure.id}
             />
-            <FigurineGallery name={figure.name} images={figure.images} />
-            <div className="mt-8">
-              <FigurineDescription description={figure.description} />
-            </div>
+            
+            <TabsComponent 
+              tabs={figurineTabs} 
+              defaultValue="gallery"
+              useHash={true}
+              className="bg-white rounded-xl shadow-sm p-6"
+              tabsListClassName="bg-gray-50"
+            />
           </div>
           
           <div className="space-y-8 animate-fade-in" style={{ animationDelay: "100ms" }}>
@@ -198,11 +229,6 @@ const FigurineDetails = () => {
             <FigurineNews news={figure.news} />
             <SocialShare title={shareTitle} url={shareUrl} />
           </div>
-        </div>
-
-        <div className="mt-8 space-y-8 animate-fade-in" style={{ animationDelay: "200ms" }}>
-          <FigurineRelated figures={figure.relatedFigures} />
-          <FigurineComments comments={figure.comments} />
         </div>
       </main>
     </div>
