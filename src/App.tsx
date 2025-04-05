@@ -22,6 +22,7 @@ import Shops from "./pages/Shops";
 import ShopDetails from "./pages/ShopDetails";
 import ReleaseScheduleDetail from "./pages/ReleaseScheduleDetail";
 import NotFound from "./pages/NotFound";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +39,7 @@ const App = () => (
       <Toaster />
       <Sonner richColors closeButton position="bottom-right" />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/news" element={<News />} />
