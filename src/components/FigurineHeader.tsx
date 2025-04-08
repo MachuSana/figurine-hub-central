@@ -90,4 +90,3 @@ export const FigurineHeader = ({ series, name, reference, id, rating, releaseDat
     </div>
   );
 };
-
