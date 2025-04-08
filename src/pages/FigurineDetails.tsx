@@ -1,6 +1,6 @@
 
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Heart, Info, MessageSquare, Newspaper, Package, ShoppingCart, Images, FileText, Tag } from "lucide-react";
+import { ArrowLeft, Heart } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineHeader } from "../components/FigurineHeader";
 import { FigurineCarousel } from "../components/FigurineCarousel";
@@ -12,10 +12,9 @@ import { FigurineComments } from "../components/FigurineComments";
 import { FigurineDescription } from "../components/FigurineDescription";
 import { SocialShare } from "../components/SocialShare";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import { ScrollToTop } from "@/components/ScrollToTop";
-import { TabsComponent } from "@/components/TabsComponent";
 
 const FigurineDetails = () => {
   const { id } = useParams();
@@ -159,61 +158,6 @@ const FigurineDetails = () => {
     });
   };
 
-  // Create tab content
-  const tabsContent = [
-    {
-      id: "gallery",
-      label: "Galerie",
-      icon: <Images size={18} />,
-      content: <FigurineCarousel name={figure.name} images={figure.images} className="shadow-none p-0" />
-    },
-    {
-      id: "description",
-      label: "Description",
-      icon: <FileText size={18} />,
-      content: <FigurineDescription description={figure.description} />
-    },
-    {
-      id: "specs",
-      label: "Spécifications",
-      icon: <Info size={18} />,
-      content: <FigurineSpecs specs={figure} />
-    },
-    {
-      id: "shops",
-      label: "Acheter",
-      icon: <ShoppingCart size={18} />,
-      content: (
-        <div className="space-y-6">
-          <FigurineShops shops={figure.shops} />
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <Button onClick={handlePreorder} className="w-full">
-              Activer l'alerte de disponibilité
-            </Button>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: "news",
-      label: "Actualités",
-      icon: <Newspaper size={18} />,
-      content: <FigurineNews news={figure.news} />
-    },
-    {
-      id: "comments",
-      label: "Commentaires",
-      icon: <MessageSquare size={18} />,
-      content: <FigurineComments comments={figure.comments} />
-    },
-    {
-      id: "related",
-      label: "Similaires",
-      icon: <Tag size={18} />,
-      content: <FigurineRelated figures={figure.relatedFigures} />
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
@@ -230,26 +174,36 @@ const FigurineDetails = () => {
           </Link>
         </div>
 
-        <FigurineHeader
-          series={figure.series}
-          name={figure.name}
-          reference={figure.reference}
-          id={figure.id}
-          className="mb-8 animate-fade-in"
-        />
-
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8 animate-fade-in">
-          <TabsComponent 
-            tabs={tabsContent}
-            defaultValue="gallery"
-            useHash={true}
-            tabsListClassName="bg-gray-100 p-1 rounded-lg"
-            tabsTriggerClassName="text-sm py-2 px-3 rounded-md data-[state=active]:bg-white data-[state=active]:shadow-sm"
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8 animate-fade-in">
+            <FigurineHeader
+              series={figure.series}
+              name={figure.name}
+              reference={figure.reference}
+              id={figure.id}
+            />
+            
+            <FigurineCarousel name={figure.name} images={figure.images} />
+            
+            <FigurineDescription description={figure.description} />
+          </div>
+          
+          <div className="space-y-8 animate-fade-in" style={{ animationDelay: "100ms" }}>
+            <FigurineSpecs specs={figure} />
+            <FigurineShops shops={figure.shops} />
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <Button onClick={handlePreorder} className="w-full">
+                Activer l'alerte de disponibilité
+              </Button>
+            </div>
+            <FigurineNews news={figure.news} />
+            <SocialShare title={shareTitle} url={shareUrl} />
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6 animate-fade-in" style={{ animationDelay: "200ms" }}>
-          <SocialShare title={shareTitle} url={shareUrl} />
+        <div className="mt-8 space-y-8 animate-fade-in" style={{ animationDelay: "200ms" }}>
+          <FigurineRelated figures={figure.relatedFigures} />
+          <FigurineComments comments={figure.comments} />
         </div>
       </main>
     </div>

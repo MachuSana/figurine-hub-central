@@ -3,7 +3,6 @@ import { Tag, Calendar, Package, Star, Clock } from "lucide-react";
 import { FavoriteButton } from "./FavoriteButton";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
 
 type FigurineHeaderProps = {
   series: string;
@@ -12,10 +11,9 @@ type FigurineHeaderProps = {
   id: number;
   rating?: number;
   releaseDate?: string;
-  className?: string;
 }
 
-export const FigurineHeader = ({ series, name, reference, id, rating, releaseDate, className }: FigurineHeaderProps) => {
+export const FigurineHeader = ({ series, name, reference, id, rating, releaseDate }: FigurineHeaderProps) => {
   const isNewRelease = new Date().getMonth() < 3; // Just for demo
   const isUpcoming = releaseDate && new Date(releaseDate) > new Date();
   
@@ -28,7 +26,7 @@ export const FigurineHeader = ({ series, name, reference, id, rating, releaseDat
   };
   
   return (
-    <div className={cn("bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md", className)}>
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
       <div className="p-6">
         <div className="flex justify-between items-start">
           <div>
