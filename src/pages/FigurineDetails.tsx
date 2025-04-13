@@ -1,6 +1,6 @@
 
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Heart } from "lucide-react";
+import { ArrowLeft, Heart, Download, ExternalLink, ShoppingCart, Bell } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineHeader } from "../components/FigurineHeader";
 import { FigurineCarousel } from "../components/FigurineCarousel";
@@ -43,7 +43,7 @@ const FigurineDetails = () => {
       ],
       manufacturer: "Bandai",
       releaseDate: "2024-06",
-      description: "Figurine représentant Luffy dans sa forme Gear 5, capturant toute la puissance et l'aspect comique de cette transformation.",
+      description: "Figurine représentant Luffy dans sa forme Gear 5, capturant toute la puissance et l'aspect comique de cette transformation. Cette édition spéciale inclut des accessoires exclusifs et des parties interchangeables permettant différentes poses.\n\nLe niveau de détail est exceptionnel, avec une attention particulière portée aux expressions faciales caractéristiques de cette transformation. La base est également travaillée avec des effets nuageux représentant les pouvoirs du fruit du démon.",
       height: "32cm",
       material: "PVC & ABS",
       scale: "1/7",
@@ -65,6 +65,11 @@ const FigurineDetails = () => {
           title: "Annonce de la figurine Luffy Gear 5",
           date: "2023-12-15",
           url: "#"
+        },
+        {
+          title: "Ouverture des précommandes pour Luffy Gear 5",
+          date: "2024-01-10",
+          url: "#"
         }
       ],
       relatedFigures: [
@@ -81,14 +86,27 @@ const FigurineDetails = () => {
           image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
           manufacturer: "Bandai",
           price: "22800¥"
+        },
+        {
+          id: 7,
+          name: "Nico Robin - Wano",
+          image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+          manufacturer: "Bandai",
+          price: "21500¥"
         }
       ],
       comments: [
         {
           author: "OnePieceFan",
           date: "2024-02-15",
-          content: "Le niveau de détail est incroyable !",
+          content: "Le niveau de détail est incroyable ! J'adore particulièrement l'expression du visage qui capture parfaitement l'essence de Gear 5.",
           rating: 5
+        },
+        {
+          author: "FigurinCollector",
+          date: "2024-03-10",
+          content: "Le rapport qualité-prix est excellent. Les finitions sont soignées et les accessoires bien pensés.",
+          rating: 4
         }
       ]
     }
@@ -158,6 +176,14 @@ const FigurineDetails = () => {
     });
   };
 
+  const handleDownloadImages = () => {
+    toast({
+      title: "Téléchargement démarré",
+      description: "Les images de la figurine seront téléchargées dans quelques instants.",
+      duration: 3000,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
@@ -181,21 +207,67 @@ const FigurineDetails = () => {
               name={figure.name}
               reference={figure.reference}
               id={figure.id}
+              rating={4.7}
+              releaseDate={figure.releaseDate}
+              className="sticky top-20 z-10"
             />
             
             <FigurineCarousel name={figure.name} images={figure.images} />
+            
+            <div className="flex items-center justify-center gap-4 my-6">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-2"
+                onClick={handleDownloadImages}
+              >
+                <Download size={16} />
+                Télécharger les images
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-2"
+                asChild
+              >
+                <a href="#" target="_blank" rel="noopener noreferrer">
+                  <ExternalLink size={16} />
+                  Voir sur le site officiel
+                </a>
+              </Button>
+            </div>
             
             <FigurineDescription description={figure.description} />
           </div>
           
           <div className="space-y-8 animate-fade-in" style={{ animationDelay: "100ms" }}>
+            <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-primary">
+              <h2 className="font-semibold mb-3 text-lg">Actions rapides</h2>
+              <div className="space-y-4">
+                <Button 
+                  onClick={handlePreorder} 
+                  className="w-full flex items-center justify-center gap-2"
+                >
+                  <Bell size={16} />
+                  Activer l'alerte de disponibilité
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  className="w-full flex items-center justify-center gap-2"
+                  asChild
+                >
+                  <a href={figure.shops[0]?.url || "#"} target="_blank" rel="noopener noreferrer">
+                    <ShoppingCart size={16} />
+                    Voir les offres d'achat
+                  </a>
+                </Button>
+              </div>
+            </div>
+            
             <FigurineSpecs specs={figure} />
             <FigurineShops shops={figure.shops} />
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <Button onClick={handlePreorder} className="w-full">
-                Activer l'alerte de disponibilité
-              </Button>
-            </div>
             <FigurineNews news={figure.news} />
             <SocialShare title={shareTitle} url={shareUrl} />
           </div>

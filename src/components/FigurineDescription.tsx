@@ -13,7 +13,7 @@ export const FigurineDescription = ({ description, className }: FigurineDescript
   const [isExpanded, setIsExpanded] = useState(false);
   const [shouldTruncate, setShouldTruncate] = useState(false);
   
-  // Check if description is long enough to truncate
+  // Vérifie si la description est assez longue pour être tronquée
   useEffect(() => {
     setShouldTruncate(description.length > 300);
   }, [description]);
@@ -38,7 +38,7 @@ export const FigurineDescription = ({ description, className }: FigurineDescript
           shouldTruncate && !isExpanded ? "max-h-32 overflow-hidden" : "max-h-[2000px]"
         )}>
           {description.split('\n').map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
+            <p key={index} className="mb-4 last:mb-0">{paragraph}</p>
           ))}
         </div>
         
