@@ -167,6 +167,7 @@ const FigurineDetails = () => {
 
   const shareUrl = window.location.href;
   const shareTitle = `${figure.name} - ${figure.series}`;
+  const mainImageUrl = figure.images[0];
 
   const handleDownloadImages = () => {
     toast({
@@ -236,7 +237,8 @@ const FigurineDetails = () => {
           <div className="space-y-8 animate-fade-in" style={{ animationDelay: "100ms" }}>
             <FigurineQuickActions 
               name={figure.name} 
-              shopUrl={figure.shops[0]?.url} 
+              shopUrl={figure.shops[0]?.url}
+              imageUrl={mainImageUrl}
             />
             
             <FigurineSpecs specs={figure} />
