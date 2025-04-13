@@ -1,6 +1,5 @@
-
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Heart, Download, ExternalLink, ShoppingCart, Bell } from "lucide-react";
+import { ArrowLeft, Heart, Download, ExternalLink } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineHeader } from "../components/FigurineHeader";
 import { FigurineCarousel } from "../components/FigurineCarousel";
@@ -10,9 +9,10 @@ import { FigurineNews } from "../components/FigurineNews";
 import { FigurineRelated } from "../components/FigurineRelated";
 import { FigurineComments } from "../components/FigurineComments";
 import { FigurineDescription } from "../components/FigurineDescription";
+import { FigurineQuickActions } from "../components/FigurineQuickActions";
 import { SocialShare } from "../components/SocialShare";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { ScrollToTop } from "@/components/ScrollToTop";
 
@@ -168,14 +168,6 @@ const FigurineDetails = () => {
   const shareUrl = window.location.href;
   const shareTitle = `${figure.name} - ${figure.series}`;
 
-  const handlePreorder = () => {
-    toast({
-      title: "Précommande ajoutée",
-      description: `Vous serez notifié lorsque ${figure.name} sera disponible.`,
-      duration: 3000,
-    });
-  };
-
   const handleDownloadImages = () => {
     toast({
       title: "Téléchargement démarré",
@@ -242,29 +234,10 @@ const FigurineDetails = () => {
           </div>
           
           <div className="space-y-8 animate-fade-in" style={{ animationDelay: "100ms" }}>
-            <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-primary">
-              <h2 className="font-semibold mb-3 text-lg">Actions rapides</h2>
-              <div className="space-y-4">
-                <Button 
-                  onClick={handlePreorder} 
-                  className="w-full flex items-center justify-center gap-2"
-                >
-                  <Bell size={16} />
-                  Activer l'alerte de disponibilité
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  className="w-full flex items-center justify-center gap-2"
-                  asChild
-                >
-                  <a href={figure.shops[0]?.url || "#"} target="_blank" rel="noopener noreferrer">
-                    <ShoppingCart size={16} />
-                    Voir les offres d'achat
-                  </a>
-                </Button>
-              </div>
-            </div>
+            <FigurineQuickActions 
+              name={figure.name} 
+              shopUrl={figure.shops[0]?.url} 
+            />
             
             <FigurineSpecs specs={figure} />
             <FigurineShops shops={figure.shops} />
