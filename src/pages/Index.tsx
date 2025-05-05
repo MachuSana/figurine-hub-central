@@ -1,15 +1,16 @@
 
 import MainNav from "../components/MainNav";
-import { Calendar, Eye, MessageSquare, ArrowRight, Star, TrendingUp, Tag, Mail, Bookmark, ChevronRight, ChevronLeft, Heart } from "lucide-react";
+import { Calendar, Eye, MessageSquare, ArrowRight, Star, TrendingUp, Tag, Mail, Bookmark, ChevronRight, ChevronLeft, Heart, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { NewsCard } from "@/components/NewsCard";
 import { Card, CardContent } from "@/components/ui/card";
 import { EventLink } from "@/components/EventLink";
+import ReleaseCalendarPreview from "@/components/ReleaseCalendarPreview";
 
 const fetchLatestNews = async () => {
   return [
@@ -90,7 +91,9 @@ const brands = [
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const emailRef = useRef<HTMLInputElement>(null);
+  const slidesRef = useRef<HTMLDivElement>(null);
   
   const { data: latestNews, isLoading } = useQuery({
     queryKey: ['latestNews'],
@@ -127,6 +130,22 @@ const Index = () => {
     },
   ];
 
+  // Auto-rotate slides every 5 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev === featuredFigurines.length - 1 ? 0 : prev + 1));
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [featuredFigurines.length]);
+  
+  // Animation effect when changing slides
+  useEffect(() => {
+    if (slidesRef.current) {
+      slidesRef.current.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+  }, [currentSlide]);
+
   const handlePrevSlide = () => {
     setCurrentSlide((prev) => (prev === 0 ? featuredFigurines.length - 1 : prev - 1));
   };
@@ -144,24 +163,31 @@ const Index = () => {
       toast.error("Veuillez entrer une adresse email valide");
     }
   };
+  
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      toast.success(`Recherche lancée pour "${searchQuery}"`);
+      // Dans une application réelle, on redirigerait vers la page de recherche
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
-        <EventLink limit={2} />
-        
-        <section className="relative mb-12 rounded-xl overflow-hidden bg-gradient-to-r from-violet-500 to-purple-700 shadow-lg">
+        {/* Hero Section amélioré */}
+        <section className="relative mb-10 rounded-xl overflow-hidden bg-gradient-to-r from-violet-500 to-purple-700 shadow-lg animate-fade-in">
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative z-10 p-8 md:p-12 flex flex-col items-start text-white max-w-3xl">
-            <Badge className="mb-4 bg-primary/90 hover:bg-primary text-white text-sm">Bienvenue sur FigureNews</Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">Découvrez l'univers fascinant des figurines</h1>
-            <p className="text-lg mb-8 text-white/90 max-w-2xl">
+            <Badge className="mb-4 bg-primary/90 hover:bg-primary text-white text-sm animate-fade-in" style={{animationDelay: "200ms"}}>Bienvenue sur FigureNews</Badge>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight animate-fade-in" style={{animationDelay: "300ms"}}>Découvrez l'univers fascinant des figurines</h1>
+            <p className="text-lg mb-8 text-white/90 max-w-2xl animate-fade-in" style={{animationDelay: "400ms"}}>
               Toute l'actualité, les sorties et les précommandes des plus grandes marques de figurines.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Button asChild size="lg" className="font-semibold">
+            <div className="flex flex-wrap gap-4 animate-fade-in" style={{animationDelay: "500ms"}}>
+              <Button asChild size="lg" className="font-semibold hover:scale-105 transition-transform">
                 <Link to="/figurines">Explorer les figurines</Link>
               </Button>
               <Button variant="outline" size="lg" className="bg-white/20 hover:bg-white/30 border-white text-white font-semibold">
@@ -173,7 +199,43 @@ const Index = () => {
             <div className="h-full w-full bg-gradient-to-l from-transparent to-violet-500/90"></div>
           </div>
         </section>
+        
+        {/* Recherche rapide */}
+        <section className="mb-10">
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <h2 className="text-xl font-bold mb-4 flex items-center">
+              <Search className="mr-2 text-primary" size={20} />
+              Recherche rapide
+            </h2>
+            <form onSubmit={handleSearch} className="flex flex-wrap gap-4">
+              <div className="flex-1 min-w-[200px]">
+                <input
+                  type="text"
+                  placeholder="Nom de figurine, série, personnage..."
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <Button type="submit" className="flex items-center gap-2">
+                <Search size={16} />
+                Rechercher
+              </Button>
+            </form>
+          </div>
+        </section>
+        
+        {/* Structure à deux colonnes: Événements + Calendrier */}
+        <div className="grid md:grid-cols-5 gap-6 mb-10">
+          <div className="md:col-span-3">
+            <EventLink limit={2} />
+          </div>
+          <div className="md:col-span-2">
+            <ReleaseCalendarPreview />
+          </div>
+        </div>
 
+        {/* Section Figurines à la Une améliorée */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold flex items-center">
@@ -190,15 +252,15 @@ const Index = () => {
             </div>
           </div>
           
-          <Card className="overflow-hidden border-none shadow-md">
+          <Card className="overflow-hidden border-none shadow-md relative">
             <div 
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              ref={slidesRef}
+              className="flex transition-all duration-500 ease-in-out"
             >
               {featuredFigurines.map((figurine) => (
                 <div key={figurine.id} className="w-full flex-shrink-0">
                   <div className="grid md:grid-cols-5 h-full">
-                    <div className="md:col-span-2 relative h-48 md:h-64">
+                    <div className="md:col-span-2 relative h-48 md:h-80">
                       <img 
                         src={figurine.image} 
                         alt={figurine.name} 
@@ -210,24 +272,26 @@ const Index = () => {
                         ))}
                       </div>
                     </div>
-                    <div className="md:col-span-3 p-4 flex flex-col justify-center">
+                    <div className="md:col-span-3 p-6 flex flex-col justify-center">
                       <div className="text-xs text-primary font-medium mb-1">{figurine.brand}</div>
-                      <h3 className="text-lg md:text-xl font-bold mb-2">{figurine.name}</h3>
-                      <div className="flex items-center mb-3">
+                      <h3 className="text-xl md:text-2xl font-bold mb-3">{figurine.name}</h3>
+                      <div className="flex items-center mb-4">
                         {[...Array(5)].map((_, i) => (
                           <Star 
                             key={i} 
-                            size={14} 
+                            size={16} 
                             className={`${i < Math.floor(figurine.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} 
                           />
                         ))}
-                        <span className="ml-2 text-xs text-gray-600">{figurine.rating}/5</span>
+                        <span className="ml-2 text-sm text-gray-600">{figurine.rating}/5</span>
                       </div>
-                      <p className="text-xl font-bold text-gray-900 mb-3">{figurine.price}</p>
-                      <div className="flex flex-wrap gap-2">
-                        <Button size="sm">Voir détails</Button>
-                        <Button variant="outline" size="sm" className="gap-1">
-                          <Heart size={14} /> Favoris
+                      <p className="text-2xl font-bold text-gray-900 mb-5">{figurine.price}</p>
+                      <div className="flex flex-wrap gap-3">
+                        <Button asChild>
+                          <Link to={`/figurines/${figurine.id}`}>Voir détails</Link>
+                        </Button>
+                        <Button variant="outline" className="gap-1">
+                          <Heart size={16} /> Favoris
                         </Button>
                       </div>
                     </div>
@@ -236,11 +300,11 @@ const Index = () => {
               ))}
             </div>
             
-            <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1">
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
               {featuredFigurines.map((_, index) => (
                 <button
                   key={index}
-                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  className={`w-2 h-2 rounded-full transition-colors ${
                     currentSlide === index ? "bg-primary" : "bg-gray-300"
                   }`}
                   onClick={() => setCurrentSlide(index)}
@@ -250,11 +314,13 @@ const Index = () => {
           </Card>
         </section>
 
+        {/* Bannières promotionnelles */}
         <div className="grid md:grid-cols-2 gap-6 mb-12">
-          {promotionalBanners.map((banner) => (
+          {promotionalBanners.map((banner, index) => (
             <div
               key={banner.id}
               className={`${banner.bgColor} rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group animate-fade-up`}
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="flex items-center p-6">
                 <div className="flex-1">
@@ -276,6 +342,7 @@ const Index = () => {
           ))}
         </div>
 
+        {/* Dernières Actualités */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold flex items-center">
@@ -306,6 +373,7 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Newsletter */}
         <div className="bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl shadow-sm p-8 mb-12">
           <div className="max-w-2xl mx-auto text-center">
             <Mail className="w-12 h-12 text-primary mx-auto mb-4" />
@@ -327,7 +395,8 @@ const Index = () => {
                   className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
                   required
                 />
-                <Button type="submit">
+                <Button type="submit" className="flex items-center gap-2">
+                  <Mail size={16} />
                   S'inscrire
                 </Button>
               </form>
@@ -335,24 +404,27 @@ const Index = () => {
           </div>
         </div>
 
+        {/* Statistiques */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {[
-            { value: "10,000+", label: "Figurines" },
-            { value: "50+", label: "Marques" },
-            { value: "25,000+", label: "Clients Satisfaits" },
-            { value: "1,000+", label: "Avis Clients" }
+            { value: "10,000+", label: "Figurines", icon: Tag },
+            { value: "50+", label: "Marques", icon: Star },
+            { value: "25,000+", label: "Clients Satisfaits", icon: Heart },
+            { value: "1,000+", label: "Avis Clients", icon: MessageSquare }
           ].map((stat, index) => (
             <div 
               key={index} 
               className="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow duration-300 animate-fade-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
+              <stat.icon className="w-8 h-8 text-primary mx-auto mb-2" />
               <div className="text-3xl font-bold text-primary mb-2">{stat.value}</div>
               <div className="text-gray-600">{stat.label}</div>
             </div>
           ))}
         </div>
 
+        {/* Marques Partenaires */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-12">
           <h2 className="text-2xl font-bold mb-6 text-center">Nos Marques Partenaires</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -375,27 +447,14 @@ const Index = () => {
             ))}
           </div>
         </div>
-
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-12">
-          <h2 className="text-2xl font-bold mb-6">Recherche Avancée</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            <input
-              type="text"
-              placeholder="Nom de la figurine"
-              className="px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
-            />
-            <select className="px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50">
-              <option value="">Toutes les marques</option>
-              <option value="good-smile">Good Smile Company</option>
-              <option value="kotobukiya">Kotobukiya</option>
-              <option value="bandai">Bandai</option>
-            </select>
-            <Button>
-              Rechercher
-            </Button>
-          </div>
-        </div>
       </main>
+      
+      {/* Footer simple */}
+      <footer className="bg-white py-8 border-t border-gray-100">
+        <div className="container mx-auto px-4 text-center text-sm text-gray-500">
+          <p>&copy; 2024 FigureNews - Tous droits réservés</p>
+        </div>
+      </footer>
     </div>
   );
 };
