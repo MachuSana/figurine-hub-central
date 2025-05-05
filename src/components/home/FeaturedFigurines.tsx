@@ -1,10 +1,17 @@
 
-import { useState, useRef, useEffect } from "react";
-import { Star, ChevronRight, ChevronLeft, Heart } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Star, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 type FigurineFeatured = {
   id: number;
@@ -18,7 +25,6 @@ type FigurineFeatured = {
 
 export const FeaturedFigurines = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slidesRef = useRef<HTMLDivElement>(null);
 
   const featuredFigurines = [
     {
@@ -58,21 +64,6 @@ export const FeaturedFigurines = () => {
 
     return () => clearInterval(timer);
   }, [featuredFigurines.length]);
-  
-  // Animation effect when changing slides
-  useEffect(() => {
-    if (slidesRef.current) {
-      slidesRef.current.style.transform = `translateX(-${currentSlide * 100}%)`;
-    }
-  }, [currentSlide]);
-
-  const handlePrevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? featuredFigurines.length - 1 : prev - 1));
-  };
-
-  const handleNextSlide = () => {
-    setCurrentSlide((prev) => (prev === featuredFigurines.length - 1 ? 0 : prev + 1));
-  };
 
   return (
     <section className="mb-12">
@@ -81,63 +72,63 @@ export const FeaturedFigurines = () => {
           <Star className="mr-2 text-primary" size={22} />
           Figurines à la Une
         </h2>
-        <div className="flex gap-2">
-          <Button variant="outline" size="icon" onClick={handlePrevSlide} className="rounded-full h-8 w-8">
-            <ChevronLeft size={16} />
-          </Button>
-          <Button variant="outline" size="icon" onClick={handleNextSlide} className="rounded-full h-8 w-8">
-            <ChevronRight size={16} />
-          </Button>
-        </div>
       </div>
       
-      <Card className="overflow-hidden border-none shadow-md relative">
-        <div 
-          ref={slidesRef}
-          className="flex transition-all duration-500 ease-in-out"
-        >
+      <Carousel
+        className="relative"
+        setApi={(api) => {
+          api?.on("select", () => {
+            setCurrentSlide(api.selectedScrollSnap());
+          });
+        }}
+      >
+        <CarouselContent>
           {featuredFigurines.map((figurine) => (
-            <div key={figurine.id} className="w-full flex-shrink-0">
-              <div className="grid md:grid-cols-5 h-full">
-                <div className="md:col-span-2 relative h-48 md:h-80">
-                  <img 
-                    src={figurine.image} 
-                    alt={figurine.name} 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-2 left-2 flex flex-wrap gap-1">
-                    {figurine.badges.map((badge, index) => (
-                      <Badge key={index} className="bg-primary/90 text-xs">{badge}</Badge>
-                    ))}
+            <CarouselItem key={figurine.id}>
+              <Card className="overflow-hidden border-none shadow-md">
+                <div className="grid md:grid-cols-5 h-full">
+                  <div className="md:col-span-2 relative h-48 md:h-80">
+                    <img 
+                      src={figurine.image} 
+                      alt={figurine.name} 
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-2 left-2 flex flex-wrap gap-1">
+                      {figurine.badges.map((badge, index) => (
+                        <Badge key={index} className="bg-primary/90 text-xs">{badge}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="md:col-span-3 p-6 flex flex-col justify-center">
+                    <div className="text-xs text-primary font-medium mb-1">{figurine.brand}</div>
+                    <h3 className="text-xl md:text-2xl font-bold mb-3">{figurine.name}</h3>
+                    <div className="flex items-center mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star 
+                          key={i} 
+                          size={16} 
+                          className={`${i < Math.floor(figurine.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} 
+                        />
+                      ))}
+                      <span className="ml-2 text-sm text-gray-600">{figurine.rating}/5</span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900 mb-5">{figurine.price}</p>
+                    <div className="flex flex-wrap gap-3">
+                      <Button asChild>
+                        <Link to={`/figurines/${figurine.id}`}>Voir détails</Link>
+                      </Button>
+                      <Button variant="outline" className="gap-1">
+                        <Heart size={16} /> Favoris
+                      </Button>
+                    </div>
                   </div>
                 </div>
-                <div className="md:col-span-3 p-6 flex flex-col justify-center">
-                  <div className="text-xs text-primary font-medium mb-1">{figurine.brand}</div>
-                  <h3 className="text-xl md:text-2xl font-bold mb-3">{figurine.name}</h3>
-                  <div className="flex items-center mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star 
-                        key={i} 
-                        size={16} 
-                        className={`${i < Math.floor(figurine.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} 
-                      />
-                    ))}
-                    <span className="ml-2 text-sm text-gray-600">{figurine.rating}/5</span>
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900 mb-5">{figurine.price}</p>
-                  <div className="flex flex-wrap gap-3">
-                    <Button asChild>
-                      <Link to={`/figurines/${figurine.id}`}>Voir détails</Link>
-                    </Button>
-                    <Button variant="outline" className="gap-1">
-                      <Heart size={16} /> Favoris
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+              </Card>
+            </CarouselItem>
           ))}
-        </div>
+        </CarouselContent>
+        <CarouselPrevious className="left-0 bg-white/50 hover:bg-white/80" />
+        <CarouselNext className="right-0 bg-white/50 hover:bg-white/80" />
         
         <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
           {featuredFigurines.map((_, index) => (
@@ -150,7 +141,7 @@ export const FeaturedFigurines = () => {
             />
           ))}
         </div>
-      </Card>
+      </Carousel>
     </section>
   );
 };
