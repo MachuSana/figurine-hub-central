@@ -11,6 +11,7 @@ import { Newsletter } from "@/components/home/Newsletter";
 import { StatsSection } from "@/components/home/StatsSection";
 import { BrandsSection } from "@/components/home/BrandsSection";
 import { Footer } from "@/components/home/Footer";
+import { AdvertisementBanner } from "@/components/home/AdvertisementBanner";
 
 const Index = () => {
   return (
@@ -32,9 +33,15 @@ const Index = () => {
           </div>
         </div>
 
+        {/* Première bannière publicitaire */}
+        <AdvertisementBanner variant="fullwidth" />
+
         <FeaturedFigurines />
         
         <PromotionalBanners />
+
+        {/* Deuxième bannière publicitaire avec un style différent */}
+        <AdvertisementBanner variant="inline" className="mx-auto" />
 
         <NewsSection />
         
