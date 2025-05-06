@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowRight, ArrowLeft, Calendar, Info, Users, History, Star, Package, ExternalLink, FileText, Award, BookOpen } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, ArrowLeft, Calendar, Info, Users, History, Star, Package, ExternalLink, FileText, Award, BookOpen, Search } from "lucide-react";
 import MainNav from "../components/MainNav";
 import { FigurineRelated } from "../components/FigurineRelated";
 import { FigurineDescription } from "../components/FigurineDescription";
@@ -14,6 +15,7 @@ import { Input } from "../components/ui/input";
 
 const SeriesDetails = () => {
   const { name } = useParams();
+  const [searchQuery, setSearchQuery] = useState("");
   
   const series = [
     {
@@ -157,6 +159,11 @@ const SeriesDetails = () => {
     );
   }
 
+  const filteredPopularFigurines = currentSeries.popularFigurines.filter(fig => 
+    fig.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    fig.series.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
@@ -188,22 +195,40 @@ const SeriesDetails = () => {
                 Figurines populaires
               </h2>
               <Separator className="mb-4 bg-gray-100" />
-              <div className="space-y-4">
-                {currentSeries.popularFigurines.slice(0, 3).map((fig, index) => (
-                  <div key={index} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                    <img 
-                      src={fig.image} 
-                      alt={fig.name}
-                      className="w-12 h-12 object-cover rounded-md" 
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium truncate">{fig.name}</div>
-                      <div className="text-sm text-gray-500">{fig.series}</div>
-                    </div>
-                    <div className="text-primary font-medium">{fig.price}</div>
-                  </div>
-                ))}
+              
+              <div className="mb-4 relative">
+                <Input
+                  placeholder="Rechercher une figurine..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-8"
+                />
+                <Search size={16} className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400" />
               </div>
+              
+              <div className="space-y-4">
+                {filteredPopularFigurines.length > 0 ? (
+                  filteredPopularFigurines.slice(0, 3).map((fig, index) => (
+                    <div key={index} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                      <img 
+                        src={fig.image} 
+                        alt={fig.name}
+                        className="w-12 h-12 object-cover rounded-md" 
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium truncate">{fig.name}</div>
+                        <div className="text-sm text-gray-500">{fig.series}</div>
+                      </div>
+                      <div className="text-primary font-medium">{fig.price}</div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-4 text-gray-500">
+                    Aucune figurine trouvée
+                  </div>
+                )}
+              </div>
+              
               <div className="mt-4">
                 <Button variant="outline" className="w-full">
                   Voir toutes les figurines
@@ -341,7 +366,9 @@ const SeriesDetails = () => {
               name: fig.name,
               image: fig.image,
               manufacturer: currentSeries.manufacturer,
-              price: fig.price
+              price: fig.price,
+              series: fig.series,
+              images: [fig.image]
             }))}
           />
         </div>
