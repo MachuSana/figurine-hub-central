@@ -36,12 +36,11 @@ const SeriesDetails = () => {
       id: 1,
       name: "Character A - Action Pose",
       image: "https://images.unsplash.com/photo-1503437313881-503a91226402",
-      price: 129.99,
+      price: "129.99", // Changed from number to string to match Figurine type
       manufacturer: "Good Smile Company",
       releaseDate: "2023-06",
       rating: 4.9,
       scale: "1/8",
-      // Adding required properties to match the Figurine type
       series: name || "Série Inconnu",
       images: ["https://images.unsplash.com/photo-1503437313881-503a91226402"]
     },
@@ -49,12 +48,11 @@ const SeriesDetails = () => {
       id: 2,
       name: "Character B - Battle Stance",
       image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4",
-      price: 149.99,
+      price: "149.99", // Changed from number to string to match Figurine type
       manufacturer: "Max Factory",
       releaseDate: "2023-08",
       rating: 4.7,
       scale: "1/7",
-      // Adding required properties to match the Figurine type
       series: name || "Série Inconnu",
       images: ["https://images.unsplash.com/photo-1501281668745-f7f57925c3b4"]
     },
@@ -62,12 +60,11 @@ const SeriesDetails = () => {
       id: 3,
       name: "Character C - Special Edition",
       image: "https://images.unsplash.com/photo-1507149833265-60c372daea22",
-      price: 199.99,
+      price: "199.99", // Changed from number to string to match Figurine type
       manufacturer: "Kotobukiya",
       releaseDate: "2023-10",
       rating: 4.8,
       scale: "1/6",
-      // Adding required properties to match the Figurine type
       series: name || "Série Inconnu",
       images: ["https://images.unsplash.com/photo-1507149833265-60c372daea22"]
     }
@@ -111,24 +108,16 @@ const SeriesDetails = () => {
     "Collaborations exclusives"
   ];
 
-  // Fixed header data props
-  const headerData = {
-    name: seriesData.name,
-    manufacturer: "Diverses marques",
-    image: seriesData.coverImage,
-    price: "Varie selon la figurine"
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
         <SeriesHeader 
-          name={headerData.name}
-          manufacturer={headerData.manufacturer}
-          image={headerData.image}
-          price={headerData.price}
+          name={seriesData.name}
+          manufacturer="Diverses marques"
+          image={seriesData.coverImage}
+          price="Varie selon la figurine"
         />
         
         {/* Bannière publicitaire en haut */}
