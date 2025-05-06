@@ -41,6 +41,7 @@ const SeriesDetails = () => {
       releaseDate: "2023-06",
       rating: 4.9,
       scale: "1/8",
+      // Adding required properties to match the Figurine type
       series: name || "Série Inconnu",
       images: ["https://images.unsplash.com/photo-1503437313881-503a91226402"]
     },
@@ -53,6 +54,7 @@ const SeriesDetails = () => {
       releaseDate: "2023-08",
       rating: 4.7,
       scale: "1/7",
+      // Adding required properties to match the Figurine type
       series: name || "Série Inconnu",
       images: ["https://images.unsplash.com/photo-1501281668745-f7f57925c3b4"]
     },
@@ -65,6 +67,7 @@ const SeriesDetails = () => {
       releaseDate: "2023-10",
       rating: 4.8,
       scale: "1/6",
+      // Adding required properties to match the Figurine type
       series: name || "Série Inconnu",
       images: ["https://images.unsplash.com/photo-1507149833265-60c372daea22"]
     }
@@ -108,16 +111,24 @@ const SeriesDetails = () => {
     "Collaborations exclusives"
   ];
 
+  // Fixed header data props
+  const headerData = {
+    name: seriesData.name,
+    manufacturer: "Diverses marques",
+    image: seriesData.coverImage,
+    price: "Varie selon la figurine"
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
         <SeriesHeader 
-          name={seriesData.name}
-          manufacturer="Diverses marques"
-          image={seriesData.coverImage}
-          price="Varie selon la figurine"
+          name={headerData.name}
+          manufacturer={headerData.manufacturer}
+          image={headerData.image}
+          price={headerData.price}
         />
         
         {/* Bannière publicitaire en haut */}
