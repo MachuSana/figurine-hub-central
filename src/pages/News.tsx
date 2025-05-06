@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import MainNav from "@/components/MainNav";
 import { NewsCard } from "@/components/NewsCard";
@@ -6,6 +5,7 @@ import { NewsFilters } from "@/components/NewsFilters";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import ReleaseCalendarPreview from "@/components/ReleaseCalendarPreview";
+import { AdvertisementBanner } from "@/components/home/AdvertisementBanner";
 
 // Données fictives pour les actualités
 const newsData = [
@@ -150,6 +150,12 @@ const News = () => {
         )}
         
         <div className="max-w-4xl mx-auto">
+          {/* Bannière publicitaire en haut */}
+          <AdvertisementBanner 
+            variant="fullwidth" 
+            className="mb-8" 
+          />
+          
           {/* Planning des sorties en haut si aucun filtre n'est appliqué ou si le filtre est sur "Planning des sorties" */}
           {(!selectedCategory || selectedCategory === "Planning des sorties") && !searchQuery && (
             <div className="mb-8">
@@ -173,6 +179,14 @@ const News = () => {
               </>
             )}
             
+            {/* Bannière publicitaire au milieu */}
+            {regularNews.length > 0 && regularNews.length > 2 && (
+              <AdvertisementBanner 
+                variant="inline" 
+                className="my-8"
+              />
+            )}
+            
             {/* Actualités régulières */}
             {regularNews.length > 0 ? (
               regularNews.map(news => (
@@ -186,6 +200,13 @@ const News = () => {
               )
             )}
           </div>
+          
+          {/* Bannière publicitaire en bas */}
+          <AdvertisementBanner 
+            variant="sidebar" 
+            className="mt-8"
+            dismissible={false}
+          />
         </div>
       </main>
     </div>

@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ArrowLeft, Calendar, User } from "lucide-react";
@@ -7,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SocialShare } from "@/components/SocialShare";
 import { useToast } from "@/components/ui/use-toast";
+import { AdvertisementBanner } from "@/components/home/AdvertisementBanner";
 
 // Dummy data - in a real app, this would come from an API
 const newsData = [
@@ -160,6 +160,9 @@ const NewsDetail = () => {
             </div>
           </div>
           
+          {/* Bannière publicitaire avant l'image */}
+          <AdvertisementBanner variant="inline" className="mb-8" />
+          
           <div className="mb-8">
             <img 
               src={article.coverImage} 
@@ -171,7 +174,18 @@ const NewsDetail = () => {
           <div className="prose prose-gray max-w-none mb-12">
             <p className="text-lg font-medium mb-6 text-gray-700">{article.summary}</p>
             
-            {article.content.split('\n\n').map((paragraph, index) => (
+            {/* Afficher le premier paragraphe */}
+            {article.content.split('\n\n').length > 0 && (
+              <p className="mb-4">{article.content.split('\n\n')[0]}</p>
+            )}
+            
+            {/* Bannière publicitaire entre les paragraphes */}
+            {article.content.split('\n\n').length > 1 && (
+              <AdvertisementBanner variant="fullwidth" className="my-8" />
+            )}
+            
+            {/* Afficher les paragraphes restants */}
+            {article.content.split('\n\n').slice(1).map((paragraph, index) => (
               <p key={index} className="mb-4">{paragraph}</p>
             ))}
             
@@ -184,6 +198,9 @@ const NewsDetail = () => {
             title={article.title} 
             url={window.location.href} 
           />
+          
+          {/* Bannière publicitaire en bas de l'article */}
+          <AdvertisementBanner variant="sidebar" className="mt-8" dismissible={false} />
         </div>
       </main>
     </div>

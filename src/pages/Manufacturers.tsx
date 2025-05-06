@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ManufacturerCard } from "../components/manufacturers/ManufacturerCard";
 import { ManufacturerFilters } from "../components/manufacturers/ManufacturerFilters";
 import { ManufacturerStats } from "../components/manufacturers/ManufacturerStats";
+import { AdvertisementBanner } from "@/components/home/AdvertisementBanner";
 
 const Manufacturers = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -119,6 +120,9 @@ const Manufacturers = () => {
           Fabricants
         </h1>
 
+        {/* Bannière publicitaire en haut */}
+        <AdvertisementBanner variant="fullwidth" className="mb-8" />
+
         <ManufacturerFilters 
           specialties={allSpecialties} 
           onFilterChange={handleFilterChange} 
@@ -162,7 +166,13 @@ const Manufacturers = () => {
           )}
         </div>
 
+        {/* Bannière publicitaire au milieu */}
+        <AdvertisementBanner variant="inline" className="my-10" />
+
         <ManufacturerStats />
+        
+        {/* Bannière publicitaire en bas */}
+        <AdvertisementBanner variant="sidebar" className="mt-10" dismissible={false} />
       </main>
     </div>
   );
