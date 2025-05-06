@@ -40,7 +40,10 @@ const SeriesDetails = () => {
       manufacturer: "Good Smile Company",
       releaseDate: "2023-06",
       rating: 4.9,
-      scale: "1/8"
+      scale: "1/8",
+      // Adding required properties to match the Figurine type
+      series: name || "Série Inconnu",
+      images: ["https://images.unsplash.com/photo-1503437313881-503a91226402"]
     },
     {
       id: 2,
@@ -50,7 +53,10 @@ const SeriesDetails = () => {
       manufacturer: "Max Factory",
       releaseDate: "2023-08",
       rating: 4.7,
-      scale: "1/7"
+      scale: "1/7",
+      // Adding required properties to match the Figurine type
+      series: name || "Série Inconnu",
+      images: ["https://images.unsplash.com/photo-1501281668745-f7f57925c3b4"]
     },
     {
       id: 3,
@@ -60,7 +66,10 @@ const SeriesDetails = () => {
       manufacturer: "Kotobukiya",
       releaseDate: "2023-10",
       rating: 4.8,
-      scale: "1/6"
+      scale: "1/6",
+      // Adding required properties to match the Figurine type
+      series: name || "Série Inconnu",
+      images: ["https://images.unsplash.com/photo-1507149833265-60c372daea22"]
     }
   ];
 
@@ -83,12 +92,44 @@ const SeriesDetails = () => {
     }
   ];
 
+  // Données pour les spécifications de la série
+  const specifications = {
+    material: "PVC et ABS",
+    packaging: "Boîte avec fenêtre",
+    articulations: "Articulées",
+    base: "Incluse",
+    instructions: "Manuel multilingue"
+  };
+
+  // Liste des caractéristiques
+  const features = [
+    "Figurines à l'échelle",
+    "Détails précis",
+    "Accessoires interchangeables",
+    "Bases personnalisées",
+    "Éditions limitées",
+    "Collaborations exclusives"
+  ];
+
+  // Fixed header data props
+  const headerData = {
+    name: seriesData.name,
+    manufacturer: "Diverses marques",
+    image: seriesData.coverImage,
+    price: "Varie selon la figurine"
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
-        <SeriesHeader series={seriesData} />
+        <SeriesHeader 
+          name={headerData.name}
+          manufacturer={headerData.manufacturer}
+          image={headerData.image}
+          price={headerData.price}
+        />
         
         {/* Bannière publicitaire en haut */}
         <AdvertisementBanner variant="fullwidth" className="my-6" />
@@ -102,13 +143,13 @@ const SeriesDetails = () => {
                 <TabsTrigger value="features">Caractéristiques</TabsTrigger>
               </TabsList>
               <TabsContent value="specifications" className="mt-6">
-                <SeriesSpecifications series={seriesData} />
+                <SeriesSpecifications specifications={specifications} />
               </TabsContent>
               <TabsContent value="figurines" className="mt-6">
                 <FigurinesList figurines={figurines} />
               </TabsContent>
               <TabsContent value="features" className="mt-6">
-                <SeriesFeatures />
+                <SeriesFeatures features={features} />
               </TabsContent>
             </Tabs>
             
@@ -118,9 +159,9 @@ const SeriesDetails = () => {
           
           <div className="space-y-6">
             <SeriesQuickStats 
-              figurineCount={seriesData.figurineCount} 
-              rating={seriesData.rating} 
-              votes={seriesData.votes}
+              startYear={seriesData.releaseYear.toString()} 
+              totalReleases={seriesData.figurineCount} 
+              scale="1/7"
             />
             
             <FigurineNews news={news} />
