@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { 
   Select,
   SelectContent,
@@ -13,13 +14,16 @@ import {
   AccordionTrigger,
 } from "./ui/accordion";
 import { Slider } from "./ui/slider";
+import { Input } from "./ui/input";
+import { ScrollArea } from "./ui/scroll-area";
 import { 
   Filter, 
   SortAsc, 
   SortDesc, 
   Tag, 
   Banknote, 
-  Calendar 
+  Calendar,
+  Search
 } from "lucide-react";
 import { Checkbox } from "./ui/checkbox";
 
@@ -53,6 +57,17 @@ export const FigurineFilters = ({
   minPrice,
   maxPrice 
 }: FigurineFiltersProps) => {
+  const [manufacturerSearch, setManufacturerSearch] = useState("");
+  const [seriesSearch, setSeriesSearch] = useState("");
+  
+  const filteredManufacturers = manufacturers.filter(manufacturer =>
+    manufacturer.toLowerCase().includes(manufacturerSearch.toLowerCase())
+  );
+  
+  const filteredSeries = series.filter(serie =>
+    serie.toLowerCase().includes(seriesSearch.toLowerCase())
+  );
+
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
       <div className="flex items-center gap-2 pb-4 border-b">
@@ -97,23 +112,42 @@ export const FigurineFilters = ({
             </span>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-2 pt-2">
-              {manufacturers.map((manufacturer) => (
-                <div key={manufacturer} className="flex items-center space-x-2">
-                  <Checkbox 
-                    id={manufacturer}
-                    onCheckedChange={(checked) => {
-                      // Implémenter la logique de filtre
-                    }}
-                  />
-                  <label 
-                    htmlFor={manufacturer}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {manufacturer}
-                  </label>
+            <div className="space-y-3 pt-2">
+              <div className="relative">
+                <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                <Input
+                  placeholder="Rechercher un fabricant..."
+                  value={manufacturerSearch}
+                  onChange={(e) => setManufacturerSearch(e.target.value)}
+                  className="pl-8 h-8"
+                />
+              </div>
+              <ScrollArea className="h-32">
+                <div className="space-y-2 pr-2">
+                  {filteredManufacturers.length > 0 ? (
+                    filteredManufacturers.map((manufacturer) => (
+                      <div key={manufacturer} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={manufacturer}
+                          onCheckedChange={(checked) => {
+                            // Implémenter la logique de filtre
+                          }}
+                        />
+                        <label 
+                          htmlFor={manufacturer}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {manufacturer}
+                        </label>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-sm text-gray-500 text-center py-2">
+                      Aucun fabricant trouvé
+                    </div>
+                  )}
                 </div>
-              ))}
+              </ScrollArea>
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -127,23 +161,42 @@ export const FigurineFilters = ({
             </span>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-2 pt-2">
-              {series.map((serie) => (
-                <div key={serie} className="flex items-center space-x-2">
-                  <Checkbox 
-                    id={serie}
-                    onCheckedChange={(checked) => {
-                      // Implémenter la logique de filtre
-                    }}
-                  />
-                  <label 
-                    htmlFor={serie}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {serie}
-                  </label>
+            <div className="space-y-3 pt-2">
+              <div className="relative">
+                <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                <Input
+                  placeholder="Rechercher une série..."
+                  value={seriesSearch}
+                  onChange={(e) => setSeriesSearch(e.target.value)}
+                  className="pl-8 h-8"
+                />
+              </div>
+              <ScrollArea className="h-32">
+                <div className="space-y-2 pr-2">
+                  {filteredSeries.length > 0 ? (
+                    filteredSeries.map((serie) => (
+                      <div key={serie} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={serie}
+                          onCheckedChange={(checked) => {
+                            // Implémenter la logique de filtre
+                          }}
+                        />
+                        <label 
+                          htmlFor={serie}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {serie}
+                        </label>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-sm text-gray-500 text-center py-2">
+                      Aucune série trouvée
+                    </div>
+                  )}
                 </div>
-              ))}
+              </ScrollArea>
             </div>
           </AccordionContent>
         </AccordionItem>
