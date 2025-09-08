@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import MainNav from "../components/MainNav";
 import ShopFilters from "../components/ShopFilters";
 import { Button } from "@/components/ui/button";
-import { Store, Star, ArrowRight, Package, Truck, Globe, MapPin } from "lucide-react";
+import { Store, Star, ArrowRight, Package, Truck, Globe, MapPin, Crown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 type ShopType = "En ligne" | "Boutique physique" | "Hybride";
@@ -22,6 +22,7 @@ interface Shop {
   shipping: string[];
   features: string[];
   location: string;
+  featured?: boolean;
 }
 
 const Shops = () => {
@@ -46,7 +47,8 @@ const Shops = () => {
       productsCount: 5000,
       location: "France",
       shipping: ["France", "Europe"],
-      features: ["Paiement sécurisé", "Livraison express", "Service client 24/7"]
+      features: ["Paiement sécurisé", "Livraison express", "Service client 24/7"],
+      featured: true
     },
     {
       id: 2,
@@ -60,7 +62,8 @@ const Shops = () => {
       productsCount: 3000,
       location: "France",
       shipping: ["France"],
-      features: ["Click & Collect", "Précommandes", "Programme fidélité"]
+      features: ["Click & Collect", "Précommandes", "Programme fidélité"],
+      featured: true
     },
     {
       id: 3,
@@ -111,6 +114,9 @@ const Shops = () => {
     setFilteredShops(shops);
   });
 
+  const featuredShops = shops.filter(shop => shop.featured);
+  const regularShops = shops.filter(shop => !shop.featured);
+
   const handleFilterChange = (filters) => {
     setActiveFilters(filters);
     
@@ -149,12 +155,85 @@ const Shops = () => {
 
         <ShopFilters onFilterChange={handleFilterChange} />
 
-        <div className="grid grid-cols-1 gap-8">
+        {/* Boutiques en avant */}
+        {featuredShops.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <Crown className="text-primary" size={28} />
+              <h2 className="text-2xl font-bold">Boutiques en avant</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {featuredShops.map((shop) => (
+                <div
+                  key={shop.id}
+                  className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-primary/20"
+                >
+                  <div className="relative">
+                    <div className="h-48 relative">
+                      <img
+                        src={shop.image}
+                        alt={shop.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                        <Star size={14} className="text-yellow-400 fill-current" />
+                        {shop.rating}
+                        {shop.reviewCount && (
+                          <span className="text-xs text-gray-500 ml-1">({shop.reviewCount})</span>
+                        )}
+                      </div>
+                      <div className="absolute top-2 left-2 bg-primary text-white px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                        <Crown size={14} />
+                        En avant
+                      </div>
+                      {shop.logo && (
+                        <div className="absolute bottom-2 left-2 w-12 h-12 bg-white rounded-lg p-1 shadow-sm">
+                          <img
+                            src={shop.logo}
+                            alt={`Logo ${shop.name}`}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="p-4">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-lg font-bold">{shop.name}</h3>
+                        <Badge variant="outline" className="bg-muted/70">{shop.type}</Badge>
+                      </div>
+                      
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">{shop.description}</p>
+                      
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-1 text-sm">
+                          <Package className="text-primary" size={14} />
+                          <span className="font-medium">{shop.productsCount}+ produits</span>
+                        </div>
+                        <Link to={`/shops/${shop.id}`}>
+                          <Button size="sm" className="flex items-center gap-1">
+                            Voir
+                            <ArrowRight size={14} />
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Toutes les boutiques */}
+        <div>
+          <h2 className="text-2xl font-bold mb-6">Toutes les boutiques</h2>
+          <div className="grid grid-cols-1 gap-8">
           {filteredShops.length > 0 ? (
             filteredShops.map((shop) => (
               <div
                 key={shop.id}
-                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
+                className={`bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden ${shop.featured ? 'ring-2 ring-primary/20' : ''}`}
               >
                 <div className="md:flex">
                   <div className="md:w-1/3">
@@ -171,6 +250,12 @@ const Shops = () => {
                           <span className="text-xs text-gray-500 ml-1">({shop.reviewCount})</span>
                         )}
                       </div>
+                      {shop.featured && (
+                        <div className="absolute top-2 left-2 bg-primary text-white px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                          <Crown size={14} />
+                          En avant
+                        </div>
+                      )}
                       {shop.logo && (
                         <div className="absolute bottom-2 left-2 w-16 h-16 bg-white rounded-lg p-2 shadow-sm">
                           <img
@@ -269,6 +354,7 @@ const Shops = () => {
               </Button>
             </div>
           )}
+        </div>
         </div>
 
         {/* Section avantages */}
