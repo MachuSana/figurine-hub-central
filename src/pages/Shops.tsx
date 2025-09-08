@@ -77,7 +77,8 @@ const Shops = () => {
       productsCount: 2000,
       location: "International",
       shipping: ["International"],
-      features: ["Garantie authenticité", "Emballage premium", "Éditions exclusives"]
+      features: ["Garantie authenticité", "Emballage premium", "Éditions exclusives"],
+      featured: true
     },
     {
       id: 4,
@@ -162,7 +163,7 @@ const Shops = () => {
               <Crown className="text-primary" size={28} />
               <h2 className="text-2xl font-bold">Boutiques en avant</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {featuredShops.map((shop) => (
                 <div
                   key={shop.id}
