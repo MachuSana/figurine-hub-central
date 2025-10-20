@@ -195,12 +195,25 @@ const Characters = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <MainNav />
       
-      <main className="container mx-auto px-4 py-8 animate-fade-in">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-          <h1 className="text-3xl font-bold">Personnages</h1>
+      <main className="container mx-auto px-4 py-8 animate-fade-up">
+        {/* Hero Header */}
+        <div className="mb-10 text-center">
+          <h1 className="text-5xl font-display font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent animate-fade-in">
+            Personnages
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto animate-fade-in" style={{animationDelay: "100ms"}}>
+            Découvrez tous vos personnages préférés et leurs figurines
+          </p>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4"
+        >
+          <div className="text-sm text-gray-500 font-medium">
+            {characters.length} personnage{characters.length > 1 ? 's' : ''} trouvé{characters.length > 1 ? 's' : ''}
+          </div>
           
           <div className="flex items-center mt-4 md:mt-0">
             <div className="relative">
@@ -394,58 +407,67 @@ const Characters = () => {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-8">
+          <div className="grid grid-cols-1 gap-6">
             {currentCharacters.map((character, index) => (
               <div
                 key={character.id}
                 className={cn(
-                  "bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden",
-                  "transform transition-all duration-300 hover:-translate-y-1",
+                  "bg-white rounded-2xl shadow-sm card-interactive overflow-hidden group border border-gray-100",
                   {
-                    "animate-fade-in [animation-delay:100ms]": index === 0,
-                    "animate-fade-in [animation-delay:200ms]": index === 1,
-                    "animate-fade-in [animation-delay:300ms]": index === 2,
+                    "animate-scale-in [animation-delay:100ms]": index === 0,
+                    "animate-scale-in [animation-delay:200ms]": index === 1,
+                    "animate-scale-in [animation-delay:300ms]": index === 2,
                   }
                 )}
               >
                 <div className="md:flex">
-                  <div className="md:w-1/3">
-                    <div className="h-64 md:h-full relative">
+                  <div className="md:w-1/3 relative overflow-hidden">
+                    <div className="h-72 md:h-full relative">
                       <img
                         src={character.image}
                         alt={character.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
                       />
-                      <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
-                        <Star size={14} className="text-yellow-400 fill-current" />
-                        {character.popularity}
+                      {/* Overlay gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                      
+                      <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 shadow-lg">
+                        <Star size={16} className="text-yellow-500 fill-current" />
+                        <span>{character.popularity}</span>
                       </div>
-                      <div className="absolute bottom-2 left-2 bg-primary/80 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium text-white">
+                      <div className="absolute bottom-3 left-3 bg-gradient-to-r from-primary to-secondary backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-semibold text-white shadow-lg">
                         {character.series}
                       </div>
                     </div>
                   </div>
                   
-                  <div className="p-6 md:w-2/3">
-                    <div className="flex items-center gap-4 mb-3">
-                      <h2 className="text-2xl font-bold">{character.name}</h2>
+                  <div className="p-6 md:p-8 md:w-2/3 flex flex-col">
+                    <div className="flex items-start justify-between gap-4 mb-4">
+                      <h2 className="text-3xl font-display font-bold text-gray-900 group-hover:text-primary transition-colors duration-300">
+                        {character.name}
+                      </h2>
                     </div>
                     
-                    <p className="text-gray-600 mb-4">{character.description}</p>
+                    <p className="text-gray-600 mb-6 leading-relaxed">{character.description}</p>
                     
-                    <div className="mb-4">
-                      <div className="text-sm text-gray-500">Figurines disponibles</div>
-                      <div className="font-medium">{character.figureCount}+</div>
+                    <div className="mb-6 p-4 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl border border-primary/10">
+                      <div className="text-sm text-gray-600 mb-1">Figurines disponibles</div>
+                      <div className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                        {character.figureCount}+
+                      </div>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-5 flex-grow">
                       <div>
-                        <div className="text-sm text-gray-500 mb-2">Traits de caractère</div>
+                        <div className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                          <div className="h-1 w-8 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+                          Traits de caractère
+                        </div>
                         <div className="flex flex-wrap gap-2">
                           {character.traits.map((trait, index) => (
                             <span
                               key={index}
-                              className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              className="bg-gradient-to-r from-primary/10 to-secondary/10 text-primary border border-primary/20 px-4 py-1.5 rounded-full text-sm font-medium hover-lift"
                             >
                               {trait}
                             </span>
@@ -454,12 +476,15 @@ const Characters = () => {
                       </div>
 
                       <div>
-                        <div className="text-sm text-gray-500 mb-2">Affiliations</div>
+                        <div className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                          <div className="h-1 w-8 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+                          Affiliations
+                        </div>
                         <div className="flex flex-wrap gap-2">
                           {character.affiliations.map((affiliation, index) => (
                             <span
                               key={index}
-                              className="bg-muted text-gray-700 px-3 py-1 rounded-full text-sm"
+                              className="bg-gradient-to-r from-secondary/10 to-accent/10 text-secondary border border-secondary/20 px-4 py-1.5 rounded-full text-sm font-medium hover-lift"
                             >
                               {affiliation}
                             </span>
@@ -468,13 +493,13 @@ const Characters = () => {
                       </div>
                     </div>
 
-                    <div className="mt-6 flex justify-end">
+                    <div className="mt-8 pt-6 border-t border-gray-100 flex justify-end">
                       <Link 
                         to={`/characters/${character.id}`}
-                        className="flex items-center gap-2 text-primary hover:text-white hover:bg-primary px-4 py-2 rounded-lg transition-colors duration-200"
+                        className="group/link flex items-center gap-2 bg-gradient-to-r from-primary to-secondary text-white font-semibold px-6 py-3 rounded-xl hover-lift shadow-lg hover:shadow-xl transition-all duration-300"
                       >
-                        Voir les détails
-                        <ArrowRight size={16} />
+                        <span>Voir les détails</span>
+                        <ArrowRight size={18} className="group-hover/link:translate-x-1 transition-transform duration-300" />
                       </Link>
                     </div>
                   </div>

@@ -6,6 +6,7 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Link } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
+import { cn } from "@/lib/utils";
 
 const Licenses = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -136,112 +137,156 @@ const Licenses = () => {
   const licenseTypes = Array.from(new Set(licenses.map(license => license.type)));
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <MainNav />
       
       <main className="container mx-auto px-4 py-8">
+        {/* Hero Header */}
+        <div className="mb-10 text-center">
+          <div className="inline-flex items-center gap-3 mb-4 animate-scale-in">
+            <Copyright className="h-10 w-10 text-primary" />
+            <h1 className="text-5xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Licences
+            </h1>
+          </div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto animate-fade-in" style={{animationDelay: "100ms"}}>
+            Explorez les univers et franchises de vos séries préférées
+          </p>
+        </div>
+
         <div className="mb-8">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
-            <div className="flex items-center gap-2">
-              <Copyright className="h-6 w-6 text-primary" />
-              <h1 className="text-3xl font-bold">Licences</h1>
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4"
+          >
+            <div className="relative w-full md:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Rechercher une licence..."
+                className="pl-10 h-11 border-2 focus:border-primary rounded-xl"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-              <div className="relative w-full md:w-64">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                <Input
-                  type="text"
-                  placeholder="Rechercher une licence..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <SlidersHorizontal size={16} />
-                    <span>Trier et Filtrer</span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-72 p-4">
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-medium mb-2 text-sm">Trier par</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <Button
-                          variant={sortOption === "rating" ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setSortOption("rating")}
-                          className="text-xs h-8"
-                        >
-                          Note
-                        </Button>
-                        <Button
-                          variant={sortOption === "name" ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setSortOption("name")}
-                          className="text-xs h-8"
-                        >
-                          Nom (A-Z)
-                        </Button>
-                        <Button
-                          variant={sortOption === "figureCount" ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setSortOption("figureCount")}
-                          className="text-xs h-8"
-                        >
-                          Nombre de Figurines
-                        </Button>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-medium mb-2 text-sm">Filtrer par type</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <Button
-                          variant={selectedType === null ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setSelectedType(null)}
-                          className="text-xs h-8"
-                        >
-                          Tous
-                        </Button>
-                        
-                        {licenseTypes.map((type) => (
-                          <Button
-                            key={type}
-                            variant={selectedType === type ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => setSelectedType(type)}
-                            className="text-xs h-8"
-                          >
-                            {type}
-                          </Button>
-                        ))}
-                      </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="gap-2 h-11 hover-lift border-2 font-semibold rounded-xl">
+                  <SlidersHorizontal size={18} />
+                  <span>Trier et Filtrer</span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-6 rounded-xl shadow-xl">
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-semibold mb-3 text-base flex items-center gap-2">
+                      <div className="h-1 w-6 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+                      Trier par
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant={sortOption === "rating" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setSortOption("rating")}
+                        className={cn(
+                          "text-xs h-9 hover-lift",
+                          sortOption === "rating" && "bg-gradient-to-r from-primary to-secondary"
+                        )}
+                      >
+                        Note
+                      </Button>
+                      <Button
+                        variant={sortOption === "name" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setSortOption("name")}
+                        className={cn(
+                          "text-xs h-9 hover-lift",
+                          sortOption === "name" && "bg-gradient-to-r from-primary to-secondary"
+                        )}
+                      >
+                        Nom (A-Z)
+                      </Button>
+                      <Button
+                        variant={sortOption === "figureCount" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setSortOption("figureCount")}
+                        className={cn(
+                          "text-xs h-9 hover-lift",
+                          sortOption === "figureCount" && "bg-gradient-to-r from-primary to-secondary"
+                        )}
+                      >
+                        Nombre de Figurines
+                      </Button>
                     </div>
                   </div>
-                </PopoverContent>
-              </Popover>
-            </div>
+                  
+                  <div>
+                    <h4 className="font-semibold mb-3 text-base flex items-center gap-2">
+                      <div className="h-1 w-6 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+                      Filtrer par type
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant={selectedType === null ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setSelectedType(null)}
+                        className={cn(
+                          "text-xs h-9 hover-lift",
+                          selectedType === null && "bg-gradient-to-r from-primary to-secondary"
+                        )}
+                      >
+                        Tous
+                      </Button>
+                      
+                      {licenseTypes.map((type) => (
+                        <Button
+                          key={type}
+                          variant={selectedType === type ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSelectedType(type)}
+                          className={cn(
+                            "text-xs h-9 hover-lift",
+                            selectedType === type && "bg-gradient-to-r from-primary to-secondary"
+                          )}
+                        >
+                          {type}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
           
-          <div className="bg-white rounded-lg p-4 mb-6 shadow-sm">
-            <div className="flex items-center gap-3 text-sm text-gray-600">
-              <div className="flex items-center gap-1.5">
-                <BookOpen size={16} className="text-primary/70" />
-                <span>{licenses.length} licences au total</span>
+          {/* Stats Banner */}
+          <div className="bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 rounded-2xl p-6 mb-8 border border-primary/10 animate-fade-in">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-white rounded-xl shadow-sm">
+                  <BookOpen size={24} className="text-primary" />
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Total de licences</div>
+                  <div className="text-2xl font-bold text-gray-900">{licenses.length}</div>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <Trophy size={16} className="text-yellow-500" />
-                <span>Top licences: Fate/Grand Order, Genshin Impact, Re:Zero</span>
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-white rounded-xl shadow-sm">
+                  <Trophy size={24} className="text-yellow-500" />
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Top licences</div>
+                  <div className="text-sm font-semibold text-gray-900">Fate/GO, Genshin, Re:Zero</div>
+                </div>
               </div>
-              <div className="hidden md:flex items-center gap-1.5">
-                <Users size={16} className="text-blue-500" />
-                <span>Plus de 1000 figurines disponibles</span>
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-white rounded-xl shadow-sm">
+                  <Users size={24} className="text-blue-500" />
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600">Figurines disponibles</div>
+                  <div className="text-2xl font-bold text-gray-900">1000+</div>
+                </div>
               </div>
             </div>
           </div>
