@@ -64,25 +64,30 @@ const MainNav = () => {
   };
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50">
+    <nav className="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="font-bold text-xl text-primary flex items-center">
-            <svg 
-              width="24" 
-              height="24" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-              className="mr-2"
-            >
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" 
-                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
-                className="fill-primary/10" />
-              <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" 
-                strokeLinecap="round" strokeLinejoin="round" className="fill-primary/20" />
-            </svg>
-            FigureNews
+          <Link to="/" className="font-display font-bold text-xl flex items-center gap-2 group">
+            <div className="relative">
+              <svg 
+                width="32" 
+                height="32" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+              >
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" 
+                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
+                  className="fill-primary/10 text-primary" />
+                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" 
+                  strokeLinecap="round" strokeLinejoin="round" className="fill-primary/20 text-primary" />
+              </svg>
+              <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              FigureNews
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -93,28 +98,28 @@ const MainNav = () => {
                   <div className="relative">
                     <button
                       onClick={(e) => toggleDropdown(item.name, e)}
-                      className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 group ${
+                      className={`flex items-center px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 group/btn ${
                         isActive(item.path) 
-                          ? "text-primary bg-primary/5" 
-                          : "text-gray-600 hover:text-primary hover:bg-gray-50"
+                          ? "text-white bg-gradient-to-r from-primary to-secondary shadow-md" 
+                          : "text-gray-700 hover:text-primary hover:bg-primary/5"
                       }`}
                       aria-expanded={activeDropdown === item.name}
                     >
                       {item.name}
                       <ChevronDown 
                         size={16} 
-                        className={`ml-1 transition-transform duration-200 ${
-                          activeDropdown === item.name ? "rotate-180" : ""
+                        className={`ml-1 transition-transform duration-300 ${
+                          activeDropdown === item.name ? "rotate-180" : "group-hover/btn:translate-y-0.5"
                         }`}
                       />
                     </button>
                     {activeDropdown === item.name && (
-                      <div className="absolute left-0 mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-50 animate-fade-in">
+                      <div className="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 z-50 animate-scale-in border border-gray-100">
                         {item.dropdown.map((subItem) => (
                           <Link
                             key={subItem.path}
                             to={subItem.path}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/5 hover:text-primary"
+                            className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-primary/5 hover:to-secondary/5 hover:text-primary transition-all duration-200 font-medium"
                           >
                             {subItem.name}
                           </Link>
@@ -125,10 +130,10 @@ const MainNav = () => {
                 ) : (
                   <Link
                     to={item.path}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
                       isActive(item.path) 
-                        ? "text-primary bg-primary/5" 
-                        : "text-gray-600 hover:text-primary hover:bg-gray-50"
+                        ? "text-white bg-gradient-to-r from-primary to-secondary shadow-md" 
+                        : "text-gray-700 hover:text-primary hover:bg-primary/5"
                     }`}
                   >
                     {item.name}
@@ -140,11 +145,11 @@ const MainNav = () => {
 
           {/* Mobile Navigation Toggle */}
           <button
-            className="md:hidden"
+            className="md:hidden p-2 rounded-xl hover:bg-primary/5 transition-colors duration-200"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={24} className="text-primary" /> : <Menu size={24} className="text-gray-700" />}
           </button>
         </div>
 

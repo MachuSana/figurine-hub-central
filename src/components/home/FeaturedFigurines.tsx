@@ -66,16 +66,19 @@ export const FeaturedFigurines = () => {
   }, [featuredFigurines.length]);
 
   return (
-    <section className="mb-12">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold flex items-center">
-          <Star className="mr-2 text-primary" size={22} />
-          Figurines à la Une
-        </h2>
+    <section className="mb-16 animate-fade-up">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h2 className="text-3xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent flex items-center gap-3">
+            <Star className="text-primary" size={28} />
+            Figurines à la Une
+          </h2>
+          <p className="text-gray-600 mt-2">Découvrez nos meilleures sélections</p>
+        </div>
       </div>
       
       <Carousel
-        className="relative"
+        className="relative group"
         setApi={(api) => {
           api?.on("select", () => {
             setCurrentSlide(api.selectedScrollSnap());
@@ -85,40 +88,62 @@ export const FeaturedFigurines = () => {
         <CarouselContent>
           {featuredFigurines.map((figurine) => (
             <CarouselItem key={figurine.id}>
-              <Card className="overflow-hidden border-none shadow-md">
+              <Card className="overflow-hidden border-0 shadow-xl bg-gradient-to-br from-white to-gray-50">
                 <div className="grid md:grid-cols-5 h-full">
-                  <div className="md:col-span-2 relative h-48 md:h-80">
+                  <div className="md:col-span-2 relative h-64 md:h-96 overflow-hidden group/image">
                     <img 
                       src={figurine.image} 
                       alt={figurine.name} 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-all duration-700 group-hover/image:scale-110 group-hover/image:rotate-1"
                     />
-                    <div className="absolute top-2 left-2 flex flex-wrap gap-1">
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60"></div>
+                    
+                    <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
                       {figurine.badges.map((badge, index) => (
-                        <Badge key={index} className="bg-primary/90 text-xs">{badge}</Badge>
+                        <Badge 
+                          key={index} 
+                          className="bg-gradient-to-r from-primary to-secondary text-white text-xs font-semibold px-3 py-1 shadow-lg animate-scale-in border-0"
+                          style={{animationDelay: `${index * 100}ms`}}
+                        >
+                          ✨ {badge}
+                        </Badge>
                       ))}
                     </div>
                   </div>
-                  <div className="md:col-span-3 p-6 flex flex-col justify-center">
-                    <div className="text-xs text-primary font-medium mb-1">{figurine.brand}</div>
-                    <h3 className="text-xl md:text-2xl font-bold mb-3">{figurine.name}</h3>
-                    <div className="flex items-center mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          size={16} 
-                          className={`${i < Math.floor(figurine.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} 
-                        />
-                      ))}
-                      <span className="ml-2 text-sm text-gray-600">{figurine.rating}/5</span>
+                  
+                  <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
+                    <div className="text-sm font-semibold text-primary mb-2 flex items-center gap-2">
+                      <div className="h-1 w-8 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+                      {figurine.brand}
                     </div>
-                    <p className="text-2xl font-bold text-gray-900 mb-5">{figurine.price}</p>
-                    <div className="flex flex-wrap gap-3">
-                      <Button asChild>
-                        <Link to={`/figurines/${figurine.id}`}>Voir détails</Link>
+                    <h3 className="text-2xl md:text-4xl font-display font-bold mb-4 text-gray-900 leading-tight">
+                      {figurine.name}
+                    </h3>
+                    <div className="flex items-center mb-6 gap-2">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            size={18} 
+                            className={`${i < Math.floor(figurine.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} 
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm font-semibold text-gray-700 ml-1">{figurine.rating}/5</span>
+                    </div>
+                    <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-8">
+                      {figurine.price}
+                    </p>
+                    <div className="flex flex-wrap gap-4">
+                      <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover-lift shadow-lg font-semibold">
+                        <Link to={`/figurines/${figurine.id}`}>
+                          Voir les détails
+                        </Link>
                       </Button>
-                      <Button variant="outline" className="gap-1">
-                        <Heart size={16} /> Favoris
+                      <Button variant="outline" size="lg" className="gap-2 hover-lift border-2 font-semibold">
+                        <Heart size={18} />
+                        Favoris
                       </Button>
                     </div>
                   </div>
@@ -127,17 +152,18 @@ export const FeaturedFigurines = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-0 bg-white/50 hover:bg-white/80" />
-        <CarouselNext className="right-0 bg-white/50 hover:bg-white/80" />
+        <CarouselPrevious className="left-4 bg-white/90 hover:bg-white shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover-lift border-2" />
+        <CarouselNext className="right-4 bg-white/90 hover:bg-white shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover-lift border-2" />
         
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+        <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-10">
           {featuredFigurines.map((_, index) => (
             <button
               key={index}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                currentSlide === index ? "bg-primary" : "bg-gray-300"
+              className={`h-2 rounded-full transition-all duration-300 ${
+                currentSlide === index ? "bg-primary w-8" : "bg-white/60 w-2 hover:bg-white/80"
               }`}
               onClick={() => setCurrentSlide(index)}
+              aria-label={`Slide ${index + 1}`}
             />
           ))}
         </div>

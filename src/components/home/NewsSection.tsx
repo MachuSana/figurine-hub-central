@@ -53,15 +53,19 @@ export const NewsSection = () => {
   });
 
   return (
-    <section className="mb-12">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold flex items-center">
-          <Bookmark className="mr-2 text-primary" size={24} />
-          Dernières Actualités
-        </h2>
-        <Button variant="outline" asChild>
-          <Link to="/news" className="inline-flex items-center">
-            Toutes les actualités <ChevronRight size={16} className="ml-1" />
+    <section className="mb-16 animate-fade-up">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h2 className="text-3xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent flex items-center gap-3">
+            <Bookmark className="text-primary" size={28} />
+            Dernières Actualités
+          </h2>
+          <p className="text-gray-600 mt-2">Restez informé des nouveautés</p>
+        </div>
+        <Button variant="outline" asChild className="hover-lift border-2 font-semibold">
+          <Link to="/news" className="inline-flex items-center gap-2">
+            Toutes les actualités 
+            <ChevronRight size={18} />
           </Link>
         </Button>
       </div>
@@ -69,15 +73,21 @@ export const NewsSection = () => {
       <div className="space-y-6">
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <div className="animate-pulse space-y-6">
+            <div className="space-y-6 w-full">
               {[1, 2].map((i) => (
-                <div key={i} className="bg-white rounded-lg h-48 w-full max-w-4xl"></div>
+                <div key={i} className="bg-white rounded-2xl h-64 w-full animate-pulse"></div>
               ))}
             </div>
           </div>
         ) : (
-          latestNews?.map((news) => (
-            <NewsCard key={news.id} news={news} />
+          latestNews?.map((news, index) => (
+            <div 
+              key={news.id} 
+              className="animate-scale-in"
+              style={{animationDelay: `${index * 100}ms`}}
+            >
+              <NewsCard news={news} />
+            </div>
           ))
         )}
       </div>
